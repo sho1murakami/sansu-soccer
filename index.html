@@ -77,7 +77,24 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .total-lbl{font-size:clamp(16px,2vw,22px);color:#bcd0ff}
 .total-num{font-size:clamp(22px,2.6vw,30px);color:var(--yellow);white-space:nowrap}
 .total-num b{font-size:clamp(48px,6.4vw,80px);font-weight:900;line-height:1;margin-right:.08em}
-.rank{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border-radius:18px;padding:10px 16px}
+.rank-wrap{position:relative;display:grid;min-width:0}
+.rank{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border-radius:18px;padding:10px 64px 10px 16px}
+.rank-info{
+  position:absolute;top:8px;right:10px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:#fff;color:var(--navy);font:italic 700 26px/1 Georgia,"Times New Roman",serif;box-shadow:0 3px 0 rgba(0,0,0,.3);
+}
+.rank-info:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.rank-list{display:flex;flex-direction:column;gap:5px;width:min(480px,80vw);max-height:calc(var(--vh) - 220px);overflow-y:auto}
+.rank-row{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:5px 14px;border-radius:14px;background:#f3f6fb;text-align:left;font-size:20px;line-height:1.25}
+.rank-row .ri{font-size:30px;line-height:1;text-align:center}
+.rank-row small{display:block;font-size:14px;color:var(--mute)}
+.rank-row.got{background:#fff8dc}
+.rank-row.now{background:#ffe27a;box-shadow:inset 0 0 0 3px #e0a000}
+.rank-row.lock .ri{opacity:.45;filter:grayscale(.8)}
+.rank-row.lock>span:nth-child(2){color:#8a94a8}
+.rank-row em{font-style:normal;font-size:15px;color:#fff;background:#ff3b6b;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.rank-row .ok{color:#22b45a;font-size:26px}
+.rank-row .left{font-size:16px;color:var(--mute);white-space:nowrap}
 .rank-ico{grid-row:1/4;font-size:clamp(38px,5vw,60px);line-height:1}
 .rank-txt small{display:block;font-size:14px;color:#bcd0ff;font-weight:500}
 .rank-txt b{font-size:clamp(22px,2.8vw,32px)}
@@ -291,6 +308,7 @@ body.kb .pad{display:none}
 .modal{position:absolute;inset:0;z-index:70;display:none;place-items:center;background:rgba(8,20,50,.55)}
 .modal.show{display:grid}
 .modal-card{background:#fff;border-radius:28px;padding:26px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;animation:popIn .35s cubic-bezier(.2,1.5,.4,1);max-width:90vw}
+.modal-card.tight{padding:18px 26px;gap:10px}
 .mq{font-size:32px;margin:0}
 .mbtns{display:flex;gap:14px}
 .mname{font-size:32px;margin:0}
@@ -366,7 +384,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
 /* ---------- たて がめん ---------- */
 @media (orientation:portrait){
   .summary{grid-template-columns:auto 1fr;grid-template-areas:"t b" "r r"}
-  .total{grid-area:t}.bookbtn{grid-area:b;justify-self:end}.rank{grid-area:r}
+  .total{grid-area:t}.bookbtn{grid-area:b;justify-self:end}.rank-wrap{grid-area:r}
   .dan-grid{grid-template-columns:repeat(3,1fr)}
   .danb.mix{grid-column:span 3}
   .qmain{grid-template:"top" auto "stage" minmax(0,1fr) "pad" auto / minmax(0,1fr)}
@@ -415,12 +433,15 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <span class="total-lbl">シール ぜんぶで</span>
         <span class="total-num"><b id="totalNum">0</b>まい</span>
       </button>
-      <button class="rank" data-act="sayRank">
-        <span class="rank-ico" id="rankIco">🌱</span>
-        <span class="rank-txt"><small>いまの ランク</small><b id="rankName">ルーキー</b></span>
-        <span class="rank-bar"><i id="rankBar"></i></span>
-        <span class="rank-next" id="rankNext"></span>
-      </button>
+      <div class="rank-wrap">
+        <button class="rank" data-act="sayRank">
+          <span class="rank-ico" id="rankIco">🌱</span>
+          <span class="rank-txt"><small>いまの ランク</small><b id="rankName">ルーキー</b></span>
+          <span class="rank-bar"><i id="rankBar"></i></span>
+          <span class="rank-next" id="rankNext"></span>
+        </button>
+        <button class="rank-info" data-act="rankInfo" aria-label="ランクの いちらん">i</button>
+      </div>
       <button class="bookbtn" data-act="book"><span>📒</span>シールちょう<small id="todayTxt">きょう 0まい</small></button>
     </div>
     <div class="cards">
@@ -529,7 +550,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <div class="set-card">
         <h3>🔊 読み上げ</h3>
         <label class="row"><span class="grow">問題と答えを読み上げる</span><span class="sw"><input type="checkbox" data-set="speech"><i></i></span></label>
-        <div class="row"><span>速さ</span><input type="range" min="0.8" max="2" step="0.1" data-set="rate"><output id="rateOut">1.4</output><button class="mini" data-act="testVoice">ためす</button></div>
+        <div class="row"><span>速さ</span><input type="range" min="0.8" max="2" step="0.1" data-set="rate"><output id="rateOut">1.0</output><button class="mini" data-act="testVoice">ためす</button></div>
         <div class="row"><span>声</span><select data-set="voice" id="voiceSel"></select></div>
       </div>
       <div class="set-card">
@@ -544,8 +565,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
         <label class="row"><span class="grow">すぐに答え合わせ<small>答えの桁数ぶん入れたら、自動でチェックします</small></span><span class="sw"><input type="checkbox" data-set="auto"><i></i></span></label>
         <div class="row">
-          <span class="grow">ボールの絵<small>慣れてきたら「ヒントで出す」にすると、まず頭で考える練習になります</small></span>
-          <div class="seg"><button data-act="seg" data-k="hint" data-val="always">いつも出す</button><button data-act="seg" data-k="hint" data-val="button">ヒントで出す</button></div>
+          <span class="grow">ボールの絵<small>「ヒントで出す」は、まず頭で考えて、こまったら「ボールを みる」で絵を出せます（まちがえると自動で出ます）</small></span>
+          <div class="seg"><button data-act="seg" data-k="hint" data-val="button">ヒントで出す</button><button data-act="seg" data-k="hint" data-val="always">いつも出す</button></div>
         </div>
       </div>
       <div class="set-card">
@@ -686,9 +707,9 @@ const KEY = 'sansu-soccer:v1';
 const blankStats = () => ({ play: 0, perfect: 0, q: 0, ok: 0 });
 function defaults() {
   return {
-    v: 1, stickers: [], miss: {},
+    v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.4, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'always', order: 'random' },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random' },
   };
 }
 let D = defaults();
@@ -704,6 +725,12 @@ function load() {
       stickers: Array.isArray(d.stickers) ? d.stickers : [],
       miss: d.miss || {},
     };
+    // v1 の初期値（速さ 1.4・ボールの絵 いつも）のままなら、あたらしい初期値に そろえる
+    if (!(d.v >= 2)) {
+      if (D.settings.rate === 1.4) D.settings.rate = def.settings.rate;
+      if (D.settings.hint === 'always') D.settings.hint = def.settings.hint;
+      D.v = 2;
+    }
   } catch (e) { D = defaults(); }
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* 保存できなくても あそべる */ } }
@@ -1373,7 +1400,12 @@ function closeOverlays() {
   closeModal();
   FX.stop();
 }
-function openModal(html) { $('#modalCard').innerHTML = html; $('#modal').classList.add('show'); }
+function openModal(html, cls = '') {
+  const c = $('#modalCard');
+  c.className = 'modal-card ' + cls;
+  c.innerHTML = html;
+  $('#modal').classList.add('show');
+}
 function closeModal() { $('#modal').classList.remove('show'); }
 
 function goHome() {
@@ -1496,6 +1528,18 @@ document.addEventListener('click', e => {
     case 'sayRank': {
       const { r, next } = rankOf(D.stickers.length);
       Speech.speak(`いまの ランクは ${r[1]}！` + (next ? ` あと ${next[0] - D.stickers.length}まいで ${next[1]}！` : ''));
+      break;
+    }
+    case 'rankInfo': {
+      const n = D.stickers.length, { r, next } = rankOf(n);
+      const rows = RANKS.map(x => {
+        const state = x === r ? 'now' : n >= x[0] ? 'got' : 'lock';
+        const right = state === 'now' ? '<em>いま ここ！</em>' : state === 'got' ? '<b class="ok">✓</b>' : `<span class="left">あと ${x[0] - n}まい</span>`;
+        const need = x[0] ? `シール ${x[0]}まい で なれる` : 'さいしょの ランク';
+        return `<div class="rank-row ${state}"><span class="ri">${x[2]}</span><span>${x[1]}<small>${need}</small></span>${right}</div>`;
+      }).join('');
+      openModal(`<p class="mq">🏅 ランク いちらん</p><p class="msub">シールを あつめると ランクが あがるよ！</p><div class="rank-list">${rows}</div><button class="bigbtn yellow" data-act="closeModal">とじる</button>`, 'tight');
+      Speech.speak(next ? `あと ${next[0] - n}まいで ${next[1]}に なれるよ！` : 'さいこうの ランクだよ！');
       break;
     }
     case 'settings': renderSettings(); show('settings'); break;
