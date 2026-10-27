@@ -78,7 +78,14 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .total-num{font-size:clamp(22px,2.6vw,30px);color:var(--yellow);white-space:nowrap}
 .total-num b{font-size:clamp(48px,6.4vw,80px);font-weight:900;line-height:1;margin-right:.08em}
 .rank-wrap{position:relative;display:grid;min-width:0}
-.rank{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border-radius:18px;padding:10px 64px 10px 16px}
+.rank{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border-radius:18px;padding:10px 64px 10px 16px;cursor:pointer}
+.rank-top{display:flex;align-items:center;gap:6px;font-size:15px;color:#bcd0ff;font-weight:500;white-space:nowrap}
+.rank-sel{
+  -webkit-appearance:none;appearance:none;max-width:none;font:inherit;font-weight:800;font-size:17px;color:#fff;cursor:pointer;
+  background:var(--tc,var(--add)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center/12px 8px;
+  border:2px solid rgba(255,255,255,.55);border-radius:999px;padding:6px 34px 6px 14px;box-shadow:0 3px 0 rgba(0,0,0,.25);
+}
+.rank-name{font-size:clamp(22px,2.8vw,32px);line-height:1.15}
 .rank-info{
   position:absolute;top:8px;right:10px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
   background:#fff;color:var(--navy);font:italic 700 26px/1 Georgia,"Times New Roman",serif;box-shadow:0 3px 0 rgba(0,0,0,.3);
@@ -95,9 +102,7 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .rank-row em{font-style:normal;font-size:15px;color:#fff;background:#ff3b6b;padding:3px 10px;border-radius:999px;white-space:nowrap}
 .rank-row .ok{color:#22b45a;font-size:26px}
 .rank-row .left{font-size:16px;color:var(--mute);white-space:nowrap}
-.rank-ico{grid-row:1/4;font-size:clamp(38px,5vw,60px);line-height:1}
-.rank-txt small{display:block;font-size:14px;color:#bcd0ff;font-weight:500}
-.rank-txt b{font-size:clamp(22px,2.8vw,32px)}
+.rank-ico{grid-row:1/5;font-size:clamp(38px,5vw,60px);line-height:1}
 .rank-bar{height:14px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
 .rank-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffe066,#ffb300);border-radius:99px;transition:width .6s}
 .rank-next{font-size:clamp(13px,1.6vw,17px);color:#d6e2ff}
@@ -434,12 +439,20 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <span class="total-num"><b id="totalNum">0</b>まい</span>
       </button>
       <div class="rank-wrap">
-        <button class="rank" data-act="sayRank">
+        <div class="rank" data-act="sayRank">
           <span class="rank-ico" id="rankIco">🌱</span>
-          <span class="rank-txt"><small>いまの ランク</small><b id="rankName">ルーキー</b></span>
+          <span class="rank-top">
+            <select class="rank-sel" id="rankTheme" aria-label="どの けいさんの ランクを みる？">
+              <option value="add">＋ たしざん</option>
+              <option value="sub">− ひきざん</option>
+              <option value="mul">× かけざん</option>
+            </select>
+            の ランク
+          </span>
+          <b class="rank-name" id="rankName">ルーキー</b>
           <span class="rank-bar"><i id="rankBar"></i></span>
           <span class="rank-next" id="rankNext"></span>
-        </button>
+        </div>
         <button class="rank-info" data-act="rankInfo" aria-label="ランクの いちらん">i</button>
       </div>
       <button class="bookbtn" data-act="book"><span>📒</span>シールちょう<small id="todayTxt">きょう 0まい</small></button>
@@ -570,6 +583,13 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
       </div>
       <div class="set-card">
+        <h3>🏅 ランク</h3>
+        <div class="row">
+          <span class="grow">トップ画面で最初に出すランク<small>じどう：たしざん → ひきざん → かけざん の順に表示し、ワールドクラス（シール300枚）になったら次の計算に切り替えます。トップ画面のプルダウンでいつでも切り替えられます</small></span>
+          <div class="seg"><button data-act="seg" data-k="rankView" data-val="auto">じどう</button><button data-act="seg" data-k="rankView" data-val="add">たしざん</button><button data-act="seg" data-k="rankView" data-val="sub">ひきざん</button><button data-act="seg" data-k="rankView" data-val="mul">かけざん</button></div>
+        </div>
+      </div>
+      <div class="set-card">
         <h3>📊 きろく</h3>
         <div id="stats"></div>
         <div class="row"><span class="grow">シールと記録をすべて消す</span><button class="danger" data-act="reset">すべて消す</button></div>
@@ -695,8 +715,10 @@ const DMAP = Object.fromEntries(DESIGNS.map(d => [d.id, d]));
 const RARE = new Set(['trophy', 'crown', 'gem', 'dragon', 'unicorn', 'saturn']);
 const SHINY_RATE = 0.12;
 
-// ランク [ひつような まいすう, なまえ, アイコン]
-const RANKS = [[0, 'ルーキー', '🌱'], [3, 'レギュラー', '⚽'], [8, 'エース', '🔥'], [15, 'キャプテン', '🎖️'], [25, 'スター', '⭐'], [40, 'レジェンド', '👑'], [60, 'ワールドクラス', '🌏']];
+// ランク（たしざん・ひきざん・かけざん それぞれ）[ひつような まいすう, なまえ, アイコン]
+const RANKS = [[0, 'ルーキー', '🌱'], [3, 'レギュラー', '⚽'], [10, 'エース', '🔥'], [30, 'キャプテン', '🎖️'], [70, 'スター', '⭐'], [150, 'レジェンド', '👑'], [300, 'ワールドクラス', '🌏']];
+const TOP_RANK = RANKS[RANKS.length - 1][0];
+const RANK_ORDER = ['add', 'sub', 'mul'];
 
 // [がめんの もじ, よみあげ]
 const PRAISE = [['ゴール！', 'ゴール！'], ['ゴール！', 'ゴール！'], ['ナイスシュート！', 'ナイスシュート！'], ['すごい！', 'すごい！'], ['やったね！', 'やったね！'], ['せいかい！', '正解！'], ['てんさい！', '天才！'], ['ばっちり！', 'ばっちり！']];
@@ -709,7 +731,7 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random' },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto' },
   };
 }
 let D = defaults();
@@ -1023,6 +1045,14 @@ function rankOf(n) {
   for (const x of RANKS) { if (n >= x[0]) r = x; else { next = x; break; } }
   return { r, next };
 }
+const themeCount = t => D.stickers.filter(s => s.t === t).length;
+// アプリを ひらいたときに トップで みせる ランク：じどうなら たしざん → ひきざん → かけざん の じゅんに、ワールドクラスに なったら つぎへ
+function initialRankTheme() {
+  const v = S().rankView;
+  if (THEMES[v]) return v;
+  return RANK_ORDER.find(t => themeCount(t) < TOP_RANK) || RANK_ORDER[RANK_ORDER.length - 1];
+}
+let rankTheme = 'add';
 const isToday = ms => new Date(ms).toDateString() === new Date().toDateString();
 
 function awardSticker(theme, dan) {
@@ -1031,17 +1061,19 @@ function awardSticker(theme, dan) {
   const w = DESIGNS.map(d => (RARE.has(d.id) ? 0.35 : 1) * (owned.has(d.id) ? 1 : 2.5));
   let r = Math.random() * w.reduce((a, b) => a + b, 0), i = 0;
   for (; i < DESIGNS.length - 1; i++) { r -= w[i]; if (r <= 0) break; }
-  const before = rankOf(D.stickers.length).r;
+  const before = rankOf(themeCount(theme)).r;
   const s = { d: DESIGNS[i].id, t: theme, k: Math.random() < SHINY_RATE ? 1 : 0, at: Date.now(), dan: dan || 0 };
   D.stickers.push(s);
-  return { s, isNew: !owned.has(s.d), rankUp: rankOf(D.stickers.length).r !== before };
+  return { s, isNew: !owned.has(s.d), rankUp: rankOf(themeCount(theme)).r !== before };
 }
 
 // ---------- ホーム ----------
 function renderHome() {
-  const st = D.stickers, n = st.length;
-  $('#totalNum').textContent = n;
-  const { r, next } = rankOf(n);
+  const st = D.stickers;
+  $('#totalNum').textContent = st.length;
+  const n = themeCount(rankTheme), { r, next } = rankOf(n);
+  $('#rankTheme').value = rankTheme;
+  $('.rank').style.setProperty('--tc', THEMES[rankTheme].color);
   $('#rankIco').textContent = r[2];
   $('#rankName').textContent = r[1];
   $('#rankNext').textContent = next ? `あと ${next[0] - n}まいで ${next[1]}` : 'さいこう ランク！';
@@ -1366,19 +1398,19 @@ function finishQuiz() {
 
 function showWin({ s, isNew, rankUp }) {
   const d = DMAP[s.d];
-  const n = D.stickers.filter(x => x.t === s.t).length;
-  const rk = rankOf(D.stickers.length).r;
+  const n = themeCount(s.t);
+  const rk = rankOf(n).r;
   $('#winStk').innerHTML = stickerHTML(s, 'xxl');
   $('#winName').innerHTML = `${d.name}${s.k ? ' <span class="kira">✨キラキラ✨</span>' : ''}${isNew ? ' <span class="newb">NEW!</span>' : ''}`;
   $('#winSub').textContent = `${THEMES[s.t].name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい`;
-  $('#winRank').textContent = rankUp ? `ランクアップ！ ${rk[2]} ${rk[1]} に なった！` : '';
+  $('#winRank').textContent = rankUp ? `ランクアップ！ ${THEMES[s.t].name}が ${rk[2]} ${rk[1]} に なった！` : '';
   const w = $('#win');
   w.classList.remove('ready', 'show'); void w.offsetWidth; w.classList.add('show');
   FX.show(4200);
   SFX.fanfare();
   setTimeout(() => SFX.sparkle(), 1300);
   if (rankUp) setTimeout(() => SFX.rankup(), 2500);
-  setTimeout(() => Speech.speak(`やったー！ 全問 正解！ ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}${rankUp ? ` ランクアップ！ ${rk[1]}に なったよ！` : ''}`), 1000);
+  setTimeout(() => Speech.speak(`やったー！ 全問 正解！ ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}${rankUp ? ` ランクアップ！ ${THEMES[s.t].name}の ランクが ${rk[1]}に なったよ！` : ''}`), 1000);
   setTimeout(() => w.classList.add('ready'), 2200);
 }
 
@@ -1472,14 +1504,14 @@ function renderSettings() {
   $$('#settings [data-act="seg"]').forEach(b => b.classList.toggle('on', S()[b.dataset.k] === b.dataset.val));
   renderVoiceSelect();
   const rows = Object.entries(THEMES).map(([t, th]) => {
-    const s = D.stats[t];
-    return `<tr><th>${th.name}</th><td>${s.play}回</td><td>${s.perfect}回</td><td>${D.stickers.filter(x => x.t === t).length}枚</td><td>${s.q ? Math.round(s.ok / s.q * 100) + '%' : '−'}</td></tr>`;
+    const s = D.stats[t], cnt = themeCount(t), rk = rankOf(cnt).r;
+    return `<tr><th>${th.name}</th><td>${s.play}回</td><td>${s.perfect}回</td><td>${cnt}枚</td><td>${rk[2]} ${rk[1]}</td><td>${s.q ? Math.round(s.ok / s.q * 100) + '%' : '−'}</td></tr>`;
   }).join('');
   const weak = Object.entries(D.miss).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([k]) => {
     const [t, a, b] = k.split(':');
     return THEMES[t] ? `${a}${THEMES[t].op}${b}` : '';
   }).filter(Boolean).join('、');
-  $('#stats').innerHTML = `<table class="st"><thead><tr><th></th><th>あそんだ</th><th>全問正解</th><th>シール</th><th>1回目の正解率</th></tr></thead><tbody>${rows}</tbody></table>
+  $('#stats').innerHTML = `<table class="st"><thead><tr><th></th><th>あそんだ</th><th>全問正解</th><th>シール</th><th>ランク</th><th>1回目の正解率</th></tr></thead><tbody>${rows}</tbody></table>
     <p class="note">にがてな問題：${weak || 'まだ ありません'}</p>`;
 }
 
@@ -1488,6 +1520,7 @@ document.addEventListener('click', e => {
   SFX.unlock();
   const ball = e.target.closest('.ball');
   if (ball) return countBall(ball);
+  if (e.target.closest('select')) return;
   const b = e.target.closest('[data-act]');
   if (!b) return;
   const act = b.dataset.act;
@@ -1525,25 +1558,28 @@ document.addEventListener('click', e => {
       break;
     }
     case 'sayTotal': Speech.speak(`シール ぜんぶで ${D.stickers.length}まい！`); break;
-    case 'sayRank': {
-      const { r, next } = rankOf(D.stickers.length);
-      Speech.speak(`いまの ランクは ${r[1]}！` + (next ? ` あと ${next[0] - D.stickers.length}まいで ${next[1]}！` : ''));
-      break;
-    }
+    case 'sayRank': sayRank(); break;
     case 'rankInfo': {
-      const n = D.stickers.length, { r, next } = rankOf(n);
+      const n = themeCount(rankTheme), { r, next } = rankOf(n);
       const rows = RANKS.map(x => {
         const state = x === r ? 'now' : n >= x[0] ? 'got' : 'lock';
         const right = state === 'now' ? '<em>いま ここ！</em>' : state === 'got' ? '<b class="ok">✓</b>' : `<span class="left">あと ${x[0] - n}まい</span>`;
         const need = x[0] ? `シール ${x[0]}まい で なれる` : 'さいしょの ランク';
         return `<div class="rank-row ${state}"><span class="ri">${x[2]}</span><span>${x[1]}<small>${need}</small></span>${right}</div>`;
       }).join('');
-      openModal(`<p class="mq">🏅 ランク いちらん</p><p class="msub">シールを あつめると ランクが あがるよ！</p><div class="rank-list">${rows}</div><button class="bigbtn yellow" data-act="closeModal">とじる</button>`, 'tight');
-      Speech.speak(next ? `あと ${next[0] - n}まいで ${next[1]}に なれるよ！` : 'さいこうの ランクだよ！');
+      const name = THEMES[rankTheme].name;
+      openModal(`<p class="mq">🏅 ${name}の ランク</p><p class="msub">${name}の シールを あつめると ランクが あがるよ！</p><div class="rank-list">${rows}</div><button class="bigbtn yellow" data-act="closeModal">とじる</button>`, 'tight');
+      Speech.speak(next ? `${name}は あと ${next[0] - n}まいで ${next[1]}に なれるよ！` : `${name}は さいこうの ランクだよ！`);
       break;
     }
     case 'settings': renderSettings(); show('settings'); break;
-    case 'seg': S()[b.dataset.k] = b.dataset.val; save(); renderSettings(); applyInputMode(); break;
+    case 'seg':
+      S()[b.dataset.k] = b.dataset.val;
+      save();
+      renderSettings();
+      applyInputMode();
+      if (b.dataset.k === 'rankView') rankTheme = initialRankTheme();
+      break;
     case 'testVoice': Speech.speak('3 たす 5 わ？ ゴール！ 3 たす 5 わ 8'); break;
     case 'reset':
       if (confirm('シールと記録をすべて消します。よろしいですか？') && confirm('本当に消しますか？（元に戻せません）')) {
@@ -1565,6 +1601,17 @@ document.addEventListener('input', e => {
   if (k === 'rate') $('#rateOut').textContent = S().rate.toFixed(1);
   if (k === 'voice') Speech.choose();
   save();
+});
+
+function sayRank() {
+  const n = themeCount(rankTheme), { r, next } = rankOf(n);
+  Speech.speak(`${THEMES[rankTheme].name}の ランクは ${r[1]}！` + (next ? ` あと ${next[0] - n}まいで ${next[1]}！` : ''));
+}
+$('#rankTheme').addEventListener('change', e => {
+  rankTheme = e.target.value;
+  renderHome();
+  SFX.tap();
+  sayRank();
 });
 
 ans.addEventListener('input', onAnsInput);
@@ -1597,6 +1644,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) Speec
 load();
 fitViewport();
 applyInputMode();
+rankTheme = initialRankTheme();
 renderHome();
 Speech.init();
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
