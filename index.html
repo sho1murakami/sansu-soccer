@@ -129,6 +129,13 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 }
 .card-name{font-size:clamp(26px,min(4vw,5.5vh),46px)}
 .card-ex{font-size:clamp(16px,2vw,22px);color:var(--mute)}
+.card.pri{box-shadow:0 0 0 5px var(--yellow),0 10px 0 rgba(0,0,0,.22)}
+.card.pri:active{box-shadow:0 0 0 5px var(--yellow),0 4px 0 rgba(0,0,0,.22)}
+.card-ex.mission{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;color:#a86400;font-size:clamp(15px,1.7vw,19px)}
+.card-ex.locked{font-size:clamp(14px,1.6vw,18px);text-align:center}
+.mdots{display:inline-flex;gap:4px}
+.mdots i{width:14px;height:14px;border-radius:50%;background:#e6eaf1;border:2px solid #c9d1de}
+.mdots i.on{background:var(--yellow);border-color:#e0a000}
 .card-cnt{display:flex;align-items:baseline;gap:.15em;font-size:clamp(18px,2.2vw,24px);background:#fff4c7;border:3px solid var(--yellow);color:#7a5600;padding:3px 16px;border-radius:999px;white-space:nowrap}
 .card-cnt b{font-size:1.5em;color:#e08a00}
 .card-mini{display:flex;gap:4px;min-height:32px;flex-wrap:wrap;justify-content:center}
@@ -288,6 +295,8 @@ body.kb .pad{display:none}
 .win-sub{font-size:clamp(16px,min(2.2vw,3.2vh),24px);color:#c9d6ff;animation:fadeUp .4s 1.45s both}
 .win-rank{background:linear-gradient(90deg,#ff5f6d,#ffc371);padding:6px 22px;border-radius:999px;font-size:clamp(18px,2.6vw,28px);animation:txtPop .6s 2.3s both}
 .win-rank:empty{display:none}
+.win-mission{background:linear-gradient(90deg,#18a050,#46cf7c)}
+.win.tight .stk.xxl{--s:min(24vmin,190px,calc(var(--vh)*.24))}
 .win-btns{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .win.ready .win-btns{opacity:1;pointer-events:auto}
 
@@ -307,7 +316,7 @@ body.kb .pad{display:none}
 .res-score b{font-size:2.2em;color:var(--add)}
 .res-msg{font-size:clamp(22px,3vw,32px);margin:4px 0 16px;line-height:1.4}
 .res-msg small{font-size:.6em;color:var(--mute)}
-.res-btns{display:flex;gap:14px;justify-content:center}
+.res-btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
 
 /* ---------- モーダル ---------- */
 .modal{position:absolute;inset:0;z-index:70;display:none;place-items:center;background:rgba(8,20,50,.55)}
@@ -315,6 +324,8 @@ body.kb .pad{display:none}
 .modal-card{background:#fff;border-radius:28px;padding:26px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;animation:popIn .35s cubic-bezier(.2,1.5,.4,1);max-width:90vw}
 .modal-card.tight{padding:18px 26px;gap:10px}
 .mq{font-size:32px;margin:0}
+.lock-ico{font-size:56px;line-height:1}
+.lock-msg{margin:0;font-size:clamp(18px,2.4vw,24px);line-height:1.55}
 .mbtns{display:flex;gap:14px}
 .mname{font-size:32px;margin:0}
 .msub{margin:0;color:var(--mute);font-size:18px}
@@ -583,6 +594,14 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
       </div>
       <div class="set-card">
+        <h3>🎯 優先テーマ</h3>
+        <div class="row">
+          <span class="grow">優先する計算<small>この計算のシールをその日に5枚集めるまで、ほかの計算ではシールがもらえません（練習はできます）</small></span>
+          <div class="seg"><button data-act="seg" data-k="priority" data-val="add">たしざん</button><button data-act="seg" data-k="priority" data-val="sub">ひきざん</button><button data-act="seg" data-k="priority" data-val="mul">かけざん</button></div>
+        </div>
+        <p class="note" id="missionNote"></p>
+      </div>
+      <div class="set-card">
         <h3>🏅 ランク</h3>
         <div class="row">
           <span class="grow">トップ画面で最初に出すランク<small>じどう：たしざん → ひきざん → かけざん の順に表示し、ワールドクラス（シール300枚）になったら次の計算に切り替えます。トップ画面のプルダウンでいつでも切り替えられます</small></span>
@@ -599,7 +618,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <p class="note">・Safari の共有ボタン →「ホーム画面に追加」で、アプリのように全画面で使えます。記録（シール）もこの iPad の中に保存され、消えにくくなります。<br>
         ・まちがえた問題は、次から少し出やすくなります。<br>
         ・ボールをタッチすると、数を声でかぞえます。<br>
-        ・10問ぜんぶ1回目で正解するとシールがもらえます（2回目で正解した問題は「おしい」になります）。</p>
+        ・10問中7問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。</p>
       </div>
     </div>
   </section>
@@ -627,12 +646,13 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
   <div class="win" id="win">
     <div class="rays"></div>
     <div class="win-in">
-      <div class="win-top">ぜんもん せいかい！</div>
+      <div class="win-top" id="winTop">ぜんもん せいかい！</div>
       <div class="win-stk" id="winStk"></div>
       <div class="win-title">シール ゲット！</div>
       <div class="win-name" id="winName"></div>
       <div class="win-sub" id="winSub"></div>
       <div class="win-rank" id="winRank"></div>
+      <div class="win-rank win-mission" id="winMission"></div>
       <div class="win-btns">
         <button class="bigbtn yellow" data-act="again">⚽ もういっかい</button>
         <button class="bigbtn" data-act="bookFromWin">📒 シールちょう</button>
@@ -649,7 +669,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <div class="res-score"><b id="resOk">0</b> / 10 ゴール</div>
       <div class="res-msg" id="resMsg"></div>
       <div class="res-btns">
-        <button class="bigbtn yellow" data-act="again">⚽ もういっかい</button>
+        <button class="bigbtn yellow" id="resPriority" data-act="startPriority" hidden></button>
+        <button class="bigbtn yellow" id="resAgain" data-act="again">⚽ もういっかい</button>
         <button class="bigbtn" data-act="home">🏠 トップ</button>
       </div>
     </div>
@@ -674,9 +695,9 @@ const ans = $('#ans');
 
 // ---------- データ ----------
 const THEMES = {
-  add: { name: 'たしざん', op: '+', say: 'たす', color: 'var(--add)' },
-  sub: { name: 'ひきざん', op: '−', say: 'ひく', color: 'var(--sub)' },
-  mul: { name: 'かけざん', op: '×', say: 'かける', color: 'var(--mul)' },
+  add: { name: 'たしざん', op: '+', say: 'たす', color: 'var(--add)', ex: 'れい：3 + 5' },
+  sub: { name: 'ひきざん', op: '−', say: 'ひく', color: 'var(--sub)', ex: 'れい：8 − 3' },
+  mul: { name: 'かけざん', op: '×', say: 'かける', color: 'var(--mul)', ex: '九九：3 × 4' },
 };
 
 // 九九の となえかた（[だん-1][かず-1]）
@@ -720,6 +741,9 @@ const RANKS = [[0, 'ルーキー', '🌱'], [15, 'レギュラー', '⚽'], [40,
 const TOP_RANK = RANKS[RANKS.length - 1][0];
 const RANK_ORDER = ['add', 'sub', 'mul'];
 
+const PASS = 7;     // シールが もらえる せいかい数（10もん ちゅう）
+const MISSION = 5;  // ゆうせんテーマで 1日に あつめる シールの数
+
 // [がめんの もじ, よみあげ]
 const PRAISE = [['ゴール！', 'ゴール！'], ['ゴール！', 'ゴール！'], ['ナイスシュート！', 'ナイスシュート！'], ['すごい！', 'すごい！'], ['やったね！', 'やったね！'], ['せいかい！', '正解！'], ['てんさい！', '天才！'], ['ばっちり！', 'ばっちり！']];
 const RETRY = ['おしい！ もう一回', 'ちがうよ。もう一回 やってみよう', 'おしい！ ボールを かぞえてみよう'];
@@ -731,7 +755,7 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto' },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add' },
   };
 }
 let D = defaults();
@@ -1054,6 +1078,10 @@ function initialRankTheme() {
 }
 let rankTheme = 'add';
 const isToday = ms => new Date(ms).toDateString() === new Date().toDateString();
+// きょうの ミッション：ゆうせんテーマの シールを MISSION まい あつめるまで、ほかの テーマは シールなし
+const missionDone = () => D.stickers.filter(s => s.t === S().priority && isToday(s.at)).length;
+const missionLeft = () => Math.max(0, MISSION - missionDone());
+const stickerLocked = t => t !== S().priority && missionLeft() > 0;
 
 function awardSticker(theme, dan) {
   const owned = new Set(D.stickers.map(s => s.d));
@@ -1061,10 +1089,10 @@ function awardSticker(theme, dan) {
   const w = DESIGNS.map(d => (RARE.has(d.id) ? 0.35 : 1) * (owned.has(d.id) ? 1 : 2.5));
   let r = Math.random() * w.reduce((a, b) => a + b, 0), i = 0;
   for (; i < DESIGNS.length - 1; i++) { r -= w[i]; if (r <= 0) break; }
-  const before = rankOf(themeCount(theme)).r;
+  const before = rankOf(themeCount(theme)).r, leftBefore = missionLeft();
   const s = { d: DESIGNS[i].id, t: theme, k: Math.random() < SHINY_RATE ? 1 : 0, at: Date.now(), dan: dan || 0 };
   D.stickers.push(s);
-  return { s, isNew: !owned.has(s.d), rankUp: rankOf(themeCount(theme)).r !== before };
+  return { s, isNew: !owned.has(s.d), rankUp: rankOf(themeCount(theme)).r !== before, missionClear: leftBefore > 0 && missionLeft() === 0 };
 }
 
 // ---------- ホーム ----------
@@ -1083,7 +1111,36 @@ function renderHome() {
     const mine = st.filter(s => s.t === t);
     $(`[data-cnt="${t}"]`).textContent = mine.length;
     $(`[data-mini="${t}"]`).innerHTML = mine.slice(-6).reverse().map(s => stickerHTML(s, 'xs')).join('');
+    renderMission(t);
   }
+}
+function renderMission(t) {
+  const card = $(`.card[data-theme="${t}"]`), ex = card.querySelector('.card-ex');
+  const pri = S().priority, done = missionDone(), isPri = t === pri, locked = stickerLocked(t);
+  card.classList.toggle('pri', isPri && done < MISSION);
+  ex.className = 'card-ex' + (isPri ? ' mission' : locked ? ' locked' : '');
+  if (isPri && done >= MISSION) ex.textContent = '✅ きょうの ミッション クリア！';
+  else if (isPri) {
+    const dots = Array.from({ length: MISSION }, (_, i) => `<i class="${i < done ? 'on' : ''}"></i>`).join('');
+    ex.innerHTML = `⭐ きょうの ミッション <span class="mdots">${dots}</span>`;
+  } else ex.textContent = locked ? `🔒 シールは ${THEMES[pri].name}の あと` : THEMES[t].ex;
+}
+
+// テーマを えらんだとき：まだ シールが もらえない テーマなら、やるか きく
+function chooseTheme(t) {
+  if (!stickerLocked(t)) return enterTheme(t);
+  const pri = THEMES[S().priority].name, name = THEMES[t].name, left = missionLeft();
+  openModal(`<div class="lock-ico">🔒</div>
+    <p class="mq">シールは もらえないよ</p>
+    <p class="lock-msg">きょうは ${pri}の シールを あと ${left}まい あつめてね。<br>そのあと ${name}でも シールが もらえるよ。<br>それでも ${name}を やる？</p>
+    <div class="mbtns"><button class="bigbtn yellow" data-act="startPriority">⭐ ${pri}に する</button><button class="bigbtn" data-act="startNoSticker" data-theme="${t}">シールなしで やる</button></div>`);
+  Speech.speak(`シールは もらえないよ。きょうは ${pri}の シールを あと ${left}まい あつめてね。それでも ${name}を やる？`);
+}
+function enterTheme(t) {
+  closeOverlays();
+  Speech.stop();
+  if (t === 'mul') { renderDan(); show('dan'); }
+  else startQuiz(t);
 }
 
 function renderDan() {
@@ -1140,10 +1197,10 @@ function setAns(v) { ans.value = v; Q.val = v; }
 function startQuiz(theme, dan = 0) {
   SFX.unlock();
   closeOverlays();
-  Object.assign(Q, { theme, dan, list: makeQuestions(theme, dan), idx: 0, results: [], combo: 0, active: true });
+  Object.assign(Q, { theme, dan, list: makeQuestions(theme, dan), idx: 0, results: [], combo: 0, active: true, noSticker: stickerLocked(theme) });
   document.body.dataset.theme = theme;
   const qt = $('#qTheme');
-  qt.textContent = THEMES[theme].name + (theme === 'mul' ? (dan ? ` ${dan}のだん` : ' ミックス') : '');
+  qt.textContent = (Q.noSticker ? '🔒 ' : '') + THEMES[theme].name + (theme === 'mul' ? (dan ? ` ${dan}のだん` : ' ミックス') : '');
   qt.style.setProperty('--tc', THEMES[theme].color);
   show('quiz');
   applyInputMode();
@@ -1373,6 +1430,7 @@ function showGoal(text, sub, big) {
   $('#goalSub').textContent = sub;
   g.classList.remove('show'); void g.offsetWidth; g.classList.add('show');
   setTimeout(() => {
+    if (!g.classList.contains('show')) return;  // もう つぎの もんだいへ すすんだ
     const r = $('#goalNet').getBoundingClientRect();
     FX.confetti(r.left + r.width / 2, r.top + r.height * 0.55, big ? 150 : 80, big ? 16 : 13, -Math.PI / 2, Math.PI * 1.3);
   }, 430);
@@ -1385,44 +1443,61 @@ function finishQuiz() {
   const ok = Q.results.filter(Boolean).length;
   const st = D.stats[Q.theme];
   st.play++; st.q += Q.list.length; st.ok += ok;
-  if (ok === Q.list.length) {
-    st.perfect++;
+  if (ok === Q.list.length) st.perfect++;
+  if (ok >= PASS && !Q.noSticker) {
     const res = awardSticker(Q.theme, Q.dan);
     save();
-    showWin(res);
+    showWin(res, ok);
   } else {
     save();
     showResult(ok);
   }
 }
 
-function showWin({ s, isNew, rankUp }) {
+function showWin({ s, isNew, rankUp, missionClear }, ok) {
   const d = DMAP[s.d];
   const n = themeCount(s.t);
   const rk = rankOf(n).r;
+  const perfect = ok === Q.list.length;
+  const left = s.t === S().priority ? missionLeft() : 0;
+  $('#winTop').textContent = perfect ? 'ぜんもん せいかい！' : `${ok}もん せいかい！`;
   $('#winStk').innerHTML = stickerHTML(s, 'xxl');
   $('#winName').innerHTML = `${d.name}${s.k ? ' <span class="kira">✨キラキラ✨</span>' : ''}${isNew ? ' <span class="newb">NEW!</span>' : ''}`;
-  $('#winSub').textContent = `${THEMES[s.t].name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい`;
+  $('#winSub').textContent = `${THEMES[s.t].name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい` + (left ? ` ・ ミッション あと ${left}まい` : '');
   $('#winRank').textContent = rankUp ? `ランクアップ！ ${THEMES[s.t].name}が ${rk[2]} ${rk[1]} に なった！` : '';
+  $('#winMission').textContent = missionClear ? '✅ きょうの ミッション クリア！ ほかの けいさんでも シールが もらえるよ！' : '';
   const w = $('#win');
+  w.classList.toggle('tight', rankUp && missionClear);
   w.classList.remove('ready', 'show'); void w.offsetWidth; w.classList.add('show');
   FX.show(4200);
   SFX.fanfare();
   setTimeout(() => SFX.sparkle(), 1300);
-  if (rankUp) setTimeout(() => SFX.rankup(), 2500);
-  setTimeout(() => Speech.speak(`やったー！ 全問 正解！ ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}${rankUp ? ` ランクアップ！ ${THEMES[s.t].name}の ランクが ${rk[1]}に なったよ！` : ''}`), 1000);
+  if (rankUp || missionClear) setTimeout(() => SFX.rankup(), 2500);
+  const line = `やったー！ ${perfect ? '全問' : `${ok}問`} 正解！ ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}`
+    + (rankUp ? ` ランクアップ！ ${THEMES[s.t].name}の ランクが ${rk[1]}に なったよ！` : '')
+    + (missionClear ? ' きょうの ミッション クリア！ ほかの けいさんでも シールが もらえるよ！' : '');
+  setTimeout(() => Speech.speak(line), 1000);
   setTimeout(() => w.classList.add('ready'), 2200);
 }
 
 function showResult(ok) {
+  const locked = Q.noSticker, pri = THEMES[S().priority].name;
   $('#resBalls').innerHTML = Q.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('');
   $('#resOk').textContent = ok;
-  const msg = ok >= 8 ? 'おしい！ あと ちょっと！' : ok >= 5 ? 'いいね！ その ちょうし！' : 'がんばったね！';
-  $('#resMsg').innerHTML = `${msg}<br><small>10もん ぜんぶ せいかいで シール ゲット！</small>`;
+  let msg = ok >= 4 ? 'いいね！ その ちょうし！' : 'がんばったね！';
+  if (locked && ok >= PASS) msg = 'すごい！ れんしゅう ばっちり！';
+  if (!locked && ok === PASS - 1) msg = 'おしい！ あと 1もん！';
+  const note = locked ? `シールは ${pri}の シールを あと ${missionLeft()}まい あつめてから もらえるよ` : `${PASS}もん いじょう せいかいで シール ゲット！`;
+  $('#resMsg').innerHTML = `${msg}<br><small>${note}</small>`;
+  // シールなしの れんしゅうの あとは、ゆうせんテーマへ さそう
+  const goPri = $('#resPriority');
+  goPri.hidden = !locked;
+  goPri.textContent = `⭐ ${pri}を やる`;
+  $('#resAgain').classList.toggle('yellow', !locked);
   $('#result').classList.add('show');
   SFX.cheer();
-  if (ok >= 7) FX.confetti(innerWidth / 2, innerHeight * 0.55, 60, 13);
-  Speech.speak(`${ok}問 正解！ ${msg} もう一回 チャレンジ しよう！`);
+  if (ok >= PASS - 1) FX.confetti(innerWidth / 2, innerHeight * 0.55, 60, 13);
+  Speech.speak(`${ok}問 正解！ ${msg} ${locked ? `つぎは ${pri}を やろう！` : 'もう一回 チャレンジ しよう！'}`);
 }
 
 function closeOverlays() {
@@ -1472,7 +1547,7 @@ function renderBook() {
   }
   const list = st.map((s, i) => ({ s, i })).filter(x => bookFilter === 'all' || x.s.t === bookFilter);
   if (!list.length) {
-    body.innerHTML = '<div class="empty">まだ シールが ないよ。<br>10もん ぜんぶ せいかいで シール ゲット！</div>';
+    body.innerHTML = `<div class="empty">まだ シールが ないよ。<br>${PASS}もん いじょう せいかいで シール ゲット！</div>`;
     return;
   }
   body.innerHTML = '<div class="board-stk">' + list.map(({ s, i }) =>
@@ -1501,6 +1576,7 @@ function renderSettings() {
     if (inp.type === 'checkbox') inp.checked = !!v; else inp.value = v;
   });
   $('#rateOut').textContent = Number(S().rate).toFixed(1);
+  $('#missionNote').textContent = `今日の${THEMES[S().priority].name}のシール：${missionDone()} / ${MISSION}枚` + (missionLeft() ? '' : '（達成）');
   $$('#settings [data-act="seg"]').forEach(b => b.classList.toggle('on', S()[b.dataset.k] === b.dataset.val));
   renderVoiceSelect();
   const rows = Object.entries(THEMES).map(([t, th]) => {
@@ -1526,10 +1602,9 @@ document.addEventListener('click', e => {
   const act = b.dataset.act;
   if (act !== 'key') SFX.tap();
   switch (act) {
-    case 'start':
-      if (b.dataset.theme === 'mul') { renderDan(); show('dan'); }
-      else startQuiz(b.dataset.theme);
-      break;
+    case 'start': chooseTheme(b.dataset.theme); break;
+    case 'startPriority': enterTheme(S().priority); break;
+    case 'startNoSticker': enterTheme(b.dataset.theme); break;
     case 'startDan': startQuiz('mul', +b.dataset.dan); break;
     case 'order': S().order = b.dataset.val; save(); renderDan(); break;
     case 'again': startQuiz(Q.theme, Q.dan); break;
@@ -1638,7 +1713,10 @@ document.addEventListener('keydown', e => {
   else return;
   e.preventDefault();
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden) Speech.stop(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) Speech.stop();
+  else if (screen === 'home') renderHome();  // 日づけが かわっていたら ミッションを あたらしく
+});
 
 // ---------- はじめる ----------
 load();
