@@ -147,6 +147,7 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .danb b{font-size:clamp(44px,min(7vw,10vh),84px);color:var(--mul);line-height:1}
 .danb span{font-size:clamp(18px,2.2vw,24px)}
 .danb em{font-style:normal;font-size:18px;min-height:1.3em;color:#e0a000}
+.danb em.nos{font-size:clamp(13px,1.5vw,16px);color:var(--mute)}
 .danb.mix{background:linear-gradient(#fff,#f3e9ff)}
 .danb.mix b{font-size:clamp(28px,4vw,44px)}
 .dan-order{align-self:center;margin:6px 0 18px}
@@ -625,7 +626,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <p class="note">・Safari の共有ボタン →「ホーム画面に追加」で、アプリのように全画面で使えます。記録（シール）もこの iPad の中に保存され、消えにくくなります。<br>
         ・まちがえた問題は、次から少し出やすくなります。<br>
         ・ボールをタッチすると、数を声でかぞえます。<br>
-        ・10問中7問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。</p>
+        ・10問中7問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
+        ・かけざんの1の段は練習用で、シールはもらえません。</p>
       </div>
     </div>
   </section>
@@ -676,7 +678,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <div class="res-score"><b id="resOk">0</b> / 10 ゴール</div>
       <div class="res-msg" id="resMsg"></div>
       <div class="res-btns">
-        <button class="bigbtn yellow" id="resPriority" data-act="startPriority" hidden></button>
+        <button class="bigbtn yellow" id="resNext" data-act="startPriority" hidden></button>
         <button class="bigbtn yellow" id="resAgain" data-act="again">⚽ もういっかい</button>
         <button class="bigbtn" data-act="home">🏠 トップ</button>
       </div>
@@ -750,6 +752,7 @@ const RANK_ORDER = ['add', 'sub', 'mul'];
 
 const PASS = 7;     // シールが もらえる せいかい数（10もん ちゅう）
 const MISSION = 5;  // ゆうせんテーマで 1日に あつめる シールの数
+const NO_STICKER_DAN = 1;  // シールが もらえない 九九の だん（れんしゅう用）
 
 // [がめんの もじ, よみあげ]
 const PRAISE = [['ゴール！', 'ゴール！'], ['ゴール！', 'ゴール！'], ['ナイスシュート！', 'ナイスシュート！'], ['すごい！', 'すごい！'], ['やったね！', 'やったね！'], ['せいかい！', '正解！'], ['てんさい！', '天才！'], ['ばっちり！', 'ばっちり！']];
@@ -1149,12 +1152,29 @@ function enterTheme(t) {
   if (t === 'mul') { renderDan(); show('dan'); }
   else startQuiz(t);
 }
+// だんを えらんだとき：シールが もらえない だんなら、やるか きく（ミッション中は もう きいてあるので きかない）
+function chooseDan(dan) {
+  if (dan !== NO_STICKER_DAN || stickerLocked('mul')) return startQuiz('mul', dan);
+  openModal(`<div class="lock-ico">🔒</div>
+    <p class="mq">シールは もらえないよ</p>
+    <p class="lock-msg">${dan}のだんは れんしゅうだよ。<br>シールは ${dan + 1}のだんから もらえるよ。<br>それでも ${dan}のだんを やる？</p>
+    <div class="mbtns"><button class="bigbtn yellow" data-act="closeModal">⭐ ほかの だんに する</button><button class="bigbtn" data-act="startDanOk" data-dan="${dan}">シールなしで やる</button></div>`);
+  Speech.speak(`${dan}のだんは シールが もらえないよ。シールは ${dan + 1}のだんから だよ。それでも やる？`);
+}
+// シールが もらえない りゆう（ミッションを さきに つたえる）
+function noStickerReason(t, dan) {
+  if (stickerLocked(t)) return 'mission';
+  return t === 'mul' && dan === NO_STICKER_DAN ? 'dan' : '';
+}
 
 function renderDan() {
   const cnt = n => D.stickers.filter(s => s.t === 'mul' && s.dan === n).length;
   const stars = c => c ? '⭐'.repeat(Math.min(c, 3)) + (c > 3 ? `+${c - 3}` : '') : '';
   let h = '';
-  for (let n = 1; n <= 9; n++) h += `<button class="danb" data-act="startDan" data-dan="${n}"><b>${n}</b><span>のだん</span><em>${stars(cnt(n))}</em></button>`;
+  for (let n = 1; n <= 9; n++) {
+    const mark = n === NO_STICKER_DAN ? '<em class="nos">🔒 シールなし</em>' : `<em>${stars(cnt(n))}</em>`;
+    h += `<button class="danb" data-act="startDan" data-dan="${n}"><b>${n}</b><span>のだん</span>${mark}</button>`;
+  }
   h += `<button class="danb mix" data-act="startDan" data-dan="0"><b>ミックス</b><span>ぜんぶの だん</span><em>${stars(cnt(0))}</em></button>`;
   $('#danGrid').innerHTML = h;
   $$('.dan-order [data-val]').forEach(b => b.classList.toggle('on', b.dataset.val === S().order));
@@ -1204,7 +1224,7 @@ function setAns(v) { ans.value = v; Q.val = v; }
 function startQuiz(theme, dan = 0) {
   SFX.unlock();
   closeOverlays();
-  Object.assign(Q, { theme, dan, list: makeQuestions(theme, dan), idx: 0, results: [], combo: 0, active: true, noSticker: stickerLocked(theme) });
+  Object.assign(Q, { theme, dan, list: makeQuestions(theme, dan), idx: 0, results: [], combo: 0, active: true, noSticker: noStickerReason(theme, dan) });
   document.body.dataset.theme = theme;
   const qt = $('#qTheme');
   qt.textContent = (Q.noSticker ? '🔒 ' : '') + THEMES[theme].name + (theme === 'mul' ? (dan ? ` ${dan}のだん` : ' ミックス') : '');
@@ -1488,23 +1508,26 @@ function showWin({ s, isNew, rankUp, missionClear }, ok) {
 }
 
 function showResult(ok) {
-  const locked = Q.noSticker, pri = THEMES[S().priority].name;
+  const why = Q.noSticker, locked = !!why, pri = THEMES[S().priority].name, byDan = why === 'dan';
   $('#resBalls').innerHTML = Q.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('');
   $('#resOk').textContent = ok;
   let msg = ok >= 4 ? 'いいね！ その ちょうし！' : 'がんばったね！';
   if (locked && ok >= PASS) msg = 'すごい！ れんしゅう ばっちり！';
   if (!locked && ok === PASS - 1) msg = 'おしい！ あと 1もん！';
-  const note = locked ? `シールは ${pri}の シールを あと ${missionLeft()}まい あつめてから もらえるよ` : `${PASS}もん いじょう せいかいで シール ゲット！`;
+  const note = byDan ? `${Q.dan}のだんは れんしゅうだよ。シールは ${Q.dan + 1}のだんから もらえるよ`
+    : locked ? `シールは ${pri}の シールを あと ${missionLeft()}まい あつめてから もらえるよ`
+    : `${PASS}もん いじょう せいかいで シール ゲット！`;
   $('#resMsg').innerHTML = `${msg}<br><small>${note}</small>`;
-  // シールなしの れんしゅうの あとは、ゆうせんテーマへ さそう
-  const goPri = $('#resPriority');
-  goPri.hidden = !locked;
-  goPri.textContent = `⭐ ${pri}を やる`;
+  // シールなしの れんしゅうの あとは、シールが もらえる ほうへ さそう
+  const goNext = $('#resNext');
+  goNext.hidden = !locked;
+  goNext.textContent = byDan ? '⭐ ほかの だんを やる' : `⭐ ${pri}を やる`;
+  goNext.dataset.act = byDan ? 'toDan' : 'startPriority';
   $('#resAgain').classList.toggle('yellow', !locked);
   $('#result').classList.add('show');
   SFX.cheer();
   if (ok >= PASS - 1) FX.confetti(innerWidth / 2, innerHeight * 0.55, 60, 13);
-  Speech.speak(`${ok}問 正解！ ${msg} ${locked ? `つぎは ${pri}を やろう！` : 'もう一回 チャレンジ しよう！'}`);
+  Speech.speak(`${ok}問 正解！ ${msg} ${byDan ? 'つぎは ほかの だんを やろう！' : locked ? `つぎは ${pri}を やろう！` : 'もう一回 チャレンジ しよう！'}`);
 }
 
 function closeOverlays() {
@@ -1648,7 +1671,9 @@ document.addEventListener('click', e => {
     case 'start': chooseTheme(b.dataset.theme); break;
     case 'startPriority': enterTheme(S().priority); break;
     case 'startNoSticker': enterTheme(b.dataset.theme); break;
-    case 'startDan': startQuiz('mul', +b.dataset.dan); break;
+    case 'startDan': chooseDan(+b.dataset.dan); break;
+    case 'startDanOk': startQuiz('mul', +b.dataset.dan); break;
+    case 'toDan': enterTheme('mul'); break;
     case 'order': S().order = b.dataset.val; save(); renderDan(); break;
     case 'again': startQuiz(Q.theme, Q.dan); break;
     case 'home': goHome(); break;
@@ -1659,7 +1684,7 @@ document.addEventListener('click', e => {
       openModal('<p class="mq">とちゅうで やめる？</p><div class="mbtns"><button class="bigbtn yellow" data-act="resume">つづける</button><button class="bigbtn" data-act="home">やめる</button></div>');
       break;
     case 'resume': closeModal(); if (isKb()) ans.focus({ preventScroll: true }); break;
-    case 'closeModal': closeModal(); break;
+    case 'closeModal': closeModal(); Speech.stop(); break;
     case 'book': bookNew = -1; renderBook(); show('book'); break;
     case 'bookFromWin': closeOverlays(); Speech.stop(); bookFilter = 'all'; bookNew = D.stickers.length - 1; renderBook(); show('book'); break;
     case 'bookTab': bookFilter = b.dataset.f; bookNew = -1; renderBook(); break;
