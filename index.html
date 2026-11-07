@@ -324,6 +324,13 @@ body.kb .pad{display:none}
 .modal-card{background:#fff;border-radius:28px;padding:26px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;animation:popIn .35s cubic-bezier(.2,1.5,.4,1);max-width:90vw}
 .modal-card.tight{padding:18px 26px;gap:10px}
 .mq{font-size:32px;margin:0}
+.gate-q{display:flex;align-items:center;gap:.3em;font-size:clamp(30px,4.4vw,44px);font-weight:900;font-variant-numeric:tabular-nums}
+.gate-val{min-width:2.4em;height:1.25em;line-height:1.25em;background:#eef2f8;border-radius:.2em;text-align:center}
+.gate-val.ng{animation:shake .4s;background:#ffe1e4;color:#e0283c}
+.gate-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(330px,70vw)}
+.gkey{height:clamp(46px,calc((var(--vh) - 390px)/4.3),68px);border-radius:14px;background:#f1f4f9;font-size:clamp(20px,2.6vw,28px);box-shadow:0 4px 0 #c9d2e0}
+.gkey:active{transform:translateY(3px);box-shadow:0 1px 0 #c9d2e0}
+.gkey.ok{background:linear-gradient(#5ee08c,#22b45a);color:#fff;box-shadow:0 4px 0 #15843f}
 .lock-ico{font-size:56px;line-height:1}
 .lock-msg{margin:0;font-size:clamp(18px,2.4vw,24px);line-height:1.55}
 .mbtns{display:flex;gap:14px}
@@ -1563,6 +1570,42 @@ function stickerDetail(s, sub) {
   Speech.speak(d.name + (s.k ? ' キラキラ' : ''));
 }
 
+// ---------- おうちの方へ の ロック（九九より むずかしい 計算で おとなを かくにん） ----------
+const Gate = { ans: 0, val: '' };
+function openGate() {
+  Speech.stop();
+  let a;
+  do { a = 13 + rand(27); } while (a % 10 === 0);
+  const b = 3 + rand(7);
+  Object.assign(Gate, { ans: a * b, val: '' });
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'del', '0', 'ok'].map(k =>
+    `<button class="gkey${k === 'ok' ? ' ok' : ''}" data-act="gateKey" data-k="${k}">${k === 'del' ? 'けす' : k === 'ok' ? 'OK' : k}</button>`).join('');
+  openModal(`<p class="mq">おうちの方の確認</p>
+    <p class="msub">次の計算の答えを入れて OK を押してください</p>
+    <div class="gate-q">${a} × ${b} = <span class="gate-val" id="gateVal"></span></div>
+    <div class="gate-pad">${keys}</div>
+    <button class="bigbtn" data-act="closeModal">もどる</button>`, 'tight');
+}
+function gateKey(k) {
+  const v = $('#gateVal');
+  if (k !== 'ok') {
+    Gate.val = k === 'del' ? Gate.val.slice(0, -1) : (Gate.val + k).slice(0, 3);
+    v.textContent = Gate.val;
+    return;
+  }
+  if (!Gate.val) return;
+  if (+Gate.val === Gate.ans) {
+    closeModal();
+    renderSettings();
+    show('settings');
+    return;
+  }
+  // まちがえたら べつの もんだいに かえる
+  SFX.wrong();
+  v.classList.remove('ng'); void v.offsetWidth; v.classList.add('ng');
+  setTimeout(() => { if ($('#modal').classList.contains('show') && $('#gateVal') === v) openGate(); }, 500);
+}
+
 // ---------- せってい ----------
 function renderVoiceSelect() {
   const sel = $('#voiceSel');
@@ -1647,7 +1690,8 @@ document.addEventListener('click', e => {
       Speech.speak(next ? `${name}は あと ${next[0] - n}まいで ${next[1]}に なれるよ！` : `${name}は さいこうの ランクだよ！`);
       break;
     }
-    case 'settings': renderSettings(); show('settings'); break;
+    case 'settings': openGate(); break;
+    case 'gateKey': gateKey(b.dataset.k); break;
     case 'seg':
       S()[b.dataset.k] = b.dataset.val;
       save();
