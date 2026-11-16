@@ -626,7 +626,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <p class="note">・Safari の共有ボタン →「ホーム画面に追加」で、アプリのように全画面で使えます。記録（シール）もこの iPad の中に保存され、消えにくくなります。<br>
         ・まちがえた問題は、次から少し出やすくなります。<br>
         ・ボールをタッチすると、数を声でかぞえます。<br>
-        ・10問中7問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
+        ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
         ・かけざんの1の段は練習用で、シールはもらえません。</p>
       </div>
     </div>
@@ -675,7 +675,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
     <div class="res-card">
       <div class="res-top">しあい しゅうりょう！</div>
       <div class="res-balls" id="resBalls"></div>
-      <div class="res-score"><b id="resOk">0</b> / 10 ゴール</div>
+      <div class="res-score"><b id="resOk">0</b> / <span id="resTotal">7</span> ゴール</div>
       <div class="res-msg" id="resMsg"></div>
       <div class="res-btns">
         <button class="bigbtn yellow" id="resNext" data-act="startPriority" hidden></button>
@@ -750,7 +750,8 @@ const RANKS = [[0, 'ルーキー', '🌱'], [15, 'レギュラー', '⚽'], [40,
 const TOP_RANK = RANKS[RANKS.length - 1][0];
 const RANK_ORDER = ['add', 'sub', 'mul'];
 
-const PASS = 7;     // シールが もらえる せいかい数（10もん ちゅう）
+const QUESTIONS = 7;  // 1かいの もんだい数
+const PASS = 4;       // シールが もらえる せいかい数（7もん ちゅう）
 const MISSION = 5;  // ゆうせんテーマで 1日に あつめる シールの数
 const NO_STICKER_DAN = 1;  // シールが もらえない 九九の だん（れんしゅう用）
 
@@ -1187,17 +1188,18 @@ function makeQuestions(t, dan) {
   if (t === 'add') for (let a = 1; a <= 9; a++) for (let b = 1; b <= 9; b++) pool.push({ t, a, b, ans: a + b });
   if (t === 'sub') for (let a = 1; a <= 9; a++) for (let b = 1; b <= a; b++) pool.push({ t, a, b, ans: a - b });
   if (t === 'mul') for (const a of dan ? [dan] : [1, 2, 3, 4, 5, 6, 7, 8, 9]) for (let b = 1; b <= 9; b++) pool.push({ t, a, b, ans: a * b });
-  if (t === 'mul' && dan && S().order === 'seq') return [...pool, pick(pool)].map(q => ({ ...q }));
   // まちがえた もんだいほど でやすく。こたえ 0 は すこし でにくく
   const w = pool.map(q => (1 + 1.5 * (D.miss[qkey(q)] || 0)) * (q.ans === 0 ? 0.4 : 1));
   const out = [];
   let avail = pool.map((_, i) => i);
-  while (out.length < 10) {
+  while (out.length < QUESTIONS) {
     if (!avail.length) avail = pool.map((_, i) => i).filter(i => pool[i] !== out[out.length - 1]);
     let r = Math.random() * avail.reduce((s, i) => s + w[i], 0), k = 0;
     for (; k < avail.length - 1; k++) { r -= w[avail[k]]; if (r <= 0) break; }
     out.push(pool[avail.splice(k, 1)[0]]);
   }
+  // だんの「じゅんばん」は、えらんだ もんだいを ×1 から じゅんに ならべる
+  if (t === 'mul' && dan && S().order === 'seq') out.sort((x, y) => x.b - y.b);
   return out.map(q => ({ ...q }));
 }
 function updateMiss(q, ok) {
@@ -1396,7 +1398,7 @@ async function onCorrect() {
   SFX.goal(Q.combo);
   Q.canSkip = true;
   let line = `${say} ${answerText(q)}`;
-  if ([3, 5, 7, 10].includes(Q.combo)) line += `。 ${Q.combo}れんぞく！`;
+  if ([3, 5, 7].includes(Q.combo)) line += `。 ${Q.combo}れんぞく！`;
   await Promise.all([Speech.speak(line), sleep(1200)]);
   if (tk === Q.token) nextQuestion();
 }
@@ -1511,7 +1513,8 @@ function showResult(ok) {
   const why = Q.noSticker, locked = !!why, pri = THEMES[S().priority].name, byDan = why === 'dan';
   $('#resBalls').innerHTML = Q.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('');
   $('#resOk').textContent = ok;
-  let msg = ok >= 4 ? 'いいね！ その ちょうし！' : 'がんばったね！';
+  $('#resTotal').textContent = Q.list.length;
+  let msg = ok >= 2 ? 'いいね！ その ちょうし！' : 'がんばったね！';
   if (locked && ok >= PASS) msg = 'すごい！ れんしゅう ばっちり！';
   if (!locked && ok === PASS - 1) msg = 'おしい！ あと 1もん！';
   const note = byDan ? `${Q.dan}のだんは れんしゅうだよ。シールは ${Q.dan + 1}のだんから もらえるよ`
