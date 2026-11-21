@@ -501,12 +501,13 @@ body.kb .pad{display:none}
 .iqcell.q{background:#ffe1e4}
 .iqcell svg{width:86%;height:86%}
 .iqcnt{display:grid;grid-template-columns:repeat(6,1fr);gap:4px 10px;font-size:clamp(26px,3.2vw,42px);line-height:1.2}
-.iqeq{display:flex;align-items:center;gap:.3em;font-size:clamp(28px,3.4vw,46px);background:#f4f6fb;border-radius:16px;padding:.1em .6em}
-.iqeq i{font-style:normal;color:#7a3cf0;font-weight:900}
-.iqweek{display:flex;gap:6px}
-.iqweek span{width:clamp(34px,4vw,48px);aspect-ratio:1;border-radius:10px;background:#f4f6fb;display:grid;place-items:center;font-size:clamp(18px,2.2vw,26px)}
-.iqweek span:first-child{color:#e0283c}.iqweek span:last-child{color:#2f6fe0}
-.iqweek span.on{background:#7a3cf0;color:#fff}
+.iqss{width:clamp(220px,30vw,340px);height:auto;display:block}
+.iqss2{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px}
+.iqss2 .iqss{width:clamp(190px,23vw,290px)}
+.iqgrp{font-size:clamp(22px,2.6vw,34px);line-height:1.25;word-break:break-all}
+.iqlr{display:flex;justify-content:space-between;width:100%;max-width:440px;font-size:clamp(14px,1.6vw,18px);color:var(--mute)}
+.iqrow.iqleft{justify-content:flex-start;min-width:min(100%,420px);background:#f4f6fb;border-radius:14px;padding:4px 10px}
+.iqemo.sm{font-size:clamp(26px,3.2vw,40px)}
 .iqside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.6vh,16px)}
 .iqchoices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .iqch{background:#fff;border-radius:18px;min-height:clamp(64px,13vh,130px);font-size:clamp(24px,3.2vw,40px);box-shadow:0 6px 0 #b8c4d8;border:4px solid transparent;font-weight:800;display:grid;place-items:center;padding:6px;line-height:1.2}
@@ -1882,7 +1883,7 @@ const GAMES = {
   iq: { name: 'IQテスト', lv: { 1: { name: 'やさしい', coin: 1 }, 2: { name: 'ふつう', coin: 1 }, 3: { name: 'むずかしい', coin: 1 } } },
 };
 const GAME_RULE = {
-  iq: 'すうれつ・ならび・なかまはずれ・かたち・パズル などの もんだいが 7もん。4もん いじょう せいかいで コイン！',
+  iq: 'かず・ならび・なかまはずれ・かたち・シーソー・じゅんばん などの もんだいが 7もん。4もん いじょう せいかいで コイン！',
   meiro: '1 → 2 → 3 … の じゅんに、ぜんぶの マスを 1かいずつ とおって、さいごの すうじまで つなごう。ゆびで なぞってね。',
   sudoku: 'たて・よこ・ふとい わくの 中に、1〜6が 1つずつ はいるように すうじを 入れよう。',
 };
@@ -2008,41 +2009,26 @@ function numW(ans, cands) {
   return out.slice(0, 3).map(String);
 }
 
-// 1. すうれつ
+// ----- 5さい向けの もんだい（9しゅるい から 7しゅるい えらぶ・むずかしさ 1〜3） -----
+// 1. かずの ならび（1ずつ・2ずつ・5ずつ・10ずつ）
 function iqSeq(lv) {
-  const t = lv === 1 ? pick(['add', 'sub']) : lv === 2 ? pick(['add', 'sub', 'mul2']) : pick(['alt', 'grow', 'mul2', 'sq']);
-  let terms, why, cands = [];
-  const n6 = [0, 1, 2, 3, 4, 5];
-  if (t === 'add') { const a = ri(1, 9), d = ri(2, lv === 1 ? 5 : 9); terms = n6.map(i => a + d * i); why = `${d}ずつ ふえて いるよ`; cands = [terms[5] + d, terms[4] + d + 1]; }
-  if (t === 'sub') { const d = ri(2, lv === 1 ? 5 : 8), a = d * 5 + ri(1, 9); terms = n6.map(i => a - d * i); why = `${d}ずつ へって いるよ`; cands = [terms[5] + 2 * d, terms[5] - 1]; }
-  if (t === 'mul2') { const m = lv === 3 ? pick([2, 3]) : 2, a = m === 3 ? ri(1, 2) : ri(1, 3); terms = n6.map(i => a * m ** i); why = `${m}ばいずつ ふえて いるよ`; cands = [terms[4] + terms[4] / 2 * 1, terms[4] * m + terms[4]]; }
-  if (t === 'alt') {
-    const a = ri(1, 9), p = ri(2, 6); let q = ri(1, 5); if (q === p) q = p + 1;
-    terms = [a]; for (let i = 1; i < 6; i++) terms.push(terms[i - 1] + (i % 2 ? p : q));
-    why = `+${p} と +${q} を じゅんばんに くりかえして いるよ`; cands = [terms[4] + p, terms[4] + q + 1];
-  }
-  if (t === 'grow') {
-    const a = ri(1, 9), s = ri(1, 3);
-    terms = [a]; for (let i = 1; i < 6; i++) terms.push(terms[i - 1] + s + i - 1);
-    why = `ふえる かずが ${s}、${s + 1}、${s + 2} … と 1ずつ おおきく なるよ`; cands = [terms[4] + s + 3, terms[4] + s + 5];
-  }
-  if (t === 'sq') {
-    const o = ri(1, 3); terms = n6.map(i => (o + i) * (o + i));
-    why = `${o}×${o}、${o + 1}×${o + 1}、${o + 2}×${o + 2} … と おなじ かずを かけた かずだよ`; cands = [terms[4] + (o + 4), (o + 5) * (o + 4)];
-  }
-  const miss = lv === 3 && Math.random() < 0.4 ? ri(2, 4) : 5;
+  const t = lv === 1 ? pick(['up1', 'up1', 'down1']) : lv === 2 ? pick(['up1', 'down1', 'up2']) : pick(['up2', 'down2', 'up5', 'up10']);
+  const step = { up1: 1, down1: -1, up2: 2, down2: -2, up5: 5, up10: 10 }[t];
+  const a = { up1: ri(1, lv === 1 ? 5 : 12), down1: lv === 1 ? ri(6, 10) : ri(8, 20), up2: ri(1, lv === 2 ? 4 : 8), down2: ri(10, 20), up5: 5, up10: 10 }[t];
+  const terms = [0, 1, 2, 3, 4].map(i => a + step * i);
+  const miss = lv === 3 && Math.random() < 0.5 ? ri(1, 3) : 4;
   const ans = terms[miss];
-  if (miss !== 5) cands = [ans + 1, ans - 1, terms[miss - 1] + 1];
+  const why = step > 0 ? `${step}ずつ ふえて いるよ` : `${-step}ずつ へって いるよ`;
   const vis = `<div class="iqrow">${terms.map((x, i) => `<span class="iqnum${i === miss ? ' q' : ''}">${i === miss ? '？' : x}</span>`).join('')}</div>`;
-  return iqPack({ kind: 'すうれつ', q: '？に はいる かずは どれ？', vis, why }, String(ans), numW(ans, cands));
+  return iqPack({ kind: 'かずの ならび', q: '？に はいる かずは どれ？', vis, why }, String(ans), numW(ans, [ans + step, ans - step]));
 }
 
 // 2. ならび（くりかえしの きまり）
-const IQ_SHP = ['🔴', '🔵', '🟢', '🟡', '🟥', '🟦', '🟩', '🟨', '🔺', '⭐', '❤️', '🌙', '🔶', '💜'];
+const IQ_SHP = ['🔴', '🔵', '🟡', '🟢', '⭐', '❤️', '🌙', '🍎', '🍌', '🐶', '🐱', '⚽', '🚗', '🌸'];
 function iqPattern(lv) {
   const p = shuffle(IQ_SHP.slice()), [a, b, c, d] = p;
-  const unit = lv === 1 ? pick([[a, b], [a, a, b]]) : lv === 2 ? pick([[a, b, c], [a, a, b], [a, b, b]]) : pick([[a, b, b, c], [a, b, c, d], [a, a, b, c], [a, b, c, b]]);
-  const n = lv === 1 ? 7 : 8, L = unit.length;
+  const unit = lv === 1 ? [a, b] : lv === 2 ? pick([[a, a, b], [a, b, b], [a, b, c]]) : pick([[a, a, b, b], [a, b, c, d], [a, a, b, c], [a, b, c, b]]);
+  const n = lv === 3 ? 8 : 6, L = unit.length;
   const seq = Array.from({ length: n }, (_, i) => unit[i % L]);
   const ans = unit[n % L];
   const wrongs = [...new Set(unit.filter(x => x !== ans)), ...p.slice(4)];
@@ -2050,31 +2036,26 @@ function iqPattern(lv) {
   return iqPack({ kind: 'ならび', q: 'きまりを みつけよう。？に はいるのは どれ？', vis, why: `${unit.join('')} の くりかえし だよ` }, ans, wrongs);
 }
 
-// 3. なかまはずれ
+// 3. なかまはずれ（なかま → かずの ちがう もの）
 const IQ_CATS = {
   'どうぶつ': ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐸', '🐯', '🐮', '🐷'],
   'くだもの': ['🍎', '🍌', '🍇', '🍓', '🍊', '🍑', '🍒', '🍉'],
   'のりもの': ['🚗', '🚌', '🚲', '✈️', '🚀', '🚂', '🚒', '🚑'],
+  'ボール': ['⚽', '🏀', '⚾', '🎾', '🏐'],
   'がっき': ['🎹', '🎸', '🥁', '🎺', '🎻'],
   'むし': ['🐞', '🐝', '🦋', '🐜', '🐛'],
-  'ボール': ['⚽', '🏀', '⚾', '🎾', '🏐'],
   'てんきの しるし': ['☀️', '☁️', '☔', '⛄', '⚡'],
 };
+const IQ_EASY_CATS = ['どうぶつ', 'くだもの', 'のりもの', 'ボール'];
 function iqOdd(lv) {
-  if (lv >= 2 && Math.random() < 0.4) {
-    const k = lv === 2 ? pick([2, 5, 10]) : pick([3, 4, 6, 7, 8, 9]);
-    // ほかの きまり（ぐうすう・きすう）で べつの かずが なかまはずれに みえないように する
-    let nums, odd, ok = false;
-    while (!ok) {
-      nums = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).map(x => x * k);
-      odd = k * ri(2, 9) + ri(1, k - 1);
-      const ev = [...nums, odd].filter(x => x % 2 === 0).length;
-      ok = !nums.includes(odd) && (ev === 4 || ev === 0 || (ev === 3 && odd % 2 === 1) || (ev === 1 && odd % 2 === 0) || ev === 2);
-    }
-    const ch = shuffle([...nums.map(String), String(odd)]);
-    return { kind: 'なかまはずれ', q: 'なかまはずれの かずは どれ？', vis: '', choices: ch, ans: ch.indexOf(String(odd)), why: `ほかは みんな ${k}の だんの かず。${odd}は ${k}の だんに ないよ` };
+  if (lv === 3) {
+    // ひとつだけ かずが ちがう まとまり
+    const e = pick(['🍎', '⭐', '🐟', '🌸', '⚽', '🍓']), k = ri(2, 4), k2 = Math.random() < 0.5 ? k + 1 : k - 1;
+    const grp = m => `<span class="iqgrp">${e.repeat(m)}</span>`;
+    const ch = shuffle([grp(k), grp(k), grp(k), grp(k2)]);
+    return { kind: 'なかまはずれ', q: 'かずが ひとつだけ ちがうのは どれ？', vis: '', choices: ch, ans: ch.indexOf(grp(k2)), why: `ほかは みんな ${k}こ。これだけ ${k2}こ だよ` };
   }
-  const names = Object.keys(IQ_CATS), A = pick(names);
+  const names = lv === 1 ? IQ_EASY_CATS : Object.keys(IQ_CATS), A = pick(names);
   const clash = (x, y) => [x, y].includes('どうぶつ') && [x, y].includes('むし');
   let B; do { B = pick(names); } while (B === A || clash(A, B));
   const three = shuffle(IQ_CATS[A].slice()).slice(0, 3), one = pick(IQ_CATS[B]);
@@ -2082,13 +2063,15 @@ function iqOdd(lv) {
   return { kind: 'なかまはずれ', q: 'なかまはずれは どれ？', vis: '', choices: ch.map(x => `<span class="iqemo">${x}</span>`), ans: ch.indexOf(one), why: `${one} だけ ${B}。ほかは ${A} だよ` };
 }
 
-// 4. かいてん・かがみ（かたちを まわす）
+// 4. かたち（おなじ かたち → さかさま → かがみ・まわす）
 const IQ_PENTS = [
   [[1, 0], [2, 0], [0, 1], [1, 1], [1, 2]],          // F
   [[0, 0], [1, 0], [0, 1], [1, 1], [0, 2]],          // P
   [[1, 0], [0, 1], [1, 1], [1, 2], [1, 3]],          // Y
   [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3]],          // L
   [[0, 0], [0, 1], [1, 1], [1, 2], [1, 3]],          // N
+  [[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]],          // T
+  [[0, 0], [2, 0], [0, 1], [1, 1], [2, 1]],          // U
 ];
 const iqNorm = cells => { const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1])); return cells.map(([x, y]) => [x - mx, y - my]); };
 const iqRot = cells => iqNorm(cells.map(([x, y]) => [-y, x]));      // とけいまわりに 1/4
@@ -2099,97 +2082,109 @@ function iqShapeSVG(cells, col) {
   return `<svg viewBox="0 0 100 100" aria-hidden="true">${cells.map(([x, y], i) => `<rect x="${ox + x * s + 1}" y="${oy + y * s + 1}" width="${s - 2}" height="${s - 2}" rx="3" fill="${i === 0 ? '#ff7a2f' : col}"/>`).join('')}</svg>`;
 }
 function iqRotate(lv) {
-  const base = iqNorm(pick(IQ_PENTS)), col = pick(['#2f8cff', '#7a3cf0', '#2fbf68', '#14a3b8']);
+  const col = pick(['#2f8cff', '#7a3cf0', '#2fbf68', '#14a3b8']);
+  if (lv === 1) {
+    // おなじ かたちを みつける（ほかの こたえは べつの かたち）
+    const [base, ...others] = shuffle(IQ_PENTS.slice()).map(iqNorm);
+    const vis = `<div class="iqshape">${iqShapeSVG(base, col)}</div>`;
+    return iqPack({ kind: 'かたち', q: 'おなじ かたちは どれ？', vis, why: 'マスの ならびかたが ぴったり おなじ ものを さがそう' }, iqShapeSVG(base, col), others.slice(0, 3).map(c => iqShapeSVG(c, col)));
+  }
+  const base = iqNorm(pick(IQ_PENTS.slice(0, 5)));
   const r1 = iqRot(base), r2 = iqRot(r1), r3 = iqRot(r2), m = iqMir(base);
   const all = [base, r1, r2, r3, m, iqRot(m), iqRot(iqRot(m)), iqRot(iqRot(iqRot(m)))];
-  const v = lv === 1 ? pick(['half', 'mirror']) : lv === 2 ? pick(['cw', 'ccw', 'mirror']) : pick(['cw', 'ccw', 'half', 'mirrorRot']);
-  const T = { half: [r2, 'さかさまに（はんかいてん）すると どれ？', '🔃 はんかいてん', 'はんかいてん すると、うえと したが いれかわるよ'],
+  const v = lv === 2 ? 'half' : pick(['mirror', 'cw']);
+  const T = { half: [r2, 'さかさまに すると どれ？', '🔃 さかさま', 'さかさまに すると、うえと したが いれかわるよ'],
     cw: [r1, 'とけいと おなじ むきに ¼ かいてん すると どれ？', '↻ ¼ かいてん', 'とけいまわりに ¼ まわすと、うえに あった ところが みぎに くるよ'],
-    ccw: [r3, 'とけいと はんたいの むきに ¼ かいてん すると どれ？', '↺ ¼ かいてん', 'はんたいまわりに ¼ まわすと、うえに あった ところが ひだりに くるよ'],
-    mirror: [m, 'かがみに うつすと どれ？（みぎと ひだりが はんたい）', '🪞 かがみ', 'かがみに うつすと、みぎと ひだりが いれかわるよ'],
-    mirrorRot: [iqRot(m), 'かがみに うつしてから、とけいまわりに ¼ かいてん すると どれ？', '🪞 → ↻', 'まず みぎと ひだりを いれかえて、それから とけいまわりに ¼ まわすよ'] }[v];
+    mirror: [m, 'かがみに うつすと どれ？（みぎと ひだりが はんたい）', '🪞 かがみ', 'かがみに うつすと、みぎと ひだりが いれかわるよ'] }[v];
   const ansKey = iqKey(T[0]);
   const wrongs = shuffle(all.filter(c => iqKey(c) !== ansKey)).slice(0, 3);
-  const correct = iqShapeSVG(T[0], col);
   const vis = `<div class="iqshape">${iqShapeSVG(base, col)}</div><div class="iqtag">${T[2]}</div>`;
-  return iqPack({ kind: lv >= 2 && v !== 'half' ? 'かいてん・かがみ' : 'かたち', q: T[1], vis, why: T[3] + '（オレンジの マスを めじるしに しよう）' }, correct, wrongs.map(c => iqShapeSVG(c, col)));
+  return iqPack({ kind: 'かたち', q: T[1], vis, why: T[3] + '（オレンジの マスを めじるしに しよう）' }, iqShapeSVG(T[0], col), wrongs.map(c => iqShapeSVG(c, col)));
 }
 
-// 5. 3×3 の パズル（たて・よこの きまり）
+// 5. 3×3 の パズル（よこが おなじ → よこは かたち・たては いろ → いろが 1つずつ）
 const IQ_COL = ['#ff5a5f', '#2f8cff', '#2fbf68'];
-function iqCellSVG(sh, co, n) {
-  const pos = n === 1 ? [[30, 30]] : n === 2 ? [[18, 30], [42, 30]] : [[18, 20], [42, 20], [30, 42]], r = n === 1 ? 20 : 11;
-  const one = ([x, y]) => sh === 0 ? `<circle cx="${x}" cy="${y}" r="${r}" fill="${IQ_COL[co]}"/>`
+function iqCellSVG(sh, co) {
+  const x = 30, y = 30, r = 20;
+  const one = sh === 0 ? `<circle cx="${x}" cy="${y}" r="${r}" fill="${IQ_COL[co]}"/>`
     : sh === 1 ? `<rect x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" rx="2" fill="${IQ_COL[co]}"/>`
     : `<path d="M${x} ${y - r}L${x + r} ${y + r * .85}H${x - r}Z" fill="${IQ_COL[co]}"/>`;
-  return `<svg viewBox="0 0 60 60" aria-hidden="true">${pos.map(one).join('')}</svg>`;
+  return `<svg viewBox="0 0 60 60" aria-hidden="true">${one}</svg>`;
 }
 function iqMatrix(lv) {
   const sp = shuffle([0, 1, 2]), cp = shuffle([0, 1, 2]);
-  const cell = (i, j) => lv === 1 ? [sp[i], cp[(i + j) % 3], 1] : lv === 2 ? [sp[(i + j) % 3], cp[(i + 2 * j) % 3], 1] : [sp[(i + j) % 3], cp[(2 * i + j) % 3], (i + 2 * j) % 3 + 1];
+  const cell = (i, j) => lv === 1 ? [sp[i], cp[i]] : lv === 2 ? [sp[i], cp[j]] : [sp[i], cp[(i + j) % 3]];
   const mi = lv === 1 ? 2 : ri(0, 2), mj = lv === 1 ? 2 : ri(0, 2);
-  const [s, c, n] = cell(mi, mj);
-  const key = (a, b, k) => `${a}${b}${k}`, seen = new Set([key(s, c, n)]), wr = [];
-  const alts = shuffle([[(s + 1) % 3, c, n], [s, (c + 1) % 3, n], [(s + 2) % 3, (c + 2) % 3, n], [s, (c + 2) % 3, n], [(s + 1) % 3, (c + 1) % 3, n]]
-    .concat(lv === 3 ? [[s, c, n % 3 + 1], [s, c, (n + 1) % 3 + 1]] : []));
+  const [s, c] = cell(mi, mj);
+  const key = (a, b) => `${a}${b}`, seen = new Set([key(s, c)]), wr = [];
+  const alts = shuffle([[(s + 1) % 3, c], [s, (c + 1) % 3], [(s + 2) % 3, (c + 2) % 3], [s, (c + 2) % 3], [(s + 1) % 3, (c + 1) % 3]]);
   for (const a of alts) if (!seen.has(key(...a)) && wr.length < 3) { seen.add(key(...a)); wr.push(iqCellSVG(...a)); }
   let g = '';
   for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) g += i === mi && j === mj ? '<span class="iqcell q">？</span>' : `<span class="iqcell">${iqCellSVG(...cell(i, j))}</span>`;
-  const why = lv === 1 ? 'よこの れつは おなじ かたち。いろは どの れつにも 3しょく 1つずつ だよ'
-    : lv === 2 ? 'たて・よこ どの れつにも、おなじ かたちと いろが 1つずつ はいるよ' : 'たて・よこ どの れつにも、かたち・いろ・かずが 1つずつ はいるよ';
-  return iqPack({ kind: '3×3 パズル', q: '？に はいるのは どれ？', vis: `<div class="iqgrid">${g}</div>`, why }, iqCellSVG(s, c, n), wr);
+  const why = lv === 1 ? 'よこの れつは みんな おなじ だよ'
+    : lv === 2 ? 'よこの れつは おなじ かたち、たての れつは おなじ いろ だよ' : 'よこの れつは おなじ かたち。いろは どの れつにも 3しょく 1つずつ だよ';
+  return iqPack({ kind: '3×3 パズル', q: '？に はいるのは どれ？', vis: `<div class="iqgrid">${g}</div>`, why }, iqCellSVG(s, c), wr);
 }
 
 // 6. かぞえる
 function iqCount(lv) {
-  const em = shuffle(['🔺', '⭐', '🔵', '🟩', '❤️', '🌙']).slice(0, lv === 1 ? 3 : 4);
-  const N = lv === 1 ? ri(10, 12) : lv === 2 ? ri(14, 16) : ri(18, 20);
+  const em = shuffle(['🔺', '⭐', '🔵', '🟩', '❤️', '🌙']).slice(0, lv === 1 ? 2 : 3);
+  const N = lv === 1 ? ri(5, 7) : lv === 2 ? ri(8, 10) : ri(11, 14);
   const items = Array.from({ length: N }, () => pick(em));
   if (!items.includes(em[0])) items[0] = em[0];
-  if (lv === 3 && !items.includes(em[1])) items[1] = em[1];
   shuffle(items);
-  const two = lv === 3, ans = items.filter(x => x === em[0] || (two && x === em[1])).length;
-  const q = two ? `${em[0]} と ${em[1]} は あわせて いくつ？` : `${em[0]} は いくつ ある？`;
-  return iqPack({ kind: 'かぞえる', q, say: two ? 'ふたつの かたちは あわせて いくつ？' : 'この かたちは いくつ ある？', vis: `<div class="iqcnt">${items.map(x => `<span>${x}</span>`).join('')}</div>`, why: `ひとつずつ しるしを つけながら かぞえると ${ans}こ だよ` }, String(ans), numW(ans, []));
+  const ans = items.filter(x => x === em[0]).length;
+  return iqPack({ kind: 'かぞえる', q: `${em[0]} は いくつ ある？`, say: 'この かたちは いくつ ある？', vis: `<div class="iqcnt">${items.map(x => `<span>${x}</span>`).join('')}</div>`, why: `ひとつずつ ゆびで さしながら かぞえると ${ans}こ だよ` }, String(ans), numW(ans, []));
 }
 
-// 7. てんびん（おもさの きまり）
-function iqBalance(lv) {
-  const [A, B, C] = shuffle(['🍎', '🍌', '🍇', '🍉', '🍓', '🍊', '🍐', '🥝']);
-  const rep = (x, k) => x.repeat(k);
-  const eq = (l, r) => `<div class="iqeq"><span>${l}</span><i>＝</i><span>${r}</span></div>`;
-  let vis, q, ans, why, cands;
-  if (lv === 1) {
-    const k = ri(2, 4), m = ri(2, 3); ans = k * m;
-    vis = eq(B, rep(A, k)); q = `${rep(B, m)} は ${A} いくつ ぶん？`;
-    why = `${B} 1こ は ${A} ${k}こ。だから ${m}こ だと ${k}×${m}＝${ans}こ`; cands = [k + m, k * m + k];
-  } else if (lv === 2) {
-    const k = ri(2, 3), m = ri(2, 3); ans = k * m;
-    vis = eq(B, rep(A, k)) + eq(C, rep(B, m)); q = `${C} は ${A} いくつ ぶん？`;
-    why = `${C} は ${B} ${m}こ。${B} 1こ は ${A} ${k}こ だから ${k}×${m}＝${ans}こ`; cands = [k + m, k * m + 1];
-  } else {
-    const k = ri(2, 3), n = ri(1, 2); const cv = k + n; ans = cv + k;
-    vis = eq(B, rep(A, k)) + eq(C, B + rep(A, n)); q = `${C}${B} は ${A} いくつ ぶん？`;
-    why = `${C} は ${A} ${cv}こ、${B} は ${A} ${k}こ。あわせて ${ans}こ`; cands = [cv, ans + k, k * n + k];
+// 7. シーソー（さがって いる ほうが おもい）
+function iqSeesawSVG(L, R, heavyLeft) {
+  const ang = heavyLeft ? -12 : 12;
+  return `<svg class="iqss" viewBox="0 0 220 120" aria-hidden="true"><polygon points="110,78 92,114 128,114" fill="#9aa4b5"/><g transform="rotate(${ang} 110 78)"><rect x="18" y="72" width="184" height="10" rx="5" fill="#7a3cf0"/><text x="46" y="66" font-size="40" text-anchor="middle">${L}</text><text x="174" y="66" font-size="40" text-anchor="middle">${R}</text></g></svg>`;
+}
+function iqSeesaw(lv) {
+  const [A, B, C] = shuffle(['🔴', '🔵', '🟡', '🟢', '🟣']);
+  if (lv < 3) {
+    const heavyLeft = Math.random() < 0.5, heavy = heavyLeft ? A : B, light = heavyLeft ? B : A;
+    const vis = iqSeesawSVG(A, B, heavyLeft);
+    if (lv === 1) return iqPack({ kind: 'シーソー', q: 'おもいのは どっち？', vis, why: 'さがって いる ほうが おもいよ' }, heavy, [light]);
+    return iqPack({ kind: 'シーソー', q: 'かるいのは どっち？', vis, why: 'あがって いる ほうが かるいよ' }, light, [heavy]);
   }
-  return iqPack({ kind: 'てんびん', q, say: 'てんびんの きまりを つかって こたえよう', vis, why }, String(ans), numW(ans, cands));
+  // A は B より おもい・B は C より おもい → いちばん おもいのは A
+  const s1 = Math.random() < 0.5 ? iqSeesawSVG(A, B, true) : iqSeesawSVG(B, A, false);
+  const s2 = Math.random() < 0.5 ? iqSeesawSVG(B, C, true) : iqSeesawSVG(C, B, false);
+  const vis = `<div class="iqss2">${shuffle([s1, s2]).join('')}</div>`;
+  return iqPack({ kind: 'シーソー', q: 'いちばん おもいのは どれ？', vis, why: `${A} は ${B} より おもい。${B} は ${C} より おもい。だから ${A} が いちばん おもいよ` }, A, [B, C]);
 }
 
-// 8. ようび
-const IQ_DAYS = ['にちようび', 'げつようび', 'かようび', 'すいようび', 'もくようび', 'きんようび', 'どようび'];
-function iqYoubi(lv) {
-  const d = rand(7);
-  let off, q;
-  if (lv === 1) { off = pick([1, 2, 3]); q = ['あした', 'あさって', '3日 あと'][off - 1]; }
-  else if (lv === 2) { off = pick([4, 5, 6, 8, 9, -1, -2]); q = off > 0 ? `${off}日 あと` : off === -1 ? 'きのう' : 'おととい'; }
-  else { off = pick([10, 12, 15, 20, -3, -5]); q = off > 0 ? `${off}日 あと` : `${-off}日 まえ`; }
-  const ans = IQ_DAYS[((d + off) % 7 + 7) % 7];
-  const wr = shuffle([1, -1, 2, -2]).map(k => IQ_DAYS[((d + off + k) % 7 + 7) % 7]);
-  const why = off > 7 || off < -2 ? `1しゅうかんは 7日。${Math.abs(off)}日 ${off > 0 ? 'あと' : 'まえ'}は、${Math.abs(off) % 7}日 ${off > 0 ? 'あと' : 'まえ'}と おなじ ようびだよ` : `${IQ_DAYS[d]}から ${Math.abs(off)}日 ${off > 0 ? 'すすめる' : 'もどる'}と ${ans}`;
-  return iqPack({ kind: 'ようび', q: `きょうは ${IQ_DAYS[d]}。${q}は なにようび？`, vis: `<div class="iqweek">${IQ_DAYS.map((x, i) => `<span class="${i === d ? 'on' : ''}">${'日月火水木金土'[i]}</span>`).join('')}</div>`, why }, ans, wr);
+// 8. じゅんばん（ひだりから・みぎから なんばんめ）
+const IQ_LINE = { '🐶': 'いぬ', '🐱': 'ねこ', '🐰': 'うさぎ', '🐻': 'くま', '🐼': 'パンダ', '🦊': 'きつね', '🐸': 'かえる', '🐯': 'とら', '🐵': 'さる', '🐷': 'ぶた' };
+function iqOrder(lv) {
+  const n = lv === 1 ? 4 : 5, row = shuffle(Object.keys(IQ_LINE)).slice(0, n);
+  const vis = `<div class="iqrow">${row.map(x => `<span class="iqemo">${x}</span>`).join('')}</div><div class="iqlr"><span>⬅ ひだり</span><span>みぎ ➡</span></div>`;
+  const fromR = lv > 1 && Math.random() < 0.5, side = fromR ? 'みぎ' : 'ひだり';
+  if (lv < 3) {
+    const k = ri(1, n), ans = row[fromR ? n - k : k - 1];
+    return iqPack({ kind: 'じゅんばん', q: `${side}から ${k}ばんめは どれ？`, vis, why: `${side}から 1、2 … と かぞえると、${k}ばんめは ${IQ_LINE[ans]} だよ` }, ans, row.filter(x => x !== ans));
+  }
+  const i = rand(n), who = row[i], k = fromR ? n - i : i + 1;
+  return iqPack({ kind: 'じゅんばん', q: `${who}（${IQ_LINE[who]}）は ${side}から なんばんめ？`, say: `${IQ_LINE[who]}は ${side}から なんばんめ？`, vis, why: `${side}から かぞえると、${IQ_LINE[who]}は ${k}ばんめ だよ` }, String(k), numW(k, [n + 1 - k]));
 }
 
-const IQ_TYPES = [iqSeq, iqPattern, iqOdd, iqRotate, iqMatrix, iqCount, iqBalance, iqYoubi];
+// 9. くらべる（どっちが おおい・すくない・いくつ おおい）
+function iqMore(lv) {
+  const [A, B] = shuffle(['🍎', '🍌', '🍓', '⭐', '⚽', '🐟', '🌸', '🚗']).slice(0, 2);
+  const max = lv === 1 ? 6 : 8, a = ri(2, max);
+  let b; do { b = ri(2, max); } while (b === a || (lv === 1 && Math.abs(a - b) < 2) || (lv === 3 && Math.abs(a - b) > 4));
+  const vis = `<div class="iqrow iqleft">${Array.from({ length: a }, () => A).map(x => `<span class="iqemo sm">${x}</span>`).join('')}</div><div class="iqrow iqleft">${Array.from({ length: b }, () => B).map(x => `<span class="iqemo sm">${x}</span>`).join('')}</div>`;
+  const more = a > b ? A : B, less = a > b ? B : A, why = `${A} は ${a}こ、${B} は ${b}こ だよ`;
+  if (lv === 1) return iqPack({ kind: 'くらべる', q: 'おおいのは どっち？', vis, why: `${why}。${more} の ほうが おおいよ` }, more, [less]);
+  if (lv === 2) return iqPack({ kind: 'くらべる', q: 'すくないのは どっち？', vis, why: `${why}。${less} の ほうが すくないよ` }, less, [more]);
+  const d = Math.abs(a - b);
+  return iqPack({ kind: 'くらべる', q: `${more} は ${less} より いくつ おおい？`, say: 'おおい ほうは、すくない ほうより いくつ おおい？', vis, why: `${why}。${Math.max(a, b)} − ${Math.min(a, b)} ＝ ${d} だから ${d}こ おおいよ` }, String(d), numW(d, [Math.max(a, b), Math.min(a, b)]));
+}
+
+const IQ_TYPES = [iqSeq, iqPattern, iqOdd, iqRotate, iqMatrix, iqCount, iqSeesaw, iqOrder, iqMore];
 const iqMake = lv => shuffle(IQ_TYPES.slice()).slice(0, IQ_N).map(f => f(lv));
 
 const iqCur = () => IQ.list[IQ.idx];
