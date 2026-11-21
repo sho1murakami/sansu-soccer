@@ -6,12 +6,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="さんすうアプリ">
+<meta name="apple-mobile-web-app-title" content="がくしゅうアプリ">
 <meta name="theme-color" content="#238a4b">
 <meta name="format-detection" content="telephone=no">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="apple-touch-icon.png">
-<title>さんすうアプリ</title>
+<title>がくしゅうアプリ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800;900&display=swap">
@@ -431,8 +431,8 @@ body.kb .pad{display:none}
 /* ---------- ゲーム ---------- */
 .gs-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:10px 24px 16px}
 .gs-grid.two{grid-template-rows:auto minmax(min-content,1fr) auto minmax(min-content,1fr) auto minmax(min-content,1fr);row-gap:8px;overflow-y:auto}
-.gs-head{grid-column:1/-1;color:#fff;font-size:clamp(22px,2.8vw,32px);text-shadow:0 3px 0 rgba(0,0,0,.25);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.gs-head small{font-size:clamp(13px,1.5vw,17px);font-weight:500;opacity:.95}
+.gs-head{grid-column:1/-1;color:#fff;font-size:clamp(22px,2.8vw,32px);text-shadow:0 3px 0 rgba(0,0,0,.25);display:flex;align-items:center;gap:14px;white-space:nowrap}
+.gs-head small{flex:1 1 0;min-width:0;white-space:normal;font-size:clamp(13px,1.5vw,17px);font-weight:500;opacity:.95;line-height:1.35}
 .lvb{--kan:#7a3cf0;background:#fff;border:5px solid var(--kan);border-radius:24px;box-shadow:0 8px 0 rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:0;padding:8px}
 .lvb:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.2)}
 .lvb b{font-size:clamp(26px,min(3.2vw,5vh),44px);color:var(--kan);line-height:1.1}
@@ -441,6 +441,10 @@ body.kb .pad{display:none}
 .gline{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:2px 12px}
 .gbest{font-size:clamp(15px,1.8vw,20px);color:var(--ink)}
 .gcoin{font-style:normal;font-size:clamp(14px,1.6vw,18px);color:#c27c00}
+.gs-left{flex:none;font-style:normal;font-size:clamp(14px,1.6vw,18px);font-weight:800;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.5);border-radius:999px;padding:2px 12px;text-shadow:0 1px 0 rgba(0,0,0,.2)}
+.gs-left.zero{background:rgba(0,0,0,.28);border-color:transparent}
+.gsb.used{opacity:.45;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.g-left{font-weight:800;color:#5d6880}
 .lv-note{margin:0 24px 18px;text-align:center;color:#fff;font-size:clamp(14px,1.7vw,18px);text-shadow:0 2px 0 rgba(0,0,0,.25)}
 .kbtn{border-radius:18px;font-size:clamp(20px,2.4vw,28px);padding:.55em .4em;background:#fff;color:var(--ink);box-shadow:0 6px 0 #b8c4d8;white-space:nowrap}
 .kbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
@@ -548,6 +552,9 @@ body.kb .pad{display:none}
 input[type=range]{flex:1;max-width:280px;accent-color:#34a85f}
 select{font:inherit;font-size:16px;padding:6px 10px;border-radius:10px;border:1px solid #cfd6e2;background:#fff;max-width:60%}
 .mini{background:#34a85f;color:#fff;padding:8px 16px;border-radius:999px;font-size:16px;white-space:nowrap}
+.bk-text{width:100%;height:84px;margin:6px 0;padding:8px 10px;border:1px solid #cfd6e2;border-radius:10px;font:13px/1.4 ui-monospace,Menlo,monospace;color:#5d6880;background:#f7f9fc;resize:vertical;-webkit-user-select:text;user-select:text;font-size:16px}
+.bk-note{font-weight:700;color:#14904a}
+.row .mini+.mini,.row .mini+.danger{margin-left:-6px}
 .danger{background:#ff4d5e;color:#fff;padding:10px 18px;border-radius:999px;font-size:16px;white-space:nowrap}
 table.st{width:100%;border-collapse:collapse;font-size:17px}
 .st th,.st td{padding:8px;border-bottom:1px solid #edf0f5;text-align:center}
@@ -610,7 +617,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
   <!-- ホーム -->
   <section class="screen pitch lines on" id="home">
     <header class="hd">
-      <h1 class="logo"><span class="logo-ball">⚽</span>さんすう<b>アプリ</b></h1>
+      <h1 class="logo"><span class="logo-ball">⚽</span>がくしゅう<b>アプリ</b></h1>
       <button class="btn-ghost" data-act="settings">⚙️ おうちの方へ</button>
     </header>
     <div class="summary">
@@ -858,6 +865,11 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <h3>🎮 ゲーム</h3>
         <label class="row"><span class="grow">きょうのミッションが終わるまでゲームにカギをかける<small>優先テーマのシールをその日に5枚集めると、めいろ・すうどく・IQテストで遊べるようになります</small></span><span class="sw"><input type="checkbox" data-set="gameLock"><i></i></span></label>
         <label class="row"><span class="grow">ゲームをクリアしたらコインをもらえる<small>クリア1回でコイン1枚（IQテストは7問中4問以上の正解）。コイン10枚で、トップ画面の「🪙」ボタンからシール1枚（ランダム）と交換できます（自動では交換しません）。オフにすると、ゲームはコインなしで遊べます。ヒントは1回3つまでです</small></span><span class="sw"><input type="checkbox" data-set="gameCoin"><i></i></span></label>
+        <div class="row">
+          <span class="grow">1日に遊べる回数（ゲームごと）<small>めいろ・すうどく・IQテストのそれぞれで、この回数まで遊べます。遊びはじめたとき（めいろは線を引きはじめた、すうどくは数字を入れた、IQテストは1問目に答えたとき）に1回と数えるので、選びまちがえてすぐ戻ったときは数えません</small></span>
+          <div class="seg"><button data-act="seg" data-k="gameLimit" data-val="1">1回</button><button data-act="seg" data-k="gameLimit" data-val="2">2回</button><button data-act="seg" data-k="gameLimit" data-val="3">3回</button><button data-act="seg" data-k="gameLimit" data-val="5">5回</button><button data-act="seg" data-k="gameLimit" data-val="0">制限なし</button></div>
+        </div>
+        <div class="row"><span class="grow" id="gPlayNote"></span><button class="mini" data-act="gReset">今日の回数をリセット</button></div>
       </div>
       <div class="set-card">
         <h3>🏅 ランク</h3>
@@ -867,19 +879,32 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
       </div>
       <div class="set-card">
+        <h3>💾 記録のバックアップ（引っこし）</h3>
+        <p class="note">ホーム画面のアイコンは、アイコンごとに記録が別々に保存され、アイコンを削除すると記録も消えます。アイコンを作り直すとき（アプリの名前を変えたいときなど）は、次の順番で記録を引っこしてください。<br>
+        ① <b>今のアイコン</b>で開き、ここで「コピー」（または「ファイルに保存」）<br>
+        ② Safari でアプリを開き、共有ボタン →「ホーム画面に追加」で<b>新しいアイコン</b>を作る<br>
+        ③ <b>新しいアイコン</b>で開き、ここで「はりつけ」→「読み込む」<br>
+        ④ 新しいアイコンでシールが戻ったのを確かめてから、古いアイコンを削除</p>
+        <div class="row"><span class="grow">記録を書き出す<small>シール・コイン・ゲームの記録・設定をまとめて書き出します</small></span><button class="mini" data-act="bkExport">📋 コピー</button><button class="mini" data-act="bkFile">📄 ファイルに保存</button></div>
+        <textarea class="bk-text" id="bkText" placeholder="ここに バックアップの もじが でます（読み込むときは ここに はりつけます）" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        <div class="row"><span class="grow">記録を読み込む<small>今の記録は、読み込んだ記録に置きかわります</small></span><button class="mini" data-act="bkPaste">📥 はりつけ</button><button class="mini" data-act="bkOpen">📂 ファイルから</button><button class="danger" data-act="bkImport">読み込む</button></div>
+        <input type="file" id="bkFileIn" accept=".json,application/json,text/plain" hidden>
+        <p class="note bk-note" id="bkNote"></p>
+      </div>
+      <div class="set-card">
         <h3>📊 きろく</h3>
         <div id="stats"></div>
         <div class="row"><span class="grow">シールと記録をすべて消す</span><button class="danger" data-act="reset">すべて消す</button></div>
       </div>
       <div class="set-card">
         <h3>💡 使い方のヒント</h3>
-        <p class="note">・Safari の共有ボタン →「ホーム画面に追加」で、アプリのように全画面で使えます。記録（シール）もこの iPad の中に保存され、消えにくくなります。<br>
+        <p class="note">・Safari の共有ボタン →「ホーム画面に追加」で、アプリのように全画面で使えます。記録（シール）もこの iPad の中に保存され、消えにくくなります。アイコンを作り直すときは、上の「記録のバックアップ」で記録を引っこしてください。<br>
         ・まちがえた問題は、次から少し出やすくなります。<br>
         ・ボールをタッチすると、数を声でかぞえます。<br>
         ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
         ・かけざんの1の段は練習用で、シールはもらえません。<br>
         ・シールは全100種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
-        ・トップ画面の下の「ゲーム」で、めいろ・すうどく・IQテストを遊べます。</p>
+        ・トップ画面の下の「ゲーム」で、めいろ・すうどく・IQテストを遊べます（それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。</p>
       </div>
     </div>
   </section>
@@ -1056,8 +1081,9 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3 },
     coins: 0, coinsTotal: 0, gstats: {},  // ゲームの コイン（10まいで シール1まいと こうかん）と きろく
+    gday: {},  // きょう ゲームを あそんだ かいすう { d: 日づけ, meiro, sudoku, iq }
   };
 }
 let D = defaults();
@@ -1073,6 +1099,7 @@ function load() {
       stickers: Array.isArray(d.stickers) ? d.stickers : [],
       miss: d.miss || {},
       gstats: d.gstats && typeof d.gstats === 'object' ? d.gstats : {},
+      gday: d.gday && typeof d.gday === 'object' ? d.gday : {},
       coins: Number.isFinite(d.coins) ? d.coins : 0,
       coinsTotal: Number.isFinite(d.coinsTotal) ? d.coinsTotal : 0,
     };
@@ -1082,9 +1109,78 @@ function load() {
       if (D.settings.hint === 'always') D.settings.hint = def.settings.hint;
       D.v = 2;
     }
+    const lim = Number(D.settings.gameLimit);
+    D.settings.gameLimit = Number.isFinite(lim) && lim >= 0 ? lim : def.settings.gameLimit;
   } catch (e) { D = defaults(); }
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* 保存できなくても あそべる */ } }
+
+// ---------- 記録の バックアップ（ホーム画面の アイコンを 作り直すときの 引っこし用。9さい向けと おなじ しくみ） ----------
+const BK_APP = 'sansu-soccer';  // 9さい向けは 'kakezan-soccer'（まちがえて 読み込まないように わける）
+const bkNote = t => { $('#bkNote').textContent = t; };
+function bkSummary(d) {
+  const st = Array.isArray(d.stickers) ? d.stickers : [], c = t => st.filter(s => s.t === t).length;
+  return `シール ${st.length}枚（たしざん ${c('add')}・ひきざん ${c('sub')}・かけざん ${c('mul')}）・コイン ${d.coins || 0}枚`;
+}
+const bkMake = () => JSON.stringify({ app: BK_APP, v: 1, at: new Date().toISOString(), data: D });
+async function bkExport() {
+  const t = bkMake(), el = $('#bkText');
+  el.value = t;
+  try {
+    await navigator.clipboard.writeText(t);
+    bkNote(`✅ コピーしました（${bkSummary(D)}）。新しいアイコンで開いて「はりつけ」→「読み込む」を押してください。`);
+  } catch (e) {
+    el.focus(); el.select();
+    bkNote('自動でコピーできませんでした。上の欄の文字をすべて選んで「コピー」してください。');
+  }
+}
+async function bkFile() {
+  const d = new Date(), name = `gakushu-5sai-backup-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}.json`;
+  const file = new File([bkMake()], name, { type: 'application/json' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'がくしゅうアプリ（5さい）バックアップ' }); bkNote('✅ 共有メニューから保存しました（「ファイルに保存」を選ぶと、ファイル App に残せます）。'); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(file); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  bkNote(`✅ ${name} を保存しました。`);
+}
+async function bkPaste() {
+  try {
+    $('#bkText').value = await navigator.clipboard.readText();
+    bkNote('はりつけました。「読み込む」を押してください。');
+  } catch (e) {
+    $('#bkText').focus();
+    bkNote('自動ではりつけできませんでした。上の欄を長押しして「ペースト」してから、「読み込む」を押してください。');
+  }
+}
+function bkImport() {
+  const raw = $('#bkText').value.trim();
+  if (!raw) { bkNote('上の欄に バックアップの文字を はりつけてください。'); return; }
+  let obj;
+  try { obj = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)); } catch (e) { obj = null; }
+  if (obj && obj.app === 'kakezan-soccer') {
+    bkNote('⚠️ これは 9さい向けの アプリの バックアップです。9さい向けの アプリで 読み込んでください。');
+    return;
+  }
+  if (!obj || obj.app !== BK_APP || !obj.data || !Array.isArray(obj.data.stickers)) {
+    bkNote('⚠️ このアプリの バックアップでは ないようです。コピーした文字が ぜんぶ はりつけられているか 確かめてください。');
+    return;
+  }
+  const when = obj.at ? new Date(obj.at).toLocaleString('ja-JP') : '';
+  if (!confirm(`この記録を読み込みますか？\n\n読み込む記録：${bkSummary(obj.data)}${when ? `（${when} に書き出し）` : ''}\n今の記録：${bkSummary(D)}\n\n今の記録は、読み込んだ記録に置きかわります。`)) return;
+  try { localStorage.setItem(KEY, JSON.stringify(obj.data)); } catch (e) { bkNote('⚠️ 保存できませんでした。'); return; }
+  load();
+  save();
+  rankTheme = initialRankTheme();
+  applyInputMode();
+  if (Speech.ok) Speech.choose();
+  renderSettings();
+  $('#bkText').value = '';
+  bkNote(`✅ 読み込みました（${bkSummary(D)}）。トップに もどって シールを 確かめてください。`);
+}
 const S = () => D.settings;
 
 // ---------- よみあげ ----------
@@ -1421,8 +1517,9 @@ function renderHome() {
     renderMission(t);
   }
   const gl = gameLocked();
-  $('#gameBar').classList.toggle('locked', gl);
-  $('#gameState').textContent = gl ? `🔒 ミッションの あと（あと ${missionLeft()}まい）` : coinOn() ? '🪙 クリアで コイン' : '▶ あそぶ';
+  const done = !gl && gAllDone();
+  $('#gameBar').classList.toggle('locked', gl || done);
+  $('#gameState').textContent = gl ? `🔒 ミッションの あと（あと ${missionLeft()}まい）` : done ? '🌙 きょうは おしまい' : coinOn() ? '🪙 クリアで コイン' : '▶ あそぶ';
   const cb = $('#coinBtn'), can = D.coins >= COIN_RATE;
   cb.hidden = !coinOn() && !D.coins;
   $('#coinNum').textContent = D.coins;
@@ -1876,6 +1973,46 @@ function goHome() {
 // カギ：きょうの ミッション（ゆうせんテーマの シール 5まい）が おわるまで あそべない
 const gameLocked = () => S().gameLock !== false && missionLeft() > 0;
 const coinOn = () => S().gameCoin !== false;
+// 1にちに あそべる かいすう（ゲームごと。0 は せいげん なし）。あそびはじめた とき（1て うごかした とき）に 1かいと かぞえる
+const GKINDS = ['meiro', 'sudoku', 'iq'];
+const gLimit = () => Math.max(0, Number(S().gameLimit) || 0);
+function gDay() {
+  const t = new Date().toDateString();
+  if (!D.gday || D.gday.d !== t) D.gday = { d: t };
+  return D.gday;
+}
+const gPlays = g => gDay()[g] || 0;
+const gLeft = g => gLimit() ? Math.max(0, gLimit() - gPlays(g)) : Infinity;
+const gAllDone = () => GKINDS.every(g => gLeft(g) <= 0);
+function gameUse() {
+  if (Gm.counted || !GKINDS.includes(Gm.kind)) return;
+  Gm.counted = true;
+  const d = gDay();
+  d[Gm.kind] = (d[Gm.kind] || 0) + 1;
+  save();
+}
+function openGameDone(g) {
+  const lim = gLimit(), name = g ? GAMES[g].name : 'ゲーム';
+  openModal(`<div class="lock-ico">🌙</div>
+    <p class="mq">きょうの ${name}は おしまい！</p>
+    <p class="lock-msg">${g ? `${name}は` : 'ゲームは どれも'} 1にち ${lim}かい までだよ。<br>また あした あそぼうね。</p>
+    <div class="mbtns"><button class="bigbtn yellow" data-act="closeModal">とじる</button></div>`);
+  Speech.speak(`きょうの ${name}は おしまい。また あした あそぼうね`);
+}
+// クリア・おわりの がめんの ことばと ボタン（のこりが 0 なら「もういっかい」の かわりに ほかの ゲームへ）
+function gEndNote(g) {
+  if (!gLimit()) return '';
+  const left = gLeft(g), name = GAMES[g].name;
+  return `<p class="msub g-left">${left > 0 ? `きょうの ${name}は あと ${left}かい あそべるよ` : `きょうの ${name}は これで おしまい。また あした！`}</p>`;
+}
+function gEndBtns(g, can) {
+  const btns = [];
+  if (can) btns.push(['exchange', '🎁 シールと こうかん']);
+  if (gLeft(g) > 0) btns.push(['again', 'もういっかい']);
+  else if (GKINDS.some(k => gLeft(k) > 0)) btns.push(['gsel', '🎮 ほかの ゲーム']);
+  btns.push(['home', '🏠 トップ']);
+  return `<div class="mbtns">${btns.map(([a, t], i) => `<button class="bigbtn${i ? '' : ' yellow'}" data-act="${a}">${t}</button>`).join('')}</div>`;
+}
 function openGameLock() {
   const pri = THEMES[S().priority].name, left = missionLeft();
   openModal(`<div class="lock-ico">🔒</div>
@@ -1898,27 +2035,38 @@ const HINTS = 3;
 const COIN_RATE = 10;  // シール1まいに ひつような コイン
 const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const gstat = (g, lv) => { const k = g + lv; return (D.gstats[k] = D.gstats[k] || { play: 0, clear: 0, best: 0 }); };
-const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0 };
+const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0, counted: false };
 let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・game・coin
 const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : g === 'meiro' ? `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}` : `さいしょの すうじ ${L.givens}こ`;
 
 function renderGameSel() {
   const g2 = $('#gsGrid');
   g2.classList.add('two');
-  g2.innerHTML = ['meiro', 'sudoku', 'iq'].map(g => `<div class="gs-head">${{ meiro: '🧩', sudoku: '🔢', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small></div>` + [1, 2, 3].map(lv => {
-    const L = GAMES[g].lv[lv], st = gstat(g, lv);
-    return `<button class="lvb gsb ${g}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${L.name}</b><small>${gameDesc(g, L)}</small><span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
-  }).join('')).join('');
-  $('#gsNote').textContent = coinOn() ? 'クリアすると コインが もらえるよ（コイン 10まいで シール 1まいと こうかん）' : 'クリアを めざそう！';
+  const lim = gLimit();
+  g2.innerHTML = GKINDS.map(g => {
+    const left = gLeft(g), used = left <= 0;
+    const badge = lim ? `<em class="gs-left${used ? ' zero' : ''}">${used ? '🌙 きょうは おしまい' : `きょう あと ${left}かい`}</em>` : '';
+    return `<div class="gs-head">${{ meiro: '🧩', sudoku: '🔢', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small>${badge}</div>` + [1, 2, 3].map(lv => {
+      const L = GAMES[g].lv[lv], st = gstat(g, lv);
+      return `<button class="lvb gsb ${g}${used ? ' used' : ''}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${L.name}</b><small>${gameDesc(g, L)}</small><span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
+    }).join('');
+  }).join('');
+  $('#gsNote').textContent = (coinOn() ? 'クリアすると コインが もらえるよ（コイン 10まいで シール 1まいと こうかん）' : 'クリアを めざそう！') + (lim ? `　ゲームは それぞれ 1にち ${lim}かい まで` : '');
 }
 
 function startGame(g, lv) {
   SFX.unlock();
   closeOverlays();
   Speech.stop();
+  if (gLeft(g) <= 0) {
+    gStop();
+    if (screen !== 'gsel') { renderGameSel(); show('gsel'); }
+    openGameDone(g);
+    return;
+  }
   Last = 'game';
   clearInterval(Gm.timer);
-  Object.assign(Gm, { kind: g, lv, t0: Date.now(), sec: 0, active: true, hints: 0 });
+  Object.assign(Gm, { kind: g, lv, t0: Date.now(), sec: 0, active: true, hints: 0, counted: false });
   const st = gstat(g, lv); st.play++; save();
   const name = `${GAMES[g].name} ${GAMES[g].lv[lv].name}`;
   if (g === 'iq') { Gm.active = false; iqStart(lv, name); return; }
@@ -1959,10 +2107,11 @@ function gameClear() {
     SFX.cheer();
     FX.confetti(innerWidth / 2, innerHeight * 0.55, 90, 14);
     const can = D.coins >= COIN_RATE;
+    const last = gLimit() && gLeft(g) <= 0 ? ` きょうの ${GAMES[g].name}は これで おしまい` : '';
     openModal(`<div class="lock-ico">🎉</div><p class="mq">${top}</p>
       ${coin ? `<div class="coin-get">${'<i class="coin">🪙</i>'.repeat(coin)}<b>コイン +${coin}まい ゲット！</b></div>${coinMeter()}` : ''}
-      <div class="mbtns">${can ? '<button class="bigbtn yellow" data-act="exchange">🎁 シールと こうかん</button>' : ''}<button class="bigbtn${can ? '' : ' yellow'}" data-act="again">もういっかい</button><button class="bigbtn" data-act="home">🏠 トップ</button></div>`);
-    Speech.speak(coin ? `クリア！ コインを ${coin}まい ゲット！${can ? ' シールと こうかん できるよ！' : ''}` : 'クリア！ すごいね！');
+      ${gEndNote(g)}${gEndBtns(g, can)}`);
+    Speech.speak((coin ? `クリア！ コインを ${coin}まい ゲット！${can ? ' シールと こうかん できるよ！' : ''}` : 'クリア！ すごいね！') + last);
   }, 450);
 }
 // コインの メーター（10まいで シール1まい）
@@ -2243,6 +2392,7 @@ async function iqCheck() {
   if (IQ.canSkip) return iqSkip();
   if (IQ.lock) return;
   if (IQ.sel < 0) { SFX.tap(); $('#iqNote').textContent = 'こたえを えらんでから「けってい」を おしてね'; return; }
+  gameUse();
   const q = iqCur(), tk = ++IQ.token, ok = IQ.sel === q.ans;
   IQ.lock = true;
   IQ.results.push(ok);
@@ -2309,9 +2459,10 @@ function iqFinish() {
     const balls = `<div class="res-balls">${IQ.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('')}</div>`;
     openModal(`<div class="lock-ico">${pass ? '🎉' : '💪'}</div><p class="mq">${IQ_N}もん ちゅう ${ok}もん せいかい！</p>${balls}
       ${pass ? (coin ? `<div class="coin-get"><i class="coin">🪙</i><b>コイン +${coin}まい ゲット！</b></div>${coinMeter()}` : '<p class="msub">クリア！ すごいね！</p>')
-        : `<p class="msub">${IQ_PASS}もん いじょう せいかいで ${coinOn() ? 'コイン ゲット！' : 'クリア！'}<br>もう いちど ちょうせん しよう</p>`}
-      <div class="mbtns">${can ? '<button class="bigbtn yellow" data-act="exchange">🎁 シールと こうかん</button>' : ''}<button class="bigbtn${can ? '' : ' yellow'}" data-act="again">もういっかい</button><button class="bigbtn" data-act="home">🏠 トップ</button></div>`);
-    Speech.speak(pass ? `${ok}問 正解！ ${coin ? `コインを ${coin}まい ゲット！` : 'クリア！'}` : `${ok}問 正解！ ${IQ_PASS}問 いじょうで クリアだよ。もう一回 ちょうせん しよう`);
+        : `<p class="msub">${IQ_PASS}もん いじょう せいかいで ${coinOn() ? 'コイン ゲット！' : 'クリア！'}${gLeft('iq') > 0 ? '<br>もう いちど ちょうせん しよう' : ''}</p>`}
+      ${gEndNote('iq')}${gEndBtns('iq', can)}`);
+    const more = gLeft('iq') > 0, last = gLimit() && !more ? ' きょうの IQテストは これで おしまい' : '';
+    Speech.speak((pass ? `${ok}問 正解！ ${coin ? `コインを ${coin}まい ゲット！` : 'クリア！'}` : `${ok}問 正解！ ${IQ_PASS}問 いじょうで クリアだよ。${more ? 'もう一回 ちょうせん しよう' : ''}`) + last);
   }, 500);
 }
 
@@ -2427,7 +2578,7 @@ function mzCellAt(e) {
     try { bd.setPointerCapture(e.pointerId); } catch (_) { /* うごかない ブラウザも ある */ }
     const p = MZ.path;
     if (!p.length) {
-      if (MZ.nums[t] === 1) { p.push(t); SFX.pop(2); MZ.drawing = true; }
+      if (MZ.nums[t] === 1) { p.push(t); SFX.pop(2); MZ.drawing = true; gameUse(); }
       else { mzNote('「1」の まるから はじめよう'); return; }
     } else {
       const j = p.indexOf(t);
@@ -2447,6 +2598,7 @@ function mzCellAt(e) {
 }
 function mzHint() {
   if (!Gm.active || Gm.hints >= HINTS) return;
+  gameUse();
   const p = MZ.path, s = MZ.sol;
   let k = 0;
   while (k < p.length && p[k] === s[k]) k++;
@@ -2532,6 +2684,7 @@ function sdRender() {
 function sdMemoLabel() { const b = $('#sdMemo'); b.textContent = `✏️ メモ：${SDK.memoMode ? 'オン' : 'オフ'}`; b.classList.toggle('on', SDK.memoMode); }
 function sdSet(i, v, memoToggle) {
   if (!Gm.active || i < 0 || SDK.given[i]) return;
+  gameUse();
   SDK.undo.push({ i, val: SDK.val[i], memo: SDK.memo[i].slice() });
   if (memoToggle) {
     if (SDK.val[i]) return sdRender();
@@ -2697,7 +2850,8 @@ function renderSettings() {
   });
   $('#rateOut').textContent = Number(S().rate).toFixed(1);
   $('#missionNote').textContent = `今日の${THEMES[S().priority].name}のシール：${missionDone()} / ${MISSION}枚` + (missionLeft() ? '' : '（達成）');
-  $$('#settings [data-act="seg"]').forEach(b => b.classList.toggle('on', S()[b.dataset.k] === b.dataset.val));
+  $$('#settings [data-act="seg"]').forEach(b => b.classList.toggle('on', String(S()[b.dataset.k]) === b.dataset.val));
+  $('#gPlayNote').innerHTML = `今日遊んだ回数<small>${GKINDS.map(g => `${GAMES[g].name} ${gPlays(g)}回`).join('・')}${gLimit() ? `（それぞれ ${gLimit()}回まで）` : '（制限なし）'}</small>`;
   renderVoiceSelect();
   const rows = Object.entries(THEMES).map(([t, th]) => {
     const s = D.stats[t], cnt = themeCount(t), rk = rankOf(cnt).r;
@@ -2738,6 +2892,7 @@ document.addEventListener('click', e => {
     case 'gsel':
       closeOverlays(); Speech.stop();
       if (gameLocked()) { openGameLock(); break; }
+      if (gAllDone()) { openGameDone(null); break; }
       renderGameSel(); show('gsel');
       break;
     case 'gstart': startGame(b.dataset.g, +b.dataset.lv); break;
@@ -2753,7 +2908,7 @@ document.addEventListener('click', e => {
     case 'sdMemo': SDK.memoMode = !SDK.memoMode; sdMemoLabel(); break;
     case 'sdHint': sdHint(); break;
     case 'iqok': iqCheck(); break;
-    case 'iqgive': if (IQ.active && !IQ.lock && !IQ.canSkip) iqReveal(true); break;
+    case 'iqgive': if (IQ.active && !IQ.lock && !IQ.canSkip) { gameUse(); iqReveal(true); } break;
     case 'iqch': if (IQ.active && !IQ.lock) { IQ.sel = +b.dataset.i; iqRenderChoices(); } break;
     case 'iqrepeat': if (IQ.active) Speech.speak(iqSay(iqCur())); break;
     case 'home': goHome(); break;
@@ -2798,13 +2953,19 @@ document.addEventListener('click', e => {
     case 'settings': openGate(); break;
     case 'gateKey': gateKey(b.dataset.k); break;
     case 'seg':
-      S()[b.dataset.k] = b.dataset.val;
+      S()[b.dataset.k] = b.dataset.k === 'gameLimit' ? Number(b.dataset.val) : b.dataset.val;
       save();
       renderSettings();
       applyInputMode();
       if (b.dataset.k === 'rankView') rankTheme = initialRankTheme();
       break;
     case 'testVoice': Speech.speak('3 たす 5 わ？ ゴール！ 3 たす 5 わ 8'); break;
+    case 'gReset': D.gday = {}; save(); renderSettings(); break;
+    case 'bkExport': bkExport(); break;
+    case 'bkFile': bkFile(); break;
+    case 'bkPaste': bkPaste(); break;
+    case 'bkOpen': $('#bkFileIn').click(); break;
+    case 'bkImport': bkImport(); break;
     case 'reset':
       if (confirm('シールと記録をすべて消します。よろしいですか？') && confirm('本当に消しますか？（元に戻せません）')) {
         const keep = D.settings;
@@ -2831,6 +2992,13 @@ function sayRank() {
   const n = themeCount(rankTheme), { r, next } = rankOf(n);
   Speech.speak(`${THEMES[rankTheme].name}の ランクは ${r[1]}！` + (next ? ` あと ${next[0] - n}まいで ${next[1]}！` : ''));
 }
+$('#bkFileIn').addEventListener('change', async e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  $('#bkText').value = await f.text();
+  e.target.value = '';
+  bkNote(`${f.name} を ひらきました。「読み込む」を押してください。`);
+});
 $('#rankTheme').addEventListener('change', e => {
   rankTheme = e.target.value;
   renderHome();
