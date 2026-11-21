@@ -68,7 +68,7 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 
 /* ---------- ホーム ---------- */
 .summary{
-  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+  display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;
   margin:6px 20px 16px;padding:14px 18px;color:#fff;
   background:linear-gradient(#1d3670,var(--navy));border:4px solid var(--navy-d);border-radius:24px;
   box-shadow:inset 0 0 0 3px rgba(255,255,255,.06),0 8px 0 rgba(0,0,0,.25);
@@ -110,6 +110,27 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .bookbtn span{font-size:1.7em;line-height:1.15}
 .bookbtn small{font-size:.68em;color:#7a5600}
 .bookbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #c99a00}
+.coinbtn{position:relative;display:flex;flex-direction:column;align-items:center;background:#fff4c7;color:var(--ink);padding:6px 16px;border-radius:20px;box-shadow:0 6px 0 #d9b94a;font-size:clamp(16px,2vw,22px);white-space:nowrap;border:3px solid #ffd23f}
+.coinbtn .coin-ico{font-size:1.5em;line-height:1.1}
+.coinbtn .coin-num b{font-size:1.4em;color:#c27c00;margin-right:.1em}
+.coinbtn small{font-size:.66em;color:#7a5600}
+.coinbtn.ready{background:linear-gradient(#fff7c2,#ffd23f);animation:beat 1.2s infinite}
+.coinbtn.ready small{color:#b02238;font-weight:900}
+.coinbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #d9b94a}
+.coin-get{display:flex;align-items:center;gap:6px;font-size:clamp(22px,2.8vw,30px);color:#c27c00}
+.coin-get .coin{font-style:normal;font-size:1.4em;animation:popIn .5s cubic-bezier(.2,1.5,.4,1) both}
+.coin-meter{display:flex;flex-direction:column;align-items:center;gap:6px}
+.coin-dots{display:flex;gap:6px}
+.coin-dots i{width:clamp(20px,2.6vw,28px);aspect-ratio:1;border-radius:50%;background:#eef1f6;border:3px dashed #c4ccd9}
+.coin-dots i.on{background:radial-gradient(circle at 35% 30%,#fff3b0,#ffc83d 55%,#d99a00);border:3px solid #b07a00}
+.coin-meter small{font-size:clamp(15px,1.8vw,19px);color:var(--mute)}
+.gamebar{align-self:center;margin:0 20px 14px;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.22);color:#fff;border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 22px;font-size:clamp(16px,1.9vw,21px);white-space:nowrap}
+.gamebar b{font-size:1.15em}
+.gb-ico{font-size:1.3em;line-height:1}
+.gb-sub{opacity:.85;font-weight:500}
+.gb-state{background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;font-size:.88em}
+.gamebar:active{transform:translateY(2px)}
+.gamebar.locked .gb-ico,.gamebar.locked b{opacity:.7}
 
 .cards{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,24px);padding:0 20px 22px}
 .card{
@@ -372,6 +393,128 @@ body.kb .pad{display:none}
 .zk-item em{position:absolute;top:0;right:6px;background:var(--add);color:#fff;font-style:normal;font-size:14px;padding:2px 8px;border-radius:999px;z-index:2}
 .zk-item.none>span:last-child{color:#b0b7c4}
 .empty{text-align:center;font-size:26px;color:#8a7a55;padding:60px 20px;line-height:1.6}
+.gr{display:inline-block;font-style:normal;font-weight:900;font-size:12px;line-height:1;padding:3px 6px;border-radius:6px;color:#fff;vertical-align:middle}
+.gr.r{background:linear-gradient(#5aa8ff,#2f6fd8)}
+.gr.sr{background:linear-gradient(#ffb02e,#e0461b)}
+.gr.n{background:#9aa4b5}
+.zk-item .gr{position:absolute;top:0;left:8px;z-index:2}
+.zk-item.none>span:nth-last-child(2){color:#b0b7c4}
+.win-name .gr{font-size:.55em;padding:.2em .45em}
+.gr-line{margin:0;font-size:18px}
+.odds{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.odds-lead{margin:0;font-size:clamp(16px,1.9vw,20px);text-align:center}
+.odds-t{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);font-size:clamp(15px,1.8vw,19px)}
+.odds-t th,.odds-t td{padding:10px 12px;text-align:center;border-bottom:1px solid #f0e6cc}
+.odds-t thead th{font-size:14px;color:#8a7a55;font-weight:500}
+.odds-t tbody th{text-align:left}
+.odds-t .big{font-size:1.3em;color:#c27c00;font-weight:900}
+.odds-t .big.pf{color:#d0457a}
+.odds-kira{margin:0;background:linear-gradient(90deg,#fff6c8,#ffe3f3,#dff4ff);border-radius:14px;padding:10px 14px;font-size:clamp(15px,1.8vw,19px);text-align:center}
+.odds-note{margin:0;color:#8a7a55;font-size:clamp(13px,1.5vw,16px);line-height:1.6;font-weight:500}
+.odds h4{margin:6px 0 0;font-size:18px}
+.odds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px}
+.odds-legend{margin:14px 0 0;font-size:14px;color:#6b5a35}
+.odds-legend b{color:#c27c00}.odds-legend b.pf{color:#d0457a}
+.odds-item{display:grid;grid-template-columns:30px 1fr 4.2em 5.4em;align-items:center;gap:6px;background:#fff;border-radius:12px;padding:5px 10px;font-size:14px}
+.odds-item.new{background:#fffbe6}
+.odds-item .on{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.odds-item b{color:#c27c00;text-align:right;line-height:1.2}
+.odds-item b.pf{color:#d0457a}
+
+/* ---------- ゲーム ---------- */
+.gs-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:10px 24px 16px}
+.gs-grid.two{grid-template-rows:auto minmax(min-content,1fr) auto minmax(min-content,1fr) auto minmax(min-content,1fr);row-gap:8px;overflow-y:auto}
+.gs-head{grid-column:1/-1;color:#fff;font-size:clamp(22px,2.8vw,32px);text-shadow:0 3px 0 rgba(0,0,0,.25);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.gs-head small{font-size:clamp(13px,1.5vw,17px);font-weight:500;opacity:.95}
+.lvb{--kan:#7a3cf0;background:#fff;border:5px solid var(--kan);border-radius:24px;box-shadow:0 8px 0 rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:0;padding:8px}
+.lvb:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.lvb b{font-size:clamp(26px,min(3.2vw,5vh),44px);color:var(--kan);line-height:1.1}
+.lvb small{font-size:clamp(14px,1.6vw,18px);color:var(--mute);text-align:center;line-height:1.3}
+.gsb.meiro{--kan:#1fa67a}.gsb.sudoku{--kan:#2f8cff}.gsb.iq{--kan:#7a3cf0}
+.gline{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:2px 12px}
+.gbest{font-size:clamp(15px,1.8vw,20px);color:var(--ink)}
+.gcoin{font-style:normal;font-size:clamp(14px,1.6vw,18px);color:#c27c00}
+.lv-note{margin:0 24px 18px;text-align:center;color:#fff;font-size:clamp(14px,1.7vw,18px);text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.kbtn{border-radius:18px;font-size:clamp(20px,2.4vw,28px);padding:.55em .4em;background:#fff;color:var(--ink);box-shadow:0 6px 0 #b8c4d8;white-space:nowrap}
+.kbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
+.kbtn.ok{background:linear-gradient(#5ee08c,#22b45a);color:#fff;box-shadow:0 6px 0 #15843f;font-size:clamp(24px,3vw,34px);text-shadow:0 2px 0 rgba(0,0,0,.2);padding:.7em .4em}
+.kbtn.ok.next{background:linear-gradient(#ffe066,#ffb300);color:var(--ink);text-shadow:none;box-shadow:0 6px 0 #c99a00}
+.kbtn.give{background:#fff4c7;box-shadow:0 6px 0 #d9b94a;font-size:clamp(18px,2.1vw,24px)}
+.kbtn.give:active{box-shadow:0 2px 0 #d9b94a}
+.kbtn:disabled{opacity:.45}
+.kbtn.on{background:#ffe27a;box-shadow:0 6px 0 #c99a00}
+.cnote{min-height:1.5em;color:#fff;text-align:center;font-size:clamp(16px,1.9vw,21px);line-height:1.5;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.cbtns{display:grid;grid-template-columns:1fr 1.6fr;gap:12px}
+.gtime{background:rgba(0,0,0,.25);color:#fff;padding:6px 14px;border-radius:999px;font-size:clamp(16px,2vw,22px);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gsp{flex:1}
+.gmain{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(16px,3vw,40px);padding:6px 16px 16px}
+.gboard{position:relative;flex:none;--gb:min(calc(var(--vh) - 120px),60vw,680px);width:var(--gb);height:var(--gb);touch-action:none}
+.gside{display:flex;flex-direction:column;gap:10px;width:clamp(230px,28vw,340px)}
+.grule{margin:0;color:#fff;font-size:clamp(14px,1.6vw,18px);line-height:1.6;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.gnote{margin:0;min-height:1.4em;color:var(--yellow);font-size:clamp(15px,1.8vw,20px);text-shadow:0 2px 0 rgba(0,0,0,.3)}
+#mzSvg{position:absolute;inset:0;width:100%;height:100%;display:block;background:#fff;border-radius:18px;box-shadow:0 8px 0 rgba(0,0,0,.22)}
+.mzc{fill:#f1f4f9}
+.mzc.on{fill:#ffe3cc}
+.mzp{fill:none;stroke:#ff7a2f;stroke-width:.4;stroke-linecap:round;stroke-linejoin:round}
+.mzw{stroke:#1d2b45;stroke-width:.13;stroke-linecap:round}
+.mzhead{fill:#fff;stroke:#ff7a2f;stroke-width:.09}
+.mzd circle{fill:#1d2b45}
+.mzd text{fill:#fff;font-weight:900;text-anchor:middle;dominant-baseline:central;font-family:inherit}
+.mzd.done circle{fill:#ff7a2f}
+.mzd.next circle{stroke:#ffd23f;stroke-width:.07}
+.sdboard{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);background:#fff;border:4px solid #1d2b45;border-radius:14px;overflow:hidden;box-shadow:0 8px 0 rgba(0,0,0,.22)}
+.sdc{position:relative;min-width:0;min-height:0;border-right:1px solid #c9d1de;border-bottom:1px solid #c9d1de;font-size:calc(var(--gb) / 6 * .55);font-weight:800;color:#2f6fd8;display:grid;place-items:center;background:#fff;line-height:1}
+.sdc:nth-child(6n){border-right:0}
+.sdc:nth-child(n+31){border-bottom:0}
+.sdc.br{border-right:3px solid #1d2b45}
+.sdc.bb{border-bottom:3px solid #1d2b45}
+.sdc.given{color:#1d2b45;font-weight:900}
+.sdc.peer{background:#eef3fb}
+.sdc.same{background:#d6e4ff}
+.sdc.sel{background:#ffe27a}
+.sdc.err{color:#e0283c;background:#ffe1e4}
+.sdc.sel.err{background:#ffc9cf}
+.sdc.hint{animation:pop .45s}
+.sdm{position:absolute;inset:6%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);font-size:calc(var(--gb) / 6 * .24);color:#7a879c;font-weight:700}
+.sdm i{font-style:normal;display:grid;place-items:center}
+.sdpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sdk{height:clamp(54px,9vh,84px);border-radius:16px;background:#fff;font-size:clamp(28px,3.6vw,42px);font-weight:900;color:var(--navy);box-shadow:0 6px 0 #b8c4d8}
+.sdk:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
+.sdrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sdrow .kbtn{font-size:clamp(16px,1.9vw,22px);padding:.55em .2em}
+
+/* ---------- IQテスト ---------- */
+.iqmain{flex:1;min-height:0;display:flex;gap:clamp(12px,2vw,28px);padding:4px 18px 14px}
+.iqcard{flex:1.25;min-width:0;min-height:0;background:#fff;border-radius:24px;box-shadow:0 6px 0 rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2vh,22px);padding:16px;overflow:hidden}
+.iqkind{background:#7a3cf0;color:#fff;border-radius:999px;padding:4px 16px;font-size:clamp(15px,1.7vw,19px)}
+.iqq{font-size:clamp(20px,2.5vw,30px);text-align:center;line-height:1.45}
+.iqvis{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%}
+.iqvis:empty{display:none}
+.iqrow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+.iqnum{min-width:1.7em;padding:.08em .3em;border-radius:12px;background:#f1ecff;font-size:clamp(26px,3.2vw,42px);text-align:center;font-variant-numeric:tabular-nums}
+.iqnum.q{background:#ffe1e4;color:#e0283c}
+.iqemo{font-size:clamp(30px,3.8vw,50px);line-height:1.1}
+.iqshape svg{width:clamp(120px,17vw,190px);height:auto;background:#f4f6fb;border-radius:18px}
+.iqtag{background:#fff3e2;color:#b85f0c;border-radius:999px;padding:4px 16px;font-size:clamp(17px,2vw,22px)}
+.iqgrid{display:grid;grid-template-columns:repeat(3,auto);gap:6px}
+.iqcell{width:clamp(56px,min(8vw,11vh),100px);aspect-ratio:1;border-radius:12px;background:#f4f6fb;display:grid;place-items:center;font-size:clamp(26px,3.4vw,42px);color:#e0283c}
+.iqcell.q{background:#ffe1e4}
+.iqcell svg{width:86%;height:86%}
+.iqcnt{display:grid;grid-template-columns:repeat(6,1fr);gap:4px 10px;font-size:clamp(26px,3.2vw,42px);line-height:1.2}
+.iqeq{display:flex;align-items:center;gap:.3em;font-size:clamp(28px,3.4vw,46px);background:#f4f6fb;border-radius:16px;padding:.1em .6em}
+.iqeq i{font-style:normal;color:#7a3cf0;font-weight:900}
+.iqweek{display:flex;gap:6px}
+.iqweek span{width:clamp(34px,4vw,48px);aspect-ratio:1;border-radius:10px;background:#f4f6fb;display:grid;place-items:center;font-size:clamp(18px,2.2vw,26px)}
+.iqweek span:first-child{color:#e0283c}.iqweek span:last-child{color:#2f6fe0}
+.iqweek span.on{background:#7a3cf0;color:#fff}
+.iqside{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.6vh,16px)}
+.iqchoices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.iqch{background:#fff;border-radius:18px;min-height:clamp(64px,13vh,130px);font-size:clamp(24px,3.2vw,40px);box-shadow:0 6px 0 #b8c4d8;border:4px solid transparent;font-weight:800;display:grid;place-items:center;padding:6px;line-height:1.2}
+.iqch:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
+.iqch svg{width:clamp(64px,min(9vw,12vh),110px);height:auto}
+.iqch.sel{border-color:#7a3cf0;background:#f3edff}
+.iqch.right{background:#d6ffe4;border-color:#22b45a;color:#0c8a3e}
+.iqch.wrong{background:#ffe1e4;border-color:#e0283c;color:#e0283c;opacity:.6}
 
 /* ---------- せってい ---------- */
 #settings{background:#eef3f8}
@@ -407,8 +550,18 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
 
 /* ---------- たて がめん ---------- */
 @media (orientation:portrait){
-  .summary{grid-template-columns:auto 1fr;grid-template-areas:"t b" "r r"}
-  .total{grid-area:t}.bookbtn{grid-area:b;justify-self:end}.rank-wrap{grid-area:r}
+  .summary{grid-template-columns:auto 1fr auto;grid-template-areas:"t c b" "r r r"}
+  .total{grid-area:t}.coinbtn{grid-area:c;justify-self:end}.bookbtn{grid-area:b;justify-self:end}.rank-wrap{grid-area:r}
+  .gmain{flex-direction:column}
+  .gboard{--gb:min(92vw,calc(var(--vh) - 470px),680px)}
+  .gside{width:min(100%,640px)}
+  .iqmain{flex-direction:column}
+  .iqcard{flex:1}
+  .iqside{flex:none}
+  .iqq{font-size:clamp(22px,3.6vw,32px)}
+  .iqcnt{font-size:clamp(30px,5.4vw,52px)}
+  .iqemo{font-size:clamp(34px,5.6vw,56px)}
+  .iqnum{font-size:clamp(30px,5vw,46px)}
   .dan-grid{grid-template-columns:repeat(3,1fr)}
   .danb.mix{grid-column:span 3}
   .qmain{grid-template:"top" auto "stage" minmax(0,1fr) "pad" auto / minmax(0,1fr)}
@@ -474,6 +627,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
         <button class="rank-info" data-act="rankInfo" aria-label="ランクの いちらん">i</button>
       </div>
+      <button class="coinbtn" data-act="exchange" id="coinBtn"><span class="coin-ico">🪙</span><span class="coin-num"><b id="coinNum">0</b>まい</span><small id="coinTxt">あと 10まいで こうかん</small></button>
       <button class="bookbtn" data-act="book"><span>📒</span>シールちょう<small id="todayTxt">きょう 0まい</small></button>
     </div>
     <div class="cards">
@@ -498,6 +652,87 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <span class="card-cnt">シール<b data-cnt="mul">0</b>まい</span>
         <span class="card-mini" data-mini="mul"></span>
       </button>
+    </div>
+    <button class="gamebar" data-act="gsel" id="gameBar"><span class="gb-ico">🎮</span><b>ゲーム</b><span class="gb-sub">めいろ ・ すうどく ・ IQテスト</span><span class="gb-state" id="gameState">🪙 クリアで コイン</span></button>
+  </section>
+
+  <!-- IQテスト -->
+  <section class="screen pitch" id="iq">
+    <div class="qbar">
+      <button class="qquit" data-act="quit" aria-label="やめる">✕</button>
+      <span class="qtheme" style="--tc:#7a3cf0" id="iqTheme">🧠 IQテスト</span>
+      <div class="pg" id="iqpg"></div>
+      <span class="combo" id="iqcombo"></span>
+      <button class="qsay" data-act="iqrepeat" aria-label="もういちど よむ">🔊</button>
+    </div>
+    <div class="iqmain">
+      <div class="iqcard">
+        <span class="iqkind" id="iqKind"></span>
+        <div class="iqq" id="iqQ"></div>
+        <div class="iqvis" id="iqVis"></div>
+      </div>
+      <div class="iqside">
+        <div class="iqchoices" id="iqChoices"></div>
+        <div class="cnote" id="iqNote"></div>
+        <div class="cbtns">
+          <button class="kbtn give" data-act="iqgive" id="iqgive">🤔 わからない</button>
+          <button class="kbtn ok" data-act="iqok" id="iqok">⚽ けってい</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ゲーム：むずかしさ えらび -->
+  <section class="screen pitch lines" id="gsel">
+    <header class="hd">
+      <button class="back" data-act="home">◀ もどる</button>
+      <h2>ゲーム<small>どれで あそぶ？</small></h2>
+      <span class="sp"></span>
+    </header>
+    <div class="gs-grid" id="gsGrid"></div>
+    <p class="lv-note" id="gsNote"></p>
+  </section>
+
+  <!-- めいろ -->
+  <section class="screen pitch" id="meiro">
+    <div class="qbar">
+      <button class="qquit" data-act="quit" aria-label="やめる">✕</button>
+      <span class="qtheme" id="mzTheme" style="--tc:#1fa67a">めいろ</span>
+      <span class="gtime" id="mzTime">⏱ 0:00</span>
+      <span class="gsp"></span>
+    </div>
+    <div class="gmain">
+      <div class="gboard" id="mzBoard"><svg id="mzSvg" aria-label="めいろの ばん"></svg></div>
+      <div class="gside">
+        <p class="grule">1 → 2 → 3 … の じゅんに、ぜんぶの マスを 1かいずつ とおって、さいごの すうじまで つなごう。とおった みちを タップすると、そこまで もどれるよ。</p>
+        <p class="gnote" id="mzNote"></p>
+        <button class="kbtn" data-act="mzUndo">↩ 1マス もどす</button>
+        <button class="kbtn give" data-act="mzHint" id="mzHint">💡 ヒント</button>
+        <button class="kbtn" data-act="mzReset">🔄 さいしょから</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- すうどく -->
+  <section class="screen pitch" id="sudoku">
+    <div class="qbar">
+      <button class="qquit" data-act="quit" aria-label="やめる">✕</button>
+      <span class="qtheme" id="sdTheme" style="--tc:#2f8cff">すうどく</span>
+      <span class="gtime" id="sdTime">⏱ 0:00</span>
+      <span class="gsp"></span>
+    </div>
+    <div class="gmain">
+      <div class="gboard sdboard" id="sdBoard"></div>
+      <div class="gside">
+        <p class="grule">たて・よこ・ふとい わくの 中に、1〜6が 1つずつ はいるように しよう。マスを えらんでから すうじを おしてね。</p>
+        <p class="gnote" id="sdNote"></p>
+        <div class="sdpad">
+          <button class="sdk" data-act="sdNum" data-d="1">1</button><button class="sdk" data-act="sdNum" data-d="2">2</button><button class="sdk" data-act="sdNum" data-d="3">3</button>
+          <button class="sdk" data-act="sdNum" data-d="4">4</button><button class="sdk" data-act="sdNum" data-d="5">5</button><button class="sdk" data-act="sdNum" data-d="6">6</button>
+        </div>
+        <div class="sdrow"><button class="kbtn" data-act="sdErase">⌫ けす</button><button class="kbtn" data-act="sdUndo">↩ もどす</button></div>
+        <div class="sdrow"><button class="kbtn" data-act="sdMemo" id="sdMemo">✏️ メモ：オフ</button><button class="kbtn give" data-act="sdHint" id="sdHint">💡 ヒント</button></div>
+      </div>
     </div>
   </section>
 
@@ -566,7 +801,9 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <button data-act="bookTab" data-f="add">たしざん<b></b></button>
       <button data-act="bookTab" data-f="sub">ひきざん<b></b></button>
       <button data-act="bookTab" data-f="mul">かけざん<b></b></button>
+      <button data-act="bookTab" data-f="coin">🪙 こうかん<b></b></button>
       <button data-act="bookTab" data-f="zukan">🔍 ずかん</button>
+      <button data-act="bookTab" data-f="odds">🎲 でる かくりつ</button>
     </div>
     <div class="bookbody" id="bookBody"></div>
   </section>
@@ -610,6 +847,11 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <p class="note" id="missionNote"></p>
       </div>
       <div class="set-card">
+        <h3>🎮 ゲーム</h3>
+        <label class="row"><span class="grow">きょうのミッションが終わるまでゲームにカギをかける<small>優先テーマのシールをその日に5枚集めると、めいろ・すうどく・IQテストで遊べるようになります</small></span><span class="sw"><input type="checkbox" data-set="gameLock"><i></i></span></label>
+        <label class="row"><span class="grow">ゲームをクリアしたらコインをもらえる<small>クリア1回でコイン1枚（IQテストは7問中4問以上の正解）。コイン10枚で、トップ画面の「🪙」ボタンからシール1枚（ランダム）と交換できます（自動では交換しません）。オフにすると、ゲームはコインなしで遊べます。ヒントは1回3つまでです</small></span><span class="sw"><input type="checkbox" data-set="gameCoin"><i></i></span></label>
+      </div>
+      <div class="set-card">
         <h3>🏅 ランク</h3>
         <div class="row">
           <span class="grow">トップ画面で最初に出すランク<small>じどう：たしざん → ひきざん → かけざん の順に表示し、ワールドクラス（シール300枚）になったら次の計算に切り替えます。トップ画面のプルダウンでいつでも切り替えられます</small></span>
@@ -627,7 +869,9 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         ・まちがえた問題は、次から少し出やすくなります。<br>
         ・ボールをタッチすると、数を声でかぞえます。<br>
         ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
-        ・かけざんの1の段は練習用で、シールはもらえません。</p>
+        ・かけざんの1の段は練習用で、シールはもらえません。<br>
+        ・シールは全100種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
+        ・トップ画面の下の「ゲーム」で、めいろ・すうどく・IQテストを遊べます。</p>
       </div>
     </div>
   </section>
@@ -664,6 +908,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <div class="win-rank win-mission" id="winMission"></div>
       <div class="win-btns">
         <button class="bigbtn yellow" data-act="again">⚽ もういっかい</button>
+        <button class="bigbtn yellow" data-act="exchange" hidden>🎁 もう1まい こうかん</button>
         <button class="bigbtn" data-act="bookFromWin">📒 シールちょう</button>
         <button class="bigbtn" data-act="home">🏠 トップ</button>
       </div>
@@ -698,6 +943,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const rand = n => Math.floor(Math.random() * n);
 const pick = a => a[rand(a.length)];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const app = $('#app');
 const ans = $('#ans');
@@ -740,10 +986,46 @@ const DESIGNS = [
   ['sun', '🌞', 'おひさま', '#ffe590'], ['volcano', '🌋', 'かざん', '#ffc8b0'], ['saturn', '🪐', 'どせい', '#e6d8ff'],
   ['onigiri', '🍙', 'おにぎり', '#e9f6e2'], ['strawberry', '🍓', 'いちご', '#ffd4dc'], ['icecream', '🍦', 'ソフトクリーム', '#fff1d9'],
   ['crown', '👑', 'おうかん', '#ffe794'], ['gem', '💎', 'ほうせき', '#ccf2ff'],
+  // ここから 54しゅるい ふやした（ぜんぶで 100しゅるい。9さい向けと おなじ）
+  ['monkey', '🐵', 'サル', '#f2d4b0'], ['giraffe', '🦒', 'キリン', '#ffe3a3'], ['elephant', '🐘', 'ゾウ', '#d6dde8'],
+  ['zebra', '🦓', 'シマウマ', '#e8e8f0'], ['hippo', '🦛', 'カバ', '#dcd0f0'], ['rhino', '🦏', 'サイ', '#d9dfe6'],
+  ['kangaroo', '🦘', 'カンガルー', '#f5d2a8'], ['squirrel', '🐿️', 'リス', '#f3cfa6'], ['hedgehog', '🦔', 'ハリネズミ', '#e8d6c2'],
+  ['owl', '🦉', 'フクロウ', '#e2cfb4'], ['parrot', '🦜', 'オウム', '#c6f0b0'], ['whale', '🐳', 'クジラ', '#b5dcff'],
+  ['tropicalfish', '🐠', 'ねったいぎょ', '#ffd9a8'], ['crab', '🦀', 'カニ', '#ffc4b8'], ['ladybug', '🐞', 'テントウムシ', '#ffc9c9'],
+  ['butterfly', '🦋', 'チョウ', '#cfe2ff'], ['bee', '🐝', 'ミツバチ', '#fff0a6'], ['crocodile', '🐊', 'ワニ', '#c4ecb0'],
+  ['flamingo', '🦩', 'フラミンゴ', '#ffd1e6'], ['hamster', '🐹', 'ハムスター', '#ffe4c4'], ['horse', '🐴', 'ウマ', '#ecd6bc'],
+  ['cow', '🐮', 'ウシ', '#ececf4'], ['pig', '🐷', 'ブタ', '#ffd6e2'], ['chick', '🐥', 'ひよこ', '#fff4a8'],
+  ['train', '🚂', 'きかんしゃ', '#d8dde6'], ['bus', '🚌', 'バス', '#ffeab0'], ['tractor', '🚜', 'トラクター', '#d6efc2'],
+  ['ship', '🚢', 'ふね', '#cfe6ff'], ['ufo', '🛸', 'ユーフォー', '#d8d2ff'], ['racecar', '🏎️', 'レーシングカー', '#ffc6c6'],
+  ['bicycle', '🚲', 'じてんしゃ', '#d2f0e6'], ['baseball', '⚾', 'やきゅう', '#f0f0f0'], ['basketball', '🏀', 'バスケットボール', '#ffd2a8'],
+  ['tennis', '🎾', 'テニス', '#e6f7b0'], ['pingpong', '🏓', 'たっきゅう', '#ffd0d0'], ['target', '🎯', 'まと', '#ffe0e0'],
+  ['moon', '🌙', 'おつきさま', '#fff6c2'], ['comet', '☄️', 'ほうきぼし', '#ffd8b8'], ['earth', '🌍', 'ちきゅう', '#c8e8ff'],
+  ['sunflower', '🌻', 'ひまわり', '#fff0a0'], ['sakura', '🌸', 'さくら', '#ffe0ec'], ['clover', '🍀', 'よつばの クローバー', '#d2f5c8'],
+  ['mushroom', '🍄', 'キノコ', '#ffd6cc'], ['cactus', '🌵', 'サボテン', '#d6f0c4'], ['snowflake', '❄️', 'ゆきの けっしょう', '#dff2ff'],
+  ['pizza', '🍕', 'ピザ', '#ffe0b0'], ['burger', '🍔', 'ハンバーガー', '#ffdcb0'], ['donut', '🍩', 'ドーナツ', '#ffd6e4'],
+  ['cake', '🍰', 'ショートケーキ', '#fff0f0'], ['watermelon', '🍉', 'スイカ', '#d8f5c8'], ['sushi', '🍣', 'おすし', '#ffe6d6'],
+  ['ghost', '👻', 'おばけ', '#e8e8ff'], ['wizard', '🧙', 'まほうつかい', '#e0d4ff'], ['castle', '🏰', 'おしろ', '#e4e8f0'],
 ].map(([id, e, name, bg]) => ({ id, e, name, bg }));
 const DMAP = Object.fromEntries(DESIGNS.map(d => [d.id, d]));
-const RARE = new Set(['trophy', 'crown', 'gem', 'dragon', 'unicorn', 'saturn']);
+// グレード：ノーマル・レア・スーパーレア（でやすさが ちがう）＋ キラキラ（どの シールでも SHINY_RATE で キラキラに なる）
+const GRADES = {
+  sr: { name: 'スーパーレア', short: 'SR', w: 0.12, ids: ['crown', 'gem', 'dragon', 'unicorn', 'ufo', 'castle'] },
+  r: { name: 'レア', short: 'R', w: 0.4, ids: ['trophy', 'saturn', 'medal', 'rocket', 'trex', 'shinkansen', 'whale', 'owl', 'flamingo', 'rainbow', 'earth', 'clover', 'wizard', 'comet', 'racecar', 'volcano'] },
+  n: { name: 'ノーマル', short: 'N', w: 1, ids: [] },
+};
+const gradeOf = id => GRADES.sr.ids.includes(id) ? 'sr' : GRADES.r.ids.includes(id) ? 'r' : 'n';
+const UNOWNED_BOOST = 2.5;  // まだ もって いない シールは 2.5ばい でやすい
 const SHINY_RATE = 0.12;
+const PERFECT_SR = 1.5;     // ぜんもん せいかいの ときは スーパーレアが 1.5ばい でやすい
+// でやすさ（おもみ）：グレード × まだ もってない ボーナス × ぜんもん せいかい ボーナス
+const stickerW = (d, owned, perfect) => { const g = gradeOf(d.id); return GRADES[g].w * (owned.has(d.id) ? 1 : UNOWNED_BOOST) * (perfect && g === 'sr' ? PERFECT_SR : 1); };
+// いま シールを もらったら、それぞれの シールが でる かくりつ
+function stickerOdds(perfect) {
+  const owned = new Set(D.stickers.map(s => s.d));
+  const w = DESIGNS.map(d => stickerW(d, owned, perfect));
+  const sum = w.reduce((a, b) => a + b, 0);
+  return DESIGNS.map((d, i) => ({ d, p: w[i] / sum, owned: owned.has(d.id), g: gradeOf(d.id) }));
+}
 
 // ランク（たしざん・ひきざん・かけざん それぞれ）[ひつような まいすう, なまえ, アイコン]
 const RANKS = [[0, 'ルーキー', '🌱'], [15, 'レギュラー', '⚽'], [40, 'エース', '🔥'], [80, 'キャプテン', '🎖️'], [130, 'スター', '⭐'], [200, 'レジェンド', '👑'], [300, 'ワールドクラス', '🌏']];
@@ -766,7 +1048,8 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add' },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true },
+    coins: 0, coinsTotal: 0, gstats: {},  // ゲームの コイン（10まいで シール1まいと こうかん）と きろく
   };
 }
 let D = defaults();
@@ -781,6 +1064,9 @@ function load() {
       stats: Object.fromEntries(Object.keys(def.stats).map(k => [k, { ...def.stats[k], ...((d.stats || {})[k] || {}) }])),
       stickers: Array.isArray(d.stickers) ? d.stickers : [],
       miss: d.miss || {},
+      gstats: d.gstats && typeof d.gstats === 'object' ? d.gstats : {},
+      coins: Number.isFinite(d.coins) ? d.coins : 0,
+      coinsTotal: Number.isFinite(d.coinsTotal) ? d.coinsTotal : 0,
     };
     // v1 の初期値（速さ 1.4・ボールの絵 いつも）のままなら、あたらしい初期値に そろえる
     if (!(d.v >= 2)) {
@@ -1094,16 +1380,18 @@ const missionDone = () => D.stickers.filter(s => s.t === S().priority && isToday
 const missionLeft = () => Math.max(0, MISSION - missionDone());
 const stickerLocked = t => t !== S().priority && missionLeft() > 0;
 
-function awardSticker(theme, dan) {
+// theme：add・sub・mul（けいさん）か coin（ゲームの コインと こうかん）
+function awardSticker(theme, dan, perfect) {
   const owned = new Set(D.stickers.map(s => s.d));
-  // まだ もっていない シールが でやすい・レアは でにくい
-  const w = DESIGNS.map(d => (RARE.has(d.id) ? 0.35 : 1) * (owned.has(d.id) ? 1 : 2.5));
+  // まだ もっていない シールが でやすい・レアは でにくい・ぜんもん せいかいなら スーパーレアが でやすい
+  const w = DESIGNS.map(d => stickerW(d, owned, perfect));
   let r = Math.random() * w.reduce((a, b) => a + b, 0), i = 0;
   for (; i < DESIGNS.length - 1; i++) { r -= w[i]; if (r <= 0) break; }
   const before = rankOf(themeCount(theme)).r, leftBefore = missionLeft();
   const s = { d: DESIGNS[i].id, t: theme, k: Math.random() < SHINY_RATE ? 1 : 0, at: Date.now(), dan: dan || 0 };
+  if (perfect) s.pf = 1;
   D.stickers.push(s);
-  return { s, isNew: !owned.has(s.d), rankUp: rankOf(themeCount(theme)).r !== before, missionClear: leftBefore > 0 && missionLeft() === 0 };
+  return { s, isNew: !owned.has(s.d), rankUp: !!THEMES[theme] && rankOf(themeCount(theme)).r !== before, missionClear: leftBefore > 0 && missionLeft() === 0 };
 }
 
 // ---------- ホーム ----------
@@ -1124,6 +1412,14 @@ function renderHome() {
     $(`[data-mini="${t}"]`).innerHTML = mine.slice(-6).reverse().map(s => stickerHTML(s, 'xs')).join('');
     renderMission(t);
   }
+  const gl = gameLocked();
+  $('#gameBar').classList.toggle('locked', gl);
+  $('#gameState').textContent = gl ? `🔒 ミッションの あと（あと ${missionLeft()}まい）` : coinOn() ? '🪙 クリアで コイン' : '▶ あそぶ';
+  const cb = $('#coinBtn'), can = D.coins >= COIN_RATE;
+  cb.hidden = !coinOn() && !D.coins;
+  $('#coinNum').textContent = D.coins;
+  $('#coinTxt').textContent = can ? '🎁 シールと こうかん！' : `あと ${COIN_RATE - D.coins}まいで こうかん`;
+  cb.classList.toggle('ready', can);
 }
 function renderMission(t) {
   const card = $(`.card[data-theme="${t}"]`), ex = card.querySelector('.card-ex');
@@ -1226,6 +1522,7 @@ function setAns(v) { ans.value = v; Q.val = v; }
 function startQuiz(theme, dan = 0) {
   SFX.unlock();
   closeOverlays();
+  Last = 'quiz';
   Object.assign(Q, { theme, dan, list: makeQuestions(theme, dan), idx: 0, results: [], combo: 0, active: true, noSticker: noStickerReason(theme, dan) });
   document.body.dataset.theme = theme;
   const qt = $('#qTheme');
@@ -1474,7 +1771,7 @@ function finishQuiz() {
   st.play++; st.q += Q.list.length; st.ok += ok;
   if (ok === Q.list.length) st.perfect++;
   if (ok >= PASS && !Q.noSticker) {
-    const res = awardSticker(Q.theme, Q.dan);
+    const res = awardSticker(Q.theme, Q.dan, ok === Q.list.length);
     save();
     showWin(res, ok);
   } else {
@@ -1483,18 +1780,23 @@ function finishQuiz() {
   }
 }
 
-function showWin({ s, isNew, rankUp, missionClear }, ok) {
-  const d = DMAP[s.d];
-  const n = themeCount(s.t);
+// top：コインと こうかん したときの みだし（けいさんの ときは なし）
+function showWin({ s, isNew, rankUp, missionClear }, ok, top) {
+  const d = DMAP[s.d], th = THEMES[s.t], g = gradeOf(s.d);
+  const n = th ? themeCount(s.t) : D.stickers.length;
   const rk = rankOf(n).r;
-  const perfect = ok === Q.list.length;
+  const perfect = !top && ok === Q.list.length;
   const left = s.t === S().priority ? missionLeft() : 0;
-  $('#winTop').textContent = perfect ? 'ぜんもん せいかい！' : `${ok}もん せいかい！`;
+  const opened = missionClear ? (S().gameLock !== false ? 'ほかの けいさんの シールと ゲームが ひらいたよ！' : 'ほかの けいさんでも シールが もらえるよ！') : '';
+  $('#winTop').textContent = top || (perfect ? 'ぜんもん せいかい！' : `${ok}もん せいかい！`);
+  $('#win [data-act="again"]').hidden = !!top;
+  $('#win [data-act="exchange"]').hidden = !(top && D.coins >= COIN_RATE);
   $('#winStk').innerHTML = stickerHTML(s, 'xxl');
-  $('#winName').innerHTML = `${d.name}${s.k ? ' <span class="kira">✨キラキラ✨</span>' : ''}${isNew ? ' <span class="newb">NEW!</span>' : ''}`;
-  $('#winSub').textContent = `${THEMES[s.t].name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい` + (left ? ` ・ ミッション あと ${left}まい` : '');
-  $('#winRank').textContent = rankUp ? `ランクアップ！ ${THEMES[s.t].name}が ${rk[2]} ${rk[1]} に なった！` : '';
-  $('#winMission').textContent = missionClear ? '✅ きょうの ミッション クリア！ ほかの けいさんでも シールが もらえるよ！' : '';
+  $('#winName').innerHTML = `${g !== 'n' ? `<i class="gr ${g}">${GRADES[g].short}</i> ` : ''}${d.name}${s.k ? ' <span class="kira">✨キラキラ✨</span>' : ''}${isNew ? ' <span class="newb">NEW!</span>' : ''}`;
+  $('#winSub').textContent = th ? `${th.name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい` + (left ? ` ・ ミッション あと ${left}まい` : '')
+    : `シール ぜんぶで ${D.stickers.length}まい ・ のこりの コイン ${D.coins}まい`;
+  $('#winRank').textContent = rankUp ? `ランクアップ！ ${th.name}が ${rk[2]} ${rk[1]} に なった！` : '';
+  $('#winMission').textContent = missionClear ? `✅ きょうの ミッション クリア！ ${opened}` : '';
   const w = $('#win');
   w.classList.toggle('tight', rankUp && missionClear);
   w.classList.remove('ready', 'show'); void w.offsetWidth; w.classList.add('show');
@@ -1502,9 +1804,9 @@ function showWin({ s, isNew, rankUp, missionClear }, ok) {
   SFX.fanfare();
   setTimeout(() => SFX.sparkle(), 1300);
   if (rankUp || missionClear) setTimeout(() => SFX.rankup(), 2500);
-  const line = `やったー！ ${perfect ? '全問' : `${ok}問`} 正解！ ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}`
-    + (rankUp ? ` ランクアップ！ ${THEMES[s.t].name}の ランクが ${rk[1]}に なったよ！` : '')
-    + (missionClear ? ' きょうの ミッション クリア！ ほかの けいさんでも シールが もらえるよ！' : '');
+  const line = `やったー！ ${top ? 'こうかん！' : perfect ? '全問 正解！' : `${ok}問 正解！`} ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}`
+    + (rankUp ? ` ランクアップ！ ${th.name}の ランクが ${rk[1]}に なったよ！` : '')
+    + (missionClear ? ` きょうの ミッション クリア！ ${opened}` : '');
   setTimeout(() => Speech.speak(line), 1000);
   setTimeout(() => w.classList.add('ready'), 2200);
 }
@@ -1551,11 +1853,733 @@ function closeModal() { $('#modal').classList.remove('show'); }
 function goHome() {
   Q.active = false;
   Q.token++;
+  gStop();
+  MZ.drawing = false;
+  IQ.active = false;
+  IQ.token++;
   Speech.stop();
   ans.blur();
   closeOverlays();
   renderHome();
   show('home');
+}
+
+// ---------- ゲーム（めいろ・すうどく・IQテスト。9さい向けと おなじ） ----------
+// カギ：きょうの ミッション（ゆうせんテーマの シール 5まい）が おわるまで あそべない
+const gameLocked = () => S().gameLock !== false && missionLeft() > 0;
+const coinOn = () => S().gameCoin !== false;
+function openGameLock() {
+  const pri = THEMES[S().priority].name, left = missionLeft();
+  openModal(`<div class="lock-ico">🔒</div>
+    <p class="mq">ゲームは まだ できないよ</p>
+    <p class="lock-msg">きょうの ミッション（${pri}の シール ${MISSION}まい）が<br>おわったら あそべるよ。あと ${left}まい！</p>
+    <div class="mbtns"><button class="bigbtn yellow" data-act="startPriority">⭐ ${pri}を やる</button><button class="bigbtn" data-act="closeModal">とじる</button></div>`);
+  Speech.speak(`ゲームは ${pri}の シールを あと ${left}まい あつめたら あそべるよ`);
+}
+const GAMES = {
+  meiro: { name: 'めいろ', lv: { 1: { name: 'やさしい', n: 5, k: 7, walls: 0, coin: 1 }, 2: { name: 'ふつう', n: 6, k: 9, walls: 3, coin: 1 }, 3: { name: 'むずかしい', n: 7, k: 10, walls: 6, coin: 1 } } },
+  sudoku: { name: 'すうどく', lv: { 1: { name: 'やさしい', givens: 18, coin: 1 }, 2: { name: 'ふつう', givens: 14, coin: 1 }, 3: { name: 'むずかしい', givens: 11, coin: 1 } } },
+  iq: { name: 'IQテスト', lv: { 1: { name: 'やさしい', coin: 1 }, 2: { name: 'ふつう', coin: 1 }, 3: { name: 'むずかしい', coin: 1 } } },
+};
+const GAME_RULE = {
+  iq: 'すうれつ・ならび・なかまはずれ・かたち・パズル などの もんだいが 7もん。4もん いじょう せいかいで コイン！',
+  meiro: '1 → 2 → 3 … の じゅんに、ぜんぶの マスを 1かいずつ とおって、さいごの すうじまで つなごう。ゆびで なぞってね。',
+  sudoku: 'たて・よこ・ふとい わくの 中に、1〜6が 1つずつ はいるように すうじを 入れよう。',
+};
+const HINTS = 3;
+const COIN_RATE = 10;  // シール1まいに ひつような コイン
+const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+const gstat = (g, lv) => { const k = g + lv; return (D.gstats[k] = D.gstats[k] || { play: 0, clear: 0, best: 0 }); };
+const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0 };
+let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・game・coin
+const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : g === 'meiro' ? `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}` : `さいしょの すうじ ${L.givens}こ`;
+
+function renderGameSel() {
+  const g2 = $('#gsGrid');
+  g2.classList.add('two');
+  g2.innerHTML = ['meiro', 'sudoku', 'iq'].map(g => `<div class="gs-head">${{ meiro: '🧩', sudoku: '🔢', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small></div>` + [1, 2, 3].map(lv => {
+    const L = GAMES[g].lv[lv], st = gstat(g, lv);
+    return `<button class="lvb gsb ${g}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${L.name}</b><small>${gameDesc(g, L)}</small><span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
+  }).join('')).join('');
+  $('#gsNote').textContent = coinOn() ? 'クリアすると コインが もらえるよ（コイン 10まいで シール 1まいと こうかん）' : 'クリアを めざそう！';
+}
+
+function startGame(g, lv) {
+  SFX.unlock();
+  closeOverlays();
+  Speech.stop();
+  Last = 'game';
+  clearInterval(Gm.timer);
+  Object.assign(Gm, { kind: g, lv, t0: Date.now(), sec: 0, active: true, hints: 0 });
+  const st = gstat(g, lv); st.play++; save();
+  const name = `${GAMES[g].name} ${GAMES[g].lv[lv].name}`;
+  if (g === 'iq') { Gm.active = false; iqStart(lv, name); return; }
+  if (g === 'meiro') { mzNew(GAMES.meiro.lv[lv]); $('#mzTheme').textContent = name; show('meiro'); }
+  else { sdNew(GAMES.sudoku.lv[lv]); $('#sdTheme').textContent = name; show('sudoku'); }
+  gHintLabel();
+  gTick();
+  Gm.timer = setInterval(gTick, 500);
+  SFX.start();
+}
+function gTick() {
+  if (!Gm.active) return;
+  Gm.sec = Math.floor((Date.now() - Gm.t0) / 1000);
+  const el = Gm.kind === 'meiro' ? $('#mzTime') : $('#sdTime');
+  el.textContent = '⏱ ' + fmtTime(Gm.sec);
+}
+function gStop() { Gm.active = false; clearInterval(Gm.timer); }
+function gHintLabel() {
+  const left = HINTS - Gm.hints;
+  const b = Gm.kind === 'meiro' ? $('#mzHint') : $('#sdHint');
+  b.textContent = `💡 ヒント（のこり ${left}）`;
+  b.disabled = left <= 0;
+}
+function gameClear() {
+  if (!Gm.active) return;
+  gStop();
+  const g = Gm.kind, lv = Gm.lv, st = gstat(g, lv);
+  st.clear++;
+  const best = !st.best || Gm.sec < st.best;
+  if (best) st.best = Gm.sec;
+  const top = `クリア！ タイム ${fmtTime(Gm.sec)}${best ? '（ベスト きろく！）' : ''}`;
+  const coin = coinOn() ? GAMES[g].lv[lv].coin : 0;
+  D.coins += coin;
+  D.coinsTotal += coin;
+  st.coins = (st.coins || 0) + coin;
+  save();
+  setTimeout(() => {
+    SFX.cheer();
+    FX.confetti(innerWidth / 2, innerHeight * 0.55, 90, 14);
+    const can = D.coins >= COIN_RATE;
+    openModal(`<div class="lock-ico">🎉</div><p class="mq">${top}</p>
+      ${coin ? `<div class="coin-get">${'<i class="coin">🪙</i>'.repeat(coin)}<b>コイン +${coin}まい ゲット！</b></div>${coinMeter()}` : ''}
+      <div class="mbtns">${can ? '<button class="bigbtn yellow" data-act="exchange">🎁 シールと こうかん</button>' : ''}<button class="bigbtn${can ? '' : ' yellow'}" data-act="again">もういっかい</button><button class="bigbtn" data-act="home">🏠 トップ</button></div>`);
+    Speech.speak(coin ? `クリア！ コインを ${coin}まい ゲット！${can ? ' シールと こうかん できるよ！' : ''}` : 'クリア！ すごいね！');
+  }, 450);
+}
+// コインの メーター（10まいで シール1まい）
+function coinMeter() {
+  const have = D.coins, n = Math.min(have, COIN_RATE);
+  const dots = Array.from({ length: COIN_RATE }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('');
+  const msg = have >= COIN_RATE ? `いま ${have}まい。シールと こうかん できるよ！` : `いま ${have}まい。あと ${COIN_RATE - have}まいで シール1まいと こうかん`;
+  return `<div class="coin-meter"><span class="coin-dots">${dots}</span><small>${msg}</small></div>`;
+}
+// こうかん：じぶんで ボタンを おしたときだけ
+function openExchange() {
+  Speech.stop();
+  if (D.coins < COIN_RATE) {
+    openModal(`<div class="lock-ico">🪙</div><p class="mq">コインが まだ たりないよ</p>${coinMeter()}<p class="msub">ゲームを クリアすると コインが もらえるよ<br>（1かい クリアで 1まい）</p><button class="bigbtn yellow" data-act="closeModal">とじる</button>`);
+    Speech.speak(`あと ${COIN_RATE - D.coins}まいで シールと こうかん できるよ`);
+    return;
+  }
+  openModal(`<div class="lock-ico">🎁</div><p class="mq">コイン ${COIN_RATE}まいで<br>シール 1まいと こうかん する？</p>${coinMeter()}<p class="msub">どの シールが でるかは おたのしみ！</p>
+    <div class="mbtns"><button class="bigbtn yellow" data-act="exchangeOk">🎁 こうかん する</button><button class="bigbtn" data-act="closeModal">やめる</button></div>`);
+  Speech.speak('コイン10まいで シールと こうかん する？');
+}
+function doExchange() {
+  if (D.coins < COIN_RATE) return closeModal();
+  D.coins -= COIN_RATE;
+  const res = awardSticker('coin', 0, false);
+  save();
+  closeModal();
+  Last = 'coin';
+  showWin(res, null, 'コインと こうかん！');
+  renderHome();
+}
+
+// ===== IQテスト（いろいろな もんだい 7もん：4もん いじょう せいかいで コイン） =====
+const IQ_N = 7, IQ_PASS = 4;
+const IQ = { list: [], idx: 0, results: [], combo: 0, sel: -1, right: -1, wrong: -1, lock: false, canSkip: false, active: false, token: 0, lv: 1 };
+const ri = (a, b) => a + rand(b - a + 1);
+// こたえ と まちがい 3つ を まぜて、こたえの いちを おぼえる
+function iqPack(o, correct, wrongs) {
+  const w = [];
+  for (const x of wrongs) if (x !== correct && !w.includes(x)) w.push(x);
+  const ch = shuffle([correct, ...w.slice(0, 3)]);
+  return { ...o, choices: ch, ans: ch.indexOf(correct) };
+}
+// かずの まちがい：それっぽい もの（cands）を 2つまで、のこりは ちかい かず
+function numW(ans, cands) {
+  const out = [];
+  const add = c => { if (Number.isInteger(c) && c > 0 && c !== ans && !out.includes(c)) out.push(c); };
+  shuffle(cands.slice()).forEach(c => { if (out.length < 2) add(c); });
+  shuffle([ans + 1, ans - 1, ans + 2, ans - 2]).forEach(add);
+  [ans + 3, ans + 4, ans + 5].forEach(add);
+  return out.slice(0, 3).map(String);
+}
+
+// 1. すうれつ
+function iqSeq(lv) {
+  const t = lv === 1 ? pick(['add', 'sub']) : lv === 2 ? pick(['add', 'sub', 'mul2']) : pick(['alt', 'grow', 'mul2', 'sq']);
+  let terms, why, cands = [];
+  const n6 = [0, 1, 2, 3, 4, 5];
+  if (t === 'add') { const a = ri(1, 9), d = ri(2, lv === 1 ? 5 : 9); terms = n6.map(i => a + d * i); why = `${d}ずつ ふえて いるよ`; cands = [terms[5] + d, terms[4] + d + 1]; }
+  if (t === 'sub') { const d = ri(2, lv === 1 ? 5 : 8), a = d * 5 + ri(1, 9); terms = n6.map(i => a - d * i); why = `${d}ずつ へって いるよ`; cands = [terms[5] + 2 * d, terms[5] - 1]; }
+  if (t === 'mul2') { const m = lv === 3 ? pick([2, 3]) : 2, a = m === 3 ? ri(1, 2) : ri(1, 3); terms = n6.map(i => a * m ** i); why = `${m}ばいずつ ふえて いるよ`; cands = [terms[4] + terms[4] / 2 * 1, terms[4] * m + terms[4]]; }
+  if (t === 'alt') {
+    const a = ri(1, 9), p = ri(2, 6); let q = ri(1, 5); if (q === p) q = p + 1;
+    terms = [a]; for (let i = 1; i < 6; i++) terms.push(terms[i - 1] + (i % 2 ? p : q));
+    why = `+${p} と +${q} を じゅんばんに くりかえして いるよ`; cands = [terms[4] + p, terms[4] + q + 1];
+  }
+  if (t === 'grow') {
+    const a = ri(1, 9), s = ri(1, 3);
+    terms = [a]; for (let i = 1; i < 6; i++) terms.push(terms[i - 1] + s + i - 1);
+    why = `ふえる かずが ${s}、${s + 1}、${s + 2} … と 1ずつ おおきく なるよ`; cands = [terms[4] + s + 3, terms[4] + s + 5];
+  }
+  if (t === 'sq') {
+    const o = ri(1, 3); terms = n6.map(i => (o + i) * (o + i));
+    why = `${o}×${o}、${o + 1}×${o + 1}、${o + 2}×${o + 2} … と おなじ かずを かけた かずだよ`; cands = [terms[4] + (o + 4), (o + 5) * (o + 4)];
+  }
+  const miss = lv === 3 && Math.random() < 0.4 ? ri(2, 4) : 5;
+  const ans = terms[miss];
+  if (miss !== 5) cands = [ans + 1, ans - 1, terms[miss - 1] + 1];
+  const vis = `<div class="iqrow">${terms.map((x, i) => `<span class="iqnum${i === miss ? ' q' : ''}">${i === miss ? '？' : x}</span>`).join('')}</div>`;
+  return iqPack({ kind: 'すうれつ', q: '？に はいる かずは どれ？', vis, why }, String(ans), numW(ans, cands));
+}
+
+// 2. ならび（くりかえしの きまり）
+const IQ_SHP = ['🔴', '🔵', '🟢', '🟡', '🟥', '🟦', '🟩', '🟨', '🔺', '⭐', '❤️', '🌙', '🔶', '💜'];
+function iqPattern(lv) {
+  const p = shuffle(IQ_SHP.slice()), [a, b, c, d] = p;
+  const unit = lv === 1 ? pick([[a, b], [a, a, b]]) : lv === 2 ? pick([[a, b, c], [a, a, b], [a, b, b]]) : pick([[a, b, b, c], [a, b, c, d], [a, a, b, c], [a, b, c, b]]);
+  const n = lv === 1 ? 7 : 8, L = unit.length;
+  const seq = Array.from({ length: n }, (_, i) => unit[i % L]);
+  const ans = unit[n % L];
+  const wrongs = [...new Set(unit.filter(x => x !== ans)), ...p.slice(4)];
+  const vis = `<div class="iqrow">${seq.map(x => `<span class="iqemo">${x}</span>`).join('')}<span class="iqnum q">？</span></div>`;
+  return iqPack({ kind: 'ならび', q: 'きまりを みつけよう。？に はいるのは どれ？', vis, why: `${unit.join('')} の くりかえし だよ` }, ans, wrongs);
+}
+
+// 3. なかまはずれ
+const IQ_CATS = {
+  'どうぶつ': ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐸', '🐯', '🐮', '🐷'],
+  'くだもの': ['🍎', '🍌', '🍇', '🍓', '🍊', '🍑', '🍒', '🍉'],
+  'のりもの': ['🚗', '🚌', '🚲', '✈️', '🚀', '🚂', '🚒', '🚑'],
+  'がっき': ['🎹', '🎸', '🥁', '🎺', '🎻'],
+  'むし': ['🐞', '🐝', '🦋', '🐜', '🐛'],
+  'ボール': ['⚽', '🏀', '⚾', '🎾', '🏐'],
+  'てんきの しるし': ['☀️', '☁️', '☔', '⛄', '⚡'],
+};
+function iqOdd(lv) {
+  if (lv >= 2 && Math.random() < 0.4) {
+    const k = lv === 2 ? pick([2, 5, 10]) : pick([3, 4, 6, 7, 8, 9]);
+    // ほかの きまり（ぐうすう・きすう）で べつの かずが なかまはずれに みえないように する
+    let nums, odd, ok = false;
+    while (!ok) {
+      nums = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).map(x => x * k);
+      odd = k * ri(2, 9) + ri(1, k - 1);
+      const ev = [...nums, odd].filter(x => x % 2 === 0).length;
+      ok = !nums.includes(odd) && (ev === 4 || ev === 0 || (ev === 3 && odd % 2 === 1) || (ev === 1 && odd % 2 === 0) || ev === 2);
+    }
+    const ch = shuffle([...nums.map(String), String(odd)]);
+    return { kind: 'なかまはずれ', q: 'なかまはずれの かずは どれ？', vis: '', choices: ch, ans: ch.indexOf(String(odd)), why: `ほかは みんな ${k}の だんの かず。${odd}は ${k}の だんに ないよ` };
+  }
+  const names = Object.keys(IQ_CATS), A = pick(names);
+  const clash = (x, y) => [x, y].includes('どうぶつ') && [x, y].includes('むし');
+  let B; do { B = pick(names); } while (B === A || clash(A, B));
+  const three = shuffle(IQ_CATS[A].slice()).slice(0, 3), one = pick(IQ_CATS[B]);
+  const ch = shuffle([...three, one]);
+  return { kind: 'なかまはずれ', q: 'なかまはずれは どれ？', vis: '', choices: ch.map(x => `<span class="iqemo">${x}</span>`), ans: ch.indexOf(one), why: `${one} だけ ${B}。ほかは ${A} だよ` };
+}
+
+// 4. かいてん・かがみ（かたちを まわす）
+const IQ_PENTS = [
+  [[1, 0], [2, 0], [0, 1], [1, 1], [1, 2]],          // F
+  [[0, 0], [1, 0], [0, 1], [1, 1], [0, 2]],          // P
+  [[1, 0], [0, 1], [1, 1], [1, 2], [1, 3]],          // Y
+  [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3]],          // L
+  [[0, 0], [0, 1], [1, 1], [1, 2], [1, 3]],          // N
+];
+const iqNorm = cells => { const mx = Math.min(...cells.map(c => c[0])), my = Math.min(...cells.map(c => c[1])); return cells.map(([x, y]) => [x - mx, y - my]); };
+const iqRot = cells => iqNorm(cells.map(([x, y]) => [-y, x]));      // とけいまわりに 1/4
+const iqMir = cells => iqNorm(cells.map(([x, y]) => [-x, y]));      // さゆう はんてん（かがみ）
+const iqKey = cells => cells.map(c => c.join(',')).sort().join(' ');
+function iqShapeSVG(cells, col) {
+  const w = Math.max(...cells.map(c => c[0])) + 1, h = Math.max(...cells.map(c => c[1])) + 1, s = Math.floor(90 / Math.max(w, h, 3)), ox = (100 - w * s) / 2, oy = (100 - h * s) / 2;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${cells.map(([x, y], i) => `<rect x="${ox + x * s + 1}" y="${oy + y * s + 1}" width="${s - 2}" height="${s - 2}" rx="3" fill="${i === 0 ? '#ff7a2f' : col}"/>`).join('')}</svg>`;
+}
+function iqRotate(lv) {
+  const base = iqNorm(pick(IQ_PENTS)), col = pick(['#2f8cff', '#7a3cf0', '#2fbf68', '#14a3b8']);
+  const r1 = iqRot(base), r2 = iqRot(r1), r3 = iqRot(r2), m = iqMir(base);
+  const all = [base, r1, r2, r3, m, iqRot(m), iqRot(iqRot(m)), iqRot(iqRot(iqRot(m)))];
+  const v = lv === 1 ? pick(['half', 'mirror']) : lv === 2 ? pick(['cw', 'ccw', 'mirror']) : pick(['cw', 'ccw', 'half', 'mirrorRot']);
+  const T = { half: [r2, 'さかさまに（はんかいてん）すると どれ？', '🔃 はんかいてん', 'はんかいてん すると、うえと したが いれかわるよ'],
+    cw: [r1, 'とけいと おなじ むきに ¼ かいてん すると どれ？', '↻ ¼ かいてん', 'とけいまわりに ¼ まわすと、うえに あった ところが みぎに くるよ'],
+    ccw: [r3, 'とけいと はんたいの むきに ¼ かいてん すると どれ？', '↺ ¼ かいてん', 'はんたいまわりに ¼ まわすと、うえに あった ところが ひだりに くるよ'],
+    mirror: [m, 'かがみに うつすと どれ？（みぎと ひだりが はんたい）', '🪞 かがみ', 'かがみに うつすと、みぎと ひだりが いれかわるよ'],
+    mirrorRot: [iqRot(m), 'かがみに うつしてから、とけいまわりに ¼ かいてん すると どれ？', '🪞 → ↻', 'まず みぎと ひだりを いれかえて、それから とけいまわりに ¼ まわすよ'] }[v];
+  const ansKey = iqKey(T[0]);
+  const wrongs = shuffle(all.filter(c => iqKey(c) !== ansKey)).slice(0, 3);
+  const correct = iqShapeSVG(T[0], col);
+  const vis = `<div class="iqshape">${iqShapeSVG(base, col)}</div><div class="iqtag">${T[2]}</div>`;
+  return iqPack({ kind: lv >= 2 && v !== 'half' ? 'かいてん・かがみ' : 'かたち', q: T[1], vis, why: T[3] + '（オレンジの マスを めじるしに しよう）' }, correct, wrongs.map(c => iqShapeSVG(c, col)));
+}
+
+// 5. 3×3 の パズル（たて・よこの きまり）
+const IQ_COL = ['#ff5a5f', '#2f8cff', '#2fbf68'];
+function iqCellSVG(sh, co, n) {
+  const pos = n === 1 ? [[30, 30]] : n === 2 ? [[18, 30], [42, 30]] : [[18, 20], [42, 20], [30, 42]], r = n === 1 ? 20 : 11;
+  const one = ([x, y]) => sh === 0 ? `<circle cx="${x}" cy="${y}" r="${r}" fill="${IQ_COL[co]}"/>`
+    : sh === 1 ? `<rect x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" rx="2" fill="${IQ_COL[co]}"/>`
+    : `<path d="M${x} ${y - r}L${x + r} ${y + r * .85}H${x - r}Z" fill="${IQ_COL[co]}"/>`;
+  return `<svg viewBox="0 0 60 60" aria-hidden="true">${pos.map(one).join('')}</svg>`;
+}
+function iqMatrix(lv) {
+  const sp = shuffle([0, 1, 2]), cp = shuffle([0, 1, 2]);
+  const cell = (i, j) => lv === 1 ? [sp[i], cp[(i + j) % 3], 1] : lv === 2 ? [sp[(i + j) % 3], cp[(i + 2 * j) % 3], 1] : [sp[(i + j) % 3], cp[(2 * i + j) % 3], (i + 2 * j) % 3 + 1];
+  const mi = lv === 1 ? 2 : ri(0, 2), mj = lv === 1 ? 2 : ri(0, 2);
+  const [s, c, n] = cell(mi, mj);
+  const key = (a, b, k) => `${a}${b}${k}`, seen = new Set([key(s, c, n)]), wr = [];
+  const alts = shuffle([[(s + 1) % 3, c, n], [s, (c + 1) % 3, n], [(s + 2) % 3, (c + 2) % 3, n], [s, (c + 2) % 3, n], [(s + 1) % 3, (c + 1) % 3, n]]
+    .concat(lv === 3 ? [[s, c, n % 3 + 1], [s, c, (n + 1) % 3 + 1]] : []));
+  for (const a of alts) if (!seen.has(key(...a)) && wr.length < 3) { seen.add(key(...a)); wr.push(iqCellSVG(...a)); }
+  let g = '';
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) g += i === mi && j === mj ? '<span class="iqcell q">？</span>' : `<span class="iqcell">${iqCellSVG(...cell(i, j))}</span>`;
+  const why = lv === 1 ? 'よこの れつは おなじ かたち。いろは どの れつにも 3しょく 1つずつ だよ'
+    : lv === 2 ? 'たて・よこ どの れつにも、おなじ かたちと いろが 1つずつ はいるよ' : 'たて・よこ どの れつにも、かたち・いろ・かずが 1つずつ はいるよ';
+  return iqPack({ kind: '3×3 パズル', q: '？に はいるのは どれ？', vis: `<div class="iqgrid">${g}</div>`, why }, iqCellSVG(s, c, n), wr);
+}
+
+// 6. かぞえる
+function iqCount(lv) {
+  const em = shuffle(['🔺', '⭐', '🔵', '🟩', '❤️', '🌙']).slice(0, lv === 1 ? 3 : 4);
+  const N = lv === 1 ? ri(10, 12) : lv === 2 ? ri(14, 16) : ri(18, 20);
+  const items = Array.from({ length: N }, () => pick(em));
+  if (!items.includes(em[0])) items[0] = em[0];
+  if (lv === 3 && !items.includes(em[1])) items[1] = em[1];
+  shuffle(items);
+  const two = lv === 3, ans = items.filter(x => x === em[0] || (two && x === em[1])).length;
+  const q = two ? `${em[0]} と ${em[1]} は あわせて いくつ？` : `${em[0]} は いくつ ある？`;
+  return iqPack({ kind: 'かぞえる', q, say: two ? 'ふたつの かたちは あわせて いくつ？' : 'この かたちは いくつ ある？', vis: `<div class="iqcnt">${items.map(x => `<span>${x}</span>`).join('')}</div>`, why: `ひとつずつ しるしを つけながら かぞえると ${ans}こ だよ` }, String(ans), numW(ans, []));
+}
+
+// 7. てんびん（おもさの きまり）
+function iqBalance(lv) {
+  const [A, B, C] = shuffle(['🍎', '🍌', '🍇', '🍉', '🍓', '🍊', '🍐', '🥝']);
+  const rep = (x, k) => x.repeat(k);
+  const eq = (l, r) => `<div class="iqeq"><span>${l}</span><i>＝</i><span>${r}</span></div>`;
+  let vis, q, ans, why, cands;
+  if (lv === 1) {
+    const k = ri(2, 4), m = ri(2, 3); ans = k * m;
+    vis = eq(B, rep(A, k)); q = `${rep(B, m)} は ${A} いくつ ぶん？`;
+    why = `${B} 1こ は ${A} ${k}こ。だから ${m}こ だと ${k}×${m}＝${ans}こ`; cands = [k + m, k * m + k];
+  } else if (lv === 2) {
+    const k = ri(2, 3), m = ri(2, 3); ans = k * m;
+    vis = eq(B, rep(A, k)) + eq(C, rep(B, m)); q = `${C} は ${A} いくつ ぶん？`;
+    why = `${C} は ${B} ${m}こ。${B} 1こ は ${A} ${k}こ だから ${k}×${m}＝${ans}こ`; cands = [k + m, k * m + 1];
+  } else {
+    const k = ri(2, 3), n = ri(1, 2); const cv = k + n; ans = cv + k;
+    vis = eq(B, rep(A, k)) + eq(C, B + rep(A, n)); q = `${C}${B} は ${A} いくつ ぶん？`;
+    why = `${C} は ${A} ${cv}こ、${B} は ${A} ${k}こ。あわせて ${ans}こ`; cands = [cv, ans + k, k * n + k];
+  }
+  return iqPack({ kind: 'てんびん', q, say: 'てんびんの きまりを つかって こたえよう', vis, why }, String(ans), numW(ans, cands));
+}
+
+// 8. ようび
+const IQ_DAYS = ['にちようび', 'げつようび', 'かようび', 'すいようび', 'もくようび', 'きんようび', 'どようび'];
+function iqYoubi(lv) {
+  const d = rand(7);
+  let off, q;
+  if (lv === 1) { off = pick([1, 2, 3]); q = ['あした', 'あさって', '3日 あと'][off - 1]; }
+  else if (lv === 2) { off = pick([4, 5, 6, 8, 9, -1, -2]); q = off > 0 ? `${off}日 あと` : off === -1 ? 'きのう' : 'おととい'; }
+  else { off = pick([10, 12, 15, 20, -3, -5]); q = off > 0 ? `${off}日 あと` : `${-off}日 まえ`; }
+  const ans = IQ_DAYS[((d + off) % 7 + 7) % 7];
+  const wr = shuffle([1, -1, 2, -2]).map(k => IQ_DAYS[((d + off + k) % 7 + 7) % 7]);
+  const why = off > 7 || off < -2 ? `1しゅうかんは 7日。${Math.abs(off)}日 ${off > 0 ? 'あと' : 'まえ'}は、${Math.abs(off) % 7}日 ${off > 0 ? 'あと' : 'まえ'}と おなじ ようびだよ` : `${IQ_DAYS[d]}から ${Math.abs(off)}日 ${off > 0 ? 'すすめる' : 'もどる'}と ${ans}`;
+  return iqPack({ kind: 'ようび', q: `きょうは ${IQ_DAYS[d]}。${q}は なにようび？`, vis: `<div class="iqweek">${IQ_DAYS.map((x, i) => `<span class="${i === d ? 'on' : ''}">${'日月火水木金土'[i]}</span>`).join('')}</div>`, why }, ans, wr);
+}
+
+const IQ_TYPES = [iqSeq, iqPattern, iqOdd, iqRotate, iqMatrix, iqCount, iqBalance, iqYoubi];
+const iqMake = lv => shuffle(IQ_TYPES.slice()).slice(0, IQ_N).map(f => f(lv));
+
+const iqCur = () => IQ.list[IQ.idx];
+const iqSay = q => (q.say || q.q).replace(/\p{Extended_Pictographic}|️|[🟥🟦🟩🟨]/gu, '');
+function iqStart(lv, name) {
+  Object.assign(IQ, { list: iqMake(lv), idx: 0, results: [], combo: 0, active: true, lv });
+  $('#iqTheme').textContent = `🧠 ${name}`;
+  show('iq');
+  iqShow();
+  SFX.start();
+}
+function iqShow() {
+  const q = iqCur();
+  Object.assign(IQ, { sel: -1, right: -1, wrong: -1, lock: false, canSkip: false });
+  IQ.token++;
+  $('#iqKind').textContent = q.kind;
+  $('#iqQ').textContent = q.q;
+  $('#iqVis').innerHTML = q.vis;
+  iqRenderChoices();
+  iqSetOk(false);
+  $('#iqNote').textContent = 'えらんでから「けってい」を おしてね';
+  iqRenderProgress();
+  Speech.speak(iqSay(q));
+}
+function iqRenderChoices() {
+  $('#iqChoices').innerHTML = iqCur().choices.map((c, k) => {
+    const cls = k === IQ.right ? ' right' : k === IQ.wrong ? ' wrong' : k === IQ.sel ? ' sel' : '';
+    return `<button class="iqch${cls}" data-act="iqch" data-i="${k}">${c}</button>`;
+  }).join('');
+}
+function iqRenderProgress() {
+  $('#iqpg').innerHTML = IQ.list.map((q, i) => {
+    const r = IQ.results[i];
+    return `<i class="${r === true ? 'ok' : r === false ? 'ng' : i === IQ.idx ? 'cur' : ''}">${r === true ? '⚽' : ''}</i>`;
+  }).join('');
+  const c = $('#iqcombo');
+  c.textContent = IQ.combo >= 2 ? `🔥 ${IQ.combo}れんぞく` : '';
+  c.classList.toggle('on', IQ.combo >= 2);
+}
+function iqSetOk(next) {
+  const b = $('#iqok');
+  b.classList.toggle('next', next);
+  b.textContent = next ? 'つぎへ ▶' : '⚽ けってい';
+  $('#iqgive').hidden = next;
+}
+// IQテストは 1かいだけ こたえる（まちがえたら こたえと わけを みせる）
+async function iqCheck() {
+  if (!IQ.active) return;
+  if (IQ.canSkip) return iqSkip();
+  if (IQ.lock) return;
+  if (IQ.sel < 0) { SFX.tap(); $('#iqNote').textContent = 'こたえを えらんでから「けってい」を おしてね'; return; }
+  const q = iqCur(), tk = ++IQ.token, ok = IQ.sel === q.ans;
+  IQ.lock = true;
+  IQ.results.push(ok);
+  IQ.combo = ok ? IQ.combo + 1 : 0;
+  IQ.right = q.ans;
+  if (!ok) IQ.wrong = IQ.sel;
+  iqRenderChoices();
+  iqRenderProgress();
+  $('#iqgive').hidden = true;
+  if (ok) {
+    const [txt, say] = pick(PRAISE);
+    showGoal(txt, '', IQ.combo >= 5);
+    SFX.goal(IQ.combo);
+    $('#iqNote').textContent = '💡 ' + q.why;
+    IQ.canSkip = true;
+    await Promise.all([Speech.speak(say), sleep(1400)]);
+    if (tk !== IQ.token) return;
+    iqNext();
+  } else iqReveal(false);
+}
+function iqReveal(giveUp) {
+  const q = iqCur();
+  if (giveUp) {
+    IQ.token++;
+    IQ.lock = true;
+    IQ.results.push(false);
+    IQ.combo = 0;
+    IQ.right = q.ans;
+    iqRenderChoices();
+    iqRenderProgress();
+  } else SFX.wrong();
+  iqSetOk(true);
+  IQ.canSkip = true;
+  $('#iqNote').textContent = `💡 ${q.why}。たしかめたら「つぎへ」を おしてね`;
+  Speech.speak(giveUp ? 'こたえは これだよ' : 'ざんねん。こたえは これだよ');
+}
+function iqSkip() {
+  IQ.canSkip = false;
+  IQ.token++;
+  Speech.stop();
+  iqNext();
+}
+function iqNext() {
+  IQ.canSkip = false;
+  $('#goal').classList.remove('show');
+  IQ.idx++;
+  if (IQ.idx >= IQ.list.length) iqFinish(); else iqShow();
+}
+function iqFinish() {
+  IQ.active = false;
+  IQ.lock = true;
+  const ok = IQ.results.filter(Boolean).length, lv = IQ.lv, st = gstat('iq', lv), pass = ok >= IQ_PASS;
+  st.hi = Math.max(st.hi || 0, ok);
+  let coin = 0;
+  if (pass) {
+    st.clear++;
+    coin = coinOn() ? GAMES.iq.lv[lv].coin : 0;
+    D.coins += coin; D.coinsTotal += coin; st.coins = (st.coins || 0) + coin;
+  }
+  save();
+  setTimeout(() => {
+    if (pass) { SFX.cheer(); FX.confetti(innerWidth / 2, innerHeight * 0.55, 90, 14); }
+    const can = pass && D.coins >= COIN_RATE;
+    const balls = `<div class="res-balls">${IQ.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('')}</div>`;
+    openModal(`<div class="lock-ico">${pass ? '🎉' : '💪'}</div><p class="mq">${IQ_N}もん ちゅう ${ok}もん せいかい！</p>${balls}
+      ${pass ? (coin ? `<div class="coin-get"><i class="coin">🪙</i><b>コイン +${coin}まい ゲット！</b></div>${coinMeter()}` : '<p class="msub">クリア！ すごいね！</p>')
+        : `<p class="msub">${IQ_PASS}もん いじょう せいかいで ${coinOn() ? 'コイン ゲット！' : 'クリア！'}<br>もう いちど ちょうせん しよう</p>`}
+      <div class="mbtns">${can ? '<button class="bigbtn yellow" data-act="exchange">🎁 シールと こうかん</button>' : ''}<button class="bigbtn${can ? '' : ' yellow'}" data-act="again">もういっかい</button><button class="bigbtn" data-act="home">🏠 トップ</button></div>`);
+    Speech.speak(pass ? `${ok}問 正解！ ${coin ? `コインを ${coin}まい ゲット！` : 'クリア！'}` : `${ok}問 正解！ ${IQ_PASS}問 いじょうで クリアだよ。もう一回 ちょうせん しよう`);
+  }, 500);
+}
+
+// ===== めいろ =====
+// ルール：1 から じゅんに すうじを たどり、ぜんぶの マスを 1かいずつ とおって さいごの すうじで おわる（かべは とおれない）
+const MZ = { n: 5, nums: {}, k: 0, walls: new Set(), sol: [], path: [], drawing: false };
+const mzKey = (a, b) => a < b ? `${a}-${b}` : `${b}-${a}`;
+const mzAdj = (a, b, n) => Math.abs(Math.floor(a / n) - Math.floor(b / n)) + Math.abs(a % n - b % n) === 1;
+// ランダムな「ぜんぶの マスを 1かいずつ とおる みち」を つくる（バックバイト法）
+function hamPath(n) {
+  let p = [];
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) p.push(r * n + (r % 2 ? n - 1 - c : c));
+  const nb = i => { const r = Math.floor(i / n), c = i % n, o = []; if (r) o.push(i - n); if (r < n - 1) o.push(i + n); if (c) o.push(i - 1); if (c < n - 1) o.push(i + 1); return o; };
+  for (let k = 0; k < n * n * 60; k++) {
+    if (Math.random() < 0.5) p.reverse();
+    const L = p.length, cand = nb(p[L - 1]).filter(x => x !== p[L - 2]);
+    const j = p.indexOf(pick(cand));
+    p = p.slice(0, j + 1).concat(p.slice(j + 1).reverse());
+  }
+  return p;
+}
+function mzNew(L) {
+  const n = L.n, N = n * n, p = hamPath(n), pos = [];
+  p.forEach((c, i) => { pos[c] = i; });
+  // すうじの ばしょ：1 と さいごは みちの はし、あいだは となりあわないように ばらばらに
+  const idx = new Set([0, N - 1]);
+  for (let t = 0; idx.size < L.k && t < 2000; t++) {
+    const i = 1 + rand(N - 2);
+    if (![...idx].some(j => Math.abs(j - i) < 2)) idx.add(i);
+  }
+  const order = [...idx].sort((a, b) => a - b);
+  const nums = {};
+  order.forEach((pi, m) => { nums[p[pi]] = m + 1; });
+  // かべ：こたえの みちで となりあわない マスの あいだに おく
+  const cand = [];
+  for (let a = 0; a < N; a++) for (const b of [a + 1, a + n]) {
+    if (b >= N || (b === a + 1 && a % n === n - 1)) continue;
+    if (Math.abs(pos[a] - pos[b]) !== 1) cand.push(mzKey(a, b));
+  }
+  Object.assign(MZ, { n, nums, k: order.length, walls: new Set(shuffle(cand).slice(0, L.walls)), sol: p, path: [], drawing: false });
+  mzNote('');
+  mzRender();
+  Speech.speak('1から じゅんに つないでね');
+}
+const mzCurNum = () => MZ.path.reduce((m, i) => Math.max(m, MZ.nums[i] || 0), 0);
+function mzNote(t) { $('#mzNote').textContent = t; }
+function mzCanStep(to) {
+  const p = MZ.path, last = p[p.length - 1], n = MZ.n;
+  if (to < 0 || to >= n * n || !mzAdj(last, to, n) || MZ.walls.has(mzKey(last, to)) || p.includes(to)) return false;
+  const cur = mzCurNum();
+  if (cur >= MZ.k) return false;
+  const m = MZ.nums[to];
+  return !m || m === cur + 1;
+}
+// ゆびの ある マスまで すすむ（はやく うごかしたときは 1マスずつ まっすぐ）
+function mzMoveTo(t) {
+  const p = MZ.path;
+  if (!p.length || t < 0) return false;
+  const j = p.indexOf(t);
+  if (j >= 0) { if (j < p.length - 1) { p.length = j + 1; return true; } return false; }
+  let changed = false;
+  for (let guard = 0; p[p.length - 1] !== t && guard < 20; guard++) {
+    const last = p[p.length - 1], n = MZ.n;
+    const dr = Math.floor(t / n) - Math.floor(last / n), dc = t % n - last % n;
+    const opts = [];
+    const vr = dr ? last + Math.sign(dr) * n : -1, vc = dc ? last + Math.sign(dc) : -1;
+    if (Math.abs(dr) >= Math.abs(dc)) opts.push(vr, vc); else opts.push(vc, vr);
+    const nx = opts.find(o => o >= 0 && mzCanStep(o));
+    if (nx === undefined) break;
+    const before = mzCurNum();
+    p.push(nx);
+    changed = true;
+    if (mzCurNum() > before) SFX.pop(mzCurNum() * 2);
+  }
+  return changed;
+}
+function mzRender() {
+  const n = MZ.n, svg = $('#mzSvg'), on = new Set(MZ.path), cur = mzCurNum();
+  svg.setAttribute('viewBox', `-0.06 -0.06 ${n + 0.12} ${n + 0.12}`);
+  let h = '';
+  for (let i = 0; i < n * n; i++) h += `<rect x="${i % n + 0.04}" y="${Math.floor(i / n) + 0.04}" width=".92" height=".92" rx=".14" class="mzc${on.has(i) ? ' on' : ''}"/>`;
+  const xy = i => `${i % n + 0.5},${Math.floor(i / n) + 0.5}`;
+  if (MZ.path.length > 1) h += `<polyline points="${MZ.path.map(xy).join(' ')}" class="mzp"/>`;
+  for (const w of MZ.walls) {
+    const [a, b] = w.split('-').map(Number), r = Math.floor(a / n), c = a % n;
+    h += b === a + 1 ? `<line x1="${c + 1}" y1="${r}" x2="${c + 1}" y2="${r + 1}" class="mzw"/>` : `<line x1="${c}" y1="${r + 1}" x2="${c + 1}" y2="${r + 1}" class="mzw"/>`;
+  }
+  if (MZ.path.length) { const [x, y] = xy(MZ.path[MZ.path.length - 1]).split(','); h += `<circle cx="${x}" cy="${y}" r=".3" class="mzhead"/>`; }
+  for (const [i, m] of Object.entries(MZ.nums)) {
+    const [x, y] = xy(+i).split(',');
+    h += `<g class="mzd${m <= cur ? ' done' : ''}${m === cur + 1 ? ' next' : ''}"><circle cx="${x}" cy="${y}" r=".34"/><text x="${x}" y="${y}" font-size="${m > 9 ? 0.34 : 0.42}">${m}</text></g>`;
+  }
+  svg.innerHTML = h;
+}
+function mzAfter() {
+  mzRender();
+  if (MZ.path.length === MZ.n * MZ.n && mzCurNum() === MZ.k) { mzNote('🎉 クリア！'); gameClear(); }
+  else if (mzCurNum() === MZ.k) mzNote('まだ とおって いない マスが あるよ');
+  else if (MZ.path.length) mzNote(`つぎは ${mzCurNum() + 1} を めざそう`);
+}
+function mzCellAt(e) {
+  const r = $('#mzBoard').getBoundingClientRect(), n = MZ.n;
+  const c = Math.floor((e.clientX - r.left) / r.width * n), rr = Math.floor((e.clientY - r.top) / r.height * n);
+  return c < 0 || rr < 0 || c >= n || rr >= n ? -1 : rr * n + c;
+}
+{
+  const bd = $('#mzBoard');
+  bd.addEventListener('pointerdown', e => {
+    if (!Gm.active || Gm.kind !== 'meiro') return;
+    e.preventDefault();
+    const t = mzCellAt(e);
+    if (t < 0) return;
+    try { bd.setPointerCapture(e.pointerId); } catch (_) { /* うごかない ブラウザも ある */ }
+    const p = MZ.path;
+    if (!p.length) {
+      if (MZ.nums[t] === 1) { p.push(t); SFX.pop(2); MZ.drawing = true; }
+      else { mzNote('「1」の まるから はじめよう'); return; }
+    } else {
+      const j = p.indexOf(t);
+      if (j >= 0) p.length = j + 1; else mzMoveTo(t);
+      MZ.drawing = true;
+    }
+    mzAfter();
+  });
+  bd.addEventListener('pointermove', e => {
+    if (!MZ.drawing || !Gm.active) return;
+    const t = mzCellAt(e);
+    if (t >= 0 && mzMoveTo(t)) mzAfter();
+  });
+  const end = () => { MZ.drawing = false; };
+  bd.addEventListener('pointerup', end);
+  bd.addEventListener('pointercancel', end);
+}
+function mzHint() {
+  if (!Gm.active || Gm.hints >= HINTS) return;
+  const p = MZ.path, s = MZ.sol;
+  let k = 0;
+  while (k < p.length && p[k] === s[k]) k++;
+  p.length = k;  // こたえと ちがう ところから けす
+  const add = Math.max(3, Math.ceil(s.length / 8));
+  for (let i = 0; i < add && p.length < s.length; i++) p.push(s[p.length]);
+  Gm.hints++;
+  gHintLabel();
+  mzAfter();
+}
+
+// ===== すうどく（6×6、ふとい わくは 2×3） =====
+const SDK = { sol: [], given: [], val: [], memo: [], sel: -1, memoMode: false, undo: [] };
+const sdBox = i => Math.floor(Math.floor(i / 6) / 2) * 2 + Math.floor((i % 6) / 3);
+const sdPeers = (i, j) => i !== j && (Math.floor(i / 6) === Math.floor(j / 6) || i % 6 === j % 6 || sdBox(i) === sdBox(j));
+const sdOk = (g, i, d) => { for (let j = 0; j < 36; j++) if (g[j] === d && sdPeers(i, j)) return false; return true; };
+function sdCount(grid, limit) {
+  const g = grid.slice();
+  let count = 0;
+  (function rec() {
+    if (count >= limit) return;
+    let best = -1, bc = null;
+    for (let i = 0; i < 36; i++) {
+      if (g[i]) continue;
+      const cs = [];
+      for (let d = 1; d <= 6; d++) if (sdOk(g, i, d)) cs.push(d);
+      if (!cs.length) return;
+      if (!bc || cs.length < bc.length) { best = i; bc = cs; if (cs.length === 1) break; }
+    }
+    if (best < 0) { count++; return; }
+    for (const d of bc) { g[best] = d; rec(); g[best] = 0; if (count >= limit) return; }
+  })();
+  return count;
+}
+function sdFull() {
+  const g = Array(36).fill(0);
+  (function rec(i) {
+    if (i === 36) return true;
+    for (const d of shuffle([1, 2, 3, 4, 5, 6])) {
+      if (sdOk(g, i, d)) { g[i] = d; if (rec(i + 1)) return true; g[i] = 0; }
+    }
+    return false;
+  })(0);
+  return g;
+}
+function sdNew(L) {
+  const sol = sdFull(), puz = sol.slice();
+  let givens = 36;
+  for (const i of shuffle([...Array(36).keys()])) {
+    if (givens <= L.givens) break;
+    const v = puz[i];
+    puz[i] = 0;
+    if (sdCount(puz, 2) !== 1) puz[i] = v; else givens--;
+  }
+  Object.assign(SDK, { sol, given: puz.map(v => v > 0), val: puz.slice(), memo: Array.from({ length: 36 }, () => []), sel: -1, memoMode: false, undo: [] });
+  sdMemoLabel();
+  sdRender();
+  Speech.speak('たて よこ わくに 1から6を 1つずつ いれよう');
+}
+function sdConflicts() {
+  const bad = new Set();
+  for (let i = 0; i < 36; i++) if (SDK.val[i]) for (let j = i + 1; j < 36; j++) if (SDK.val[j] === SDK.val[i] && sdPeers(i, j)) { bad.add(i); bad.add(j); }
+  return bad;
+}
+function sdRender() {
+  const bad = sdConflicts(), s = SDK.sel, sv = s >= 0 ? SDK.val[s] : 0;
+  let h = '';
+  for (let i = 0; i < 36; i++) {
+    const r = Math.floor(i / 6), c = i % 6, v = SDK.val[i];
+    const cls = ['sdc'];
+    if (c === 2) cls.push('br');
+    if (r === 1 || r === 3) cls.push('bb');
+    if (SDK.given[i]) cls.push('given');
+    if (s >= 0 && sdPeers(i, s)) cls.push('peer');
+    if (sv && v === sv && i !== s) cls.push('same');
+    if (i === s) cls.push('sel');
+    if (bad.has(i)) cls.push('err');
+    const inner = v ? v : SDK.memo[i].length ? `<span class="sdm">${[1, 2, 3, 4, 5, 6].map(d => `<i>${SDK.memo[i].includes(d) ? d : ''}</i>`).join('')}</span>` : '';
+    h += `<button class="${cls.join(' ')}" data-act="sdCell" data-i="${i}">${inner}</button>`;
+  }
+  $('#sdBoard').innerHTML = h;
+}
+function sdMemoLabel() { const b = $('#sdMemo'); b.textContent = `✏️ メモ：${SDK.memoMode ? 'オン' : 'オフ'}`; b.classList.toggle('on', SDK.memoMode); }
+function sdSet(i, v, memoToggle) {
+  if (!Gm.active || i < 0 || SDK.given[i]) return;
+  SDK.undo.push({ i, val: SDK.val[i], memo: SDK.memo[i].slice() });
+  if (memoToggle) {
+    if (SDK.val[i]) return sdRender();
+    const m = SDK.memo[i];
+    SDK.memo[i] = m.includes(v) ? m.filter(x => x !== v) : m.concat(v).sort();
+  } else {
+    SDK.val[i] = SDK.val[i] === v ? 0 : v;
+    if (SDK.val[i]) for (let j = 0; j < 36; j++) if (sdPeers(i, j)) SDK.memo[j] = SDK.memo[j].filter(x => x !== v);
+  }
+  sdRender();
+  if (SDK.val.every((x, k) => x === SDK.sol[k])) gameClear();
+}
+function sdNum(d) {
+  if (SDK.sel < 0) { $('#sdNote').textContent = 'さきに マスを えらんでね'; return; }
+  $('#sdNote').textContent = '';
+  if (SDK.given[SDK.sel]) { $('#sdNote').textContent = 'さいしょから ある すうじは かえられないよ'; return; }
+  sdSet(SDK.sel, d, SDK.memoMode);
+}
+function sdErase() {
+  const i = SDK.sel;
+  if (i < 0 || SDK.given[i]) return;
+  SDK.undo.push({ i, val: SDK.val[i], memo: SDK.memo[i].slice() });
+  SDK.val[i] = 0; SDK.memo[i] = [];
+  sdRender();
+}
+function sdUndo() {
+  const u = SDK.undo.pop();
+  if (!u) return;
+  SDK.val[u.i] = u.val; SDK.memo[u.i] = u.memo; SDK.sel = u.i;
+  sdRender();
+}
+function sdHint() {
+  if (!Gm.active || Gm.hints >= HINTS) return;
+  let i = SDK.sel;
+  if (i < 0 || SDK.given[i] || SDK.val[i] === SDK.sol[i]) {
+    // まちがって いる マスを さきに、なければ あいて いる マスから
+    const wrong = [...Array(36).keys()].filter(k => SDK.val[k] && SDK.val[k] !== SDK.sol[k]);
+    const empty = [...Array(36).keys()].filter(k => !SDK.val[k]);
+    i = wrong.length ? wrong[0] : pick(empty);
+  }
+  if (i === undefined) return;
+  Gm.hints++;
+  gHintLabel();
+  SDK.sel = i;
+  SDK.memo[i] = [];
+  sdSet(i, SDK.sol[i], false);
+  if (SDK.val[i] !== SDK.sol[i]) { SDK.val[i] = SDK.sol[i]; sdRender(); }
+  const cell = $(`#sdBoard [data-i="${i}"]`);
+  if (cell) cell.classList.add('hint');
+  $('#sdNote').textContent = '💡 1つ おしえたよ';
 }
 
 // ---------- シールちょう ----------
@@ -1570,11 +2594,13 @@ function renderBook() {
     if (cnt) cnt.textContent = f === 'all' ? st.length : st.filter(s => s.t === f).length;
   });
   const body = $('#bookBody');
+  if (bookFilter === 'odds') { body.innerHTML = oddsHTML(); return; }
   if (bookFilter === 'zukan') {
     body.innerHTML = '<div class="zukan">' + DESIGNS.map(d => {
-      const mine = st.filter(s => s.d === d.id);
-      if (!mine.length) return '<div class="zk-item none"><span class="stk md unknown"><span class="em">？</span></span><span>？？？</span></div>';
-      return `<button class="zk-item" data-act="zukanItem" data-did="${d.id}">${stickerHTML({ d: d.id, k: mine.some(s => s.k) }, 'md')}<span>${d.name}</span><em>×${mine.length}</em></button>`;
+      const mine = st.filter(s => s.d === d.id), g = gradeOf(d.id);
+      const badge = g !== 'n' ? `<i class="gr ${g}">${GRADES[g].short}</i>` : '';
+      if (!mine.length) return `<div class="zk-item none"><span class="stk md unknown"><span class="em">？</span></span><span>？？？</span>${badge}</div>`;
+      return `<button class="zk-item" data-act="zukanItem" data-did="${d.id}">${stickerHTML({ d: d.id, k: mine.some(s => s.k) }, 'md')}<span>${d.name}</span><em>×${mine.length}</em>${badge}</button>`;
     }).join('') + '</div>';
     return;
   }
@@ -1589,9 +2615,32 @@ function renderBook() {
   const nw = body.querySelector('.new');
   if (nw) nw.scrollIntoView({ block: 'center' });
 }
+// でる かくりつ（いま シールを 1まい もらったら）
+function oddsHTML() {
+  const odds = stickerOdds(false), oddsP = stickerOdds(true), pct = p => (p * 100 >= 1 ? (p * 100).toFixed(1) : (p * 100).toFixed(2)) + '%';
+  const byG = g => odds.filter(o => o.g === g);
+  const sumG = g => byG(g).reduce((a, o) => a + o.p, 0);
+  const sumP = g => oddsP.filter(o => o.g === g).reduce((a, o) => a + o.p, 0);
+  const pOf = id => (oddsP.find(o => o.d.id === id) || {}).p || 0;
+  const rows = ['n', 'r', 'sr'].map(g => {
+    const list = byG(g), have = list.filter(o => o.owned).length;
+    return `<tr><th><i class="gr ${g}">${GRADES[g].short}</i> ${GRADES[g].name}</th><td>${list.length}しゅるい</td><td>${have}しゅるい</td><td class="big">${pct(sumG(g))}</td><td class="big pf">${pct(sumP(g))}</td></tr>`;
+  }).join('');
+  // シールごと：みぎに「ぜんもん せいかいの とき」の かくりつも ならべる
+  const tiles = ['sr', 'r', 'n'].map(g => `<h4><i class="gr ${g}">${GRADES[g].short}</i> ${GRADES[g].name}</h4><div class="odds-grid">${byG(g).sort((a, b) => b.p - a.p).map(o =>
+    `<div class="odds-item${o.owned ? '' : ' new'}">${o.owned ? stickerHTML({ d: o.d.id }, 'xs') : '<span class="stk xs unknown"><span class="em">？</span></span>'}<span class="on">${o.owned ? o.d.name : '？？？'}</span><b>${pct(o.p)}</b><b class="pf">🌟${pct(pOf(o.d.id))}</b></div>`).join('')}</div>`).join('');
+  return `<div class="odds">
+    <p class="odds-lead">シールを 1まい もらうと、どの シールが でるかは くじびきで きまるよ。いまの かくりつは こうだよ。</p>
+    <table class="odds-t"><thead><tr><th>グレード</th><th>ぜんぶ</th><th>もってる</th><th>でる かくりつ</th><th>🌟 ぜんもん<br>せいかいの とき</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="odds-kira">✨ キラキラ：どの シールでも <b>${Math.round(SHINY_RATE * 100)}%</b>（100まいに ${Math.round(SHINY_RATE * 100)}まいくらい）で キラキラに なるよ</p>
+    <p class="odds-note">・まだ もって いない シールは、もって いる シールの ${UNOWNED_BOOST}ばい でやすいよ（だから あつめるほど かくりつが かわるよ）<br>・でやすさ：ノーマル 1 ・ レア ${GRADES.r.w} ・ スーパーレア ${GRADES.sr.w}（ノーマルを 1と したとき）<br>・🌟 ぜんもん せいかいで シールを もらうと、スーパーレアが ${PERFECT_SR}ばい でやすく なるよ（コインの こうかんは ふつうの かくりつ）</p>
+    <p class="odds-legend">シール 1まい ずつの かくりつ：<b>ひだり＝ふだん</b>　<b class="pf">みぎ（🌟）＝ぜんもん せいかいの とき</b></p>
+    ${tiles}
+  </div>`;
+}
 function stickerDetail(s, sub) {
-  const d = DMAP[s.d];
-  openModal(`${stickerHTML(s, 'xl')}<p class="mname">${d.name}${s.k ? ' ✨' : ''}</p><p class="msub">${sub}</p><button class="bigbtn yellow" data-act="closeModal">とじる</button>`);
+  const d = DMAP[s.d], g = gradeOf(s.d);
+  openModal(`${stickerHTML(s, 'xl')}<p class="mname">${d.name}${s.k ? ' ✨' : ''}</p><p class="gr-line"><i class="gr ${g}">${GRADES[g].short}</i> ${GRADES[g].name}${s.k ? ' ・ ✨キラキラ' : ''}</p><p class="msub">${sub}</p><button class="bigbtn yellow" data-act="closeModal">とじる</button>`);
   SFX.pop(5);
   Speech.speak(d.name + (s.k ? ' キラキラ' : ''));
 }
@@ -1657,7 +2706,8 @@ function renderSettings() {
     return THEMES[t] ? `${a}${THEMES[t].op}${b}` : '';
   }).filter(Boolean).join('、');
   $('#stats').innerHTML = `<table class="st"><thead><tr><th></th><th>あそんだ</th><th>全問正解</th><th>シール</th><th>ランク</th><th>1回目の正解率</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="note">にがてな問題：${weak || 'まだ ありません'}</p>`;
+    <p class="note">にがてな問題：${weak || 'まだ ありません'}</p>
+    <p class="note">🪙 コイン：いま ${D.coins}枚（これまでに ${D.coinsTotal}枚・交換したシール ${themeCount('coin')}枚）</p>`;
 }
 
 // ---------- できごと ----------
@@ -1678,7 +2728,32 @@ document.addEventListener('click', e => {
     case 'startDanOk': startQuiz('mul', +b.dataset.dan); break;
     case 'toDan': enterTheme('mul'); break;
     case 'order': S().order = b.dataset.val; save(); renderDan(); break;
-    case 'again': startQuiz(Q.theme, Q.dan); break;
+    case 'again':
+      if (Last === 'game') startGame(Gm.kind, Gm.lv);
+      else if (Last === 'coin') goHome();
+      else startQuiz(Q.theme, Q.dan);
+      break;
+    case 'gsel':
+      closeOverlays(); Speech.stop();
+      if (gameLocked()) { openGameLock(); break; }
+      renderGameSel(); show('gsel');
+      break;
+    case 'gstart': startGame(b.dataset.g, +b.dataset.lv); break;
+    case 'exchange': closeOverlays(); openExchange(); break;
+    case 'exchangeOk': doExchange(); break;
+    case 'mzUndo': if (Gm.active && MZ.path.length) { MZ.path.pop(); mzAfter(); } break;
+    case 'mzReset': if (Gm.active) { MZ.path = []; mzNote(''); mzRender(); } break;
+    case 'mzHint': mzHint(); break;
+    case 'sdCell': SDK.sel = +b.dataset.i; $('#sdNote').textContent = ''; sdRender(); break;
+    case 'sdNum': sdNum(+b.dataset.d); break;
+    case 'sdErase': sdErase(); break;
+    case 'sdUndo': sdUndo(); break;
+    case 'sdMemo': SDK.memoMode = !SDK.memoMode; sdMemoLabel(); break;
+    case 'sdHint': sdHint(); break;
+    case 'iqok': iqCheck(); break;
+    case 'iqgive': if (IQ.active && !IQ.lock && !IQ.canSkip) iqReveal(true); break;
+    case 'iqch': if (IQ.active && !IQ.lock) { IQ.sel = +b.dataset.i; iqRenderChoices(); } break;
+    case 'iqrepeat': if (IQ.active) Speech.speak(iqSay(iqCur())); break;
     case 'home': goHome(); break;
     case 'key': padKey(b.dataset.k); break;
     case 'repeat': if (cur()) Speech.speak(questionText(cur())); break;
@@ -1686,7 +2761,7 @@ document.addEventListener('click', e => {
     case 'quit':
       openModal('<p class="mq">とちゅうで やめる？</p><div class="mbtns"><button class="bigbtn yellow" data-act="resume">つづける</button><button class="bigbtn" data-act="home">やめる</button></div>');
       break;
-    case 'resume': closeModal(); if (isKb()) ans.focus({ preventScroll: true }); break;
+    case 'resume': closeModal(); if (screen === 'quiz' && isKb()) ans.focus({ preventScroll: true }); break;
     case 'closeModal': closeModal(); Speech.stop(); break;
     case 'book': bookNew = -1; renderBook(); show('book'); break;
     case 'bookFromWin': closeOverlays(); Speech.stop(); bookFilter = 'all'; bookNew = D.stickers.length - 1; renderBook(); show('book'); break;
@@ -1694,7 +2769,7 @@ document.addEventListener('click', e => {
     case 'stk': {
       const s = D.stickers[+b.dataset.sid];
       const dt = new Date(s.at);
-      const where = THEMES[s.t].name + (s.t === 'mul' ? (s.dan ? ` ${s.dan}のだん` : ' ミックス') : '');
+      const where = !THEMES[s.t] ? '🪙 コインと こうかん' : THEMES[s.t].name + (s.t === 'mul' ? (s.dan ? ` ${s.dan}のだん` : ' ミックス') : '');
       stickerDetail(s, `${where} で ゲット ・ ${dt.getMonth() + 1}がつ ${dt.getDate()}にち`);
       break;
     }
@@ -1770,13 +2845,23 @@ $('#ansForm').addEventListener('submit', e => {
 });
 $('#board').addEventListener('click', () => { if (isKb() && Q.active) ans.focus({ preventScroll: true }); });
 // ゴールの えんしゅつ中に タップすると すぐ つぎへ
-$('#goal').addEventListener('click', () => { if (Q.canSkip) skip(); });
+$('#goal').addEventListener('click', () => { if (screen === 'iq') { if (IQ.canSkip) iqSkip(); } else if (Q.canSkip) skip(); });
 // もんだい中は ボタンを おしても 入力らんの フォーカスを はずさない（キーボードが とじないように）
 $('#app').addEventListener('mousedown', e => {
   if (Q.active && e.target !== ans && !e.target.closest('.modal')) e.preventDefault();
 });
 // ハードウェアキーボードや すうじボタンモードでの キー入力
 document.addEventListener('keydown', e => {
+  // すうどく：すうじ・けす・やじるしで マスを うごかす
+  if (screen === 'sudoku' && Gm.active && !$('#modal').classList.contains('show')) {
+    const mv = { ArrowUp: -6, ArrowDown: 6, ArrowLeft: -1, ArrowRight: 1 }[e.key];
+    if (/^[1-6]$/.test(e.key)) sdNum(+e.key);
+    else if (e.key === 'Backspace' || e.key === 'Delete') sdErase();
+    else if (mv) { const i = SDK.sel < 0 ? 0 : SDK.sel + mv; if (i >= 0 && i < 36 && !(Math.abs(mv) === 1 && Math.floor(i / 6) !== Math.floor(SDK.sel / 6))) { SDK.sel = i; sdRender(); } }
+    else return;
+    e.preventDefault();
+    return;
+  }
   if (screen !== 'quiz' || !Q.active || $('#modal').classList.contains('show')) return;
   if (document.activeElement === ans && isKb()) return;
   if (/^[0-9]$/.test(e.key)) padKey(e.key);
