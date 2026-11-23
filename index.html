@@ -437,7 +437,7 @@ body.kb .pad{display:none}
 .lvb:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.2)}
 .lvb b{font-size:clamp(26px,min(3.2vw,5vh),44px);color:var(--kan);line-height:1.1}
 .lvb small{font-size:clamp(14px,1.6vw,18px);color:var(--mute);text-align:center;line-height:1.3}
-.gsb.meiro{--kan:#1fa67a}.gsb.sudoku{--kan:#2f8cff}.gsb.iq{--kan:#7a3cf0}
+.gsb.meiro{--kan:#1fa67a}.gsb.iq{--kan:#7a3cf0}
 .gline{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:2px 12px}
 .gbest{font-size:clamp(15px,1.8vw,20px);color:var(--ink)}
 .gcoin{font-style:normal;font-size:clamp(14px,1.6vw,18px);color:#c27c00}
@@ -473,26 +473,40 @@ body.kb .pad{display:none}
 .mzd text{fill:#fff;font-weight:900;text-anchor:middle;dominant-baseline:central;font-family:inherit}
 .mzd.done circle{fill:#ff7a2f}
 .mzd.next circle{stroke:#ffd23f;stroke-width:.07}
-.sdboard{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);background:#fff;border:4px solid #1d2b45;border-radius:14px;overflow:hidden;box-shadow:0 8px 0 rgba(0,0,0,.22)}
-.sdc{position:relative;min-width:0;min-height:0;border-right:1px solid #c9d1de;border-bottom:1px solid #c9d1de;font-size:calc(var(--gb) / 6 * .55);font-weight:800;color:#2f6fd8;display:grid;place-items:center;background:#fff;line-height:1}
-.sdc:nth-child(6n){border-right:0}
-.sdc:nth-child(n+31){border-bottom:0}
-.sdc.br{border-right:3px solid #1d2b45}
-.sdc.bb{border-bottom:3px solid #1d2b45}
-.sdc.given{color:#1d2b45;font-weight:900}
-.sdc.peer{background:#eef3fb}
-.sdc.same{background:#d6e4ff}
-.sdc.sel{background:#ffe27a}
-.sdc.err{color:#e0283c;background:#ffe1e4}
-.sdc.sel.err{background:#ffc9cf}
-.sdc.hint{animation:pop .45s}
-.sdm{position:absolute;inset:6%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);font-size:calc(var(--gb) / 6 * .24);color:#7a879c;font-weight:700}
-.sdm i{font-style:normal;display:grid;place-items:center}
-.sdpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sdk{height:clamp(54px,9vh,84px);border-radius:16px;background:#fff;font-size:clamp(28px,3.6vw,42px);font-weight:900;color:var(--navy);box-shadow:0 6px 0 #b8c4d8}
-.sdk:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
-.sdrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sdrow .kbtn{font-size:clamp(16px,1.9vw,22px);padding:.55em .2em}
+/* しんけいすいじゃく（どうぶつ カード） */
+.mmwrap{flex:1;min-width:0;min-height:0;align-self:stretch;display:grid;place-items:center;padding:10px}
+.mmboard{display:grid;--cw:120px}
+.mc{position:relative;width:var(--cw);height:calc(var(--cw) * 1.2);border-radius:calc(var(--cw) * .12);perspective:900px}
+.mc-in{position:absolute;inset:0;transition:transform .38s cubic-bezier(.3,.7,.4,1);-webkit-transform-style:preserve-3d;transform-style:preserve-3d}
+.mc.up .mc-in,.mc.got .mc-in,.mmboard.peek .mc-in{transform:rotateY(180deg)}
+.mc-back,.mc-face{position:absolute;inset:0;border-radius:calc(var(--cw) * .12);border:calc(var(--cw) * .045) solid #fff;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 5px 0 rgba(0,0,0,.25);overflow:hidden}
+.mc-back{display:grid;place-items:center;background:radial-gradient(circle,transparent 0 29%,rgba(255,255,255,.5) 29% 32%,transparent 32%),linear-gradient(transparent 49%,rgba(255,255,255,.5) 49% 51%,transparent 51%),repeating-linear-gradient(#249a50 0 12.5%,#2fae5f 12.5% 25%)}
+.mc-back::after{content:"⚽";font-size:calc(var(--cw) * .34);filter:drop-shadow(0 2px 0 rgba(0,0,0,.25))}
+.mc:active .mc-back{filter:brightness(1.1)}
+.mc-face{transform:rotateY(180deg);display:flex;flex-direction:column;background:var(--sc,#fff)}
+.mc-face i{flex:1;min-height:0;display:grid;place-items:center;font-style:normal;font-size:calc(var(--cw) * .55);line-height:1;padding-top:6%}
+.mc-face b{flex:none;background:#fff;color:var(--ink);font-size:calc(var(--cw) * .15);line-height:1.45;text-align:center;white-space:nowrap;font-weight:900}
+.mc.up .mc-face{box-shadow:0 0 0 calc(var(--cw) * .035) #ffd23f,0 5px 0 rgba(0,0,0,.25)}
+.mc.got{animation:mmGot .5s}
+.mc.got .mc-face{box-shadow:0 0 0 calc(var(--cw) * .035) #2fd067,0 5px 0 rgba(0,0,0,.25)}
+.mc.got::after{content:"⭐";position:absolute;right:calc(var(--cw) * -.07);top:calc(var(--cw) * -.09);font-size:calc(var(--cw) * .25);line-height:1;z-index:3;animation:pop .45s}
+@keyframes mmGot{0%,100%{transform:none}45%{transform:scale(1.1)}}
+.hb-home{--sc:linear-gradient(#fff3d1 0 62%,#efcd97 62%)}
+.hb-farm{--sc:linear-gradient(#cdeeff 0 60%,#9ed874 60%)}
+.hb-forest{--sc:linear-gradient(#e2f5cf 0 60%,#7cc35a 60%)}
+.hb-savanna{--sc:linear-gradient(#ffe7b0 0 60%,#e0b866 60%)}
+.hb-pond{--sc:linear-gradient(#d8f2ff 0 58%,#6fc2e6 58%)}
+.hb-sea{--sc:linear-gradient(#b4e1ff,#4aa6e4)}
+.hb-ice{--sc:linear-gradient(#d9edff 0 60%,#fbfdff 60%)}
+.mmstat{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 10px;background:rgba(0,0,0,.22);color:#fff;border-radius:16px;padding:8px 16px}
+.mmstat b{font-size:clamp(24px,3vw,36px);white-space:nowrap}
+.mmstat small{font-size:clamp(14px,1.6vw,18px);opacity:.92;white-space:nowrap}
+.mmtray{display:flex;flex-wrap:wrap;align-content:flex-start;gap:0 4px;min-height:calc(1.3em + 12px);font-size:clamp(22px,2.6vw,30px);line-height:1.3;background:rgba(255,255,255,.16);border-radius:14px;padding:6px 10px}
+.mmtray:empty::before{content:"みつけた どうぶつが ここに ならぶよ";align-self:center;font-size:clamp(13px,1.4vw,16px);color:rgba(255,255,255,.88)}
+.mmtray i{font-style:normal;animation:pop .45s}
+.gsb.memory{--kan:#f0801e}
+.gsb.wide{grid-column:1/-1}
+.mm-deco{font-size:clamp(20px,2.4vw,28px);letter-spacing:.08em}
 
 /* ---------- IQテスト ---------- */
 .iqmain{flex:1;min-height:0;display:flex;gap:clamp(12px,2vw,28px);padding:4px 18px 14px}
@@ -570,6 +584,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
   .gmain{flex-direction:column}
   .gboard{--gb:min(92vw,calc(var(--vh) - 470px),680px)}
   .gside{width:min(100%,640px)}
+  #memory .gside{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"rule rule" "stat hint" "tray tray" "note note";align-items:center}
+  #memory .grule{grid-area:rule}#mmStat{grid-area:stat}#mmHint{grid-area:hint}#mmTray{grid-area:tray}#mmNote{grid-area:note}
   .iqmain{flex-direction:column}
   .iqcard{flex:1}
   .iqside{flex:none}
@@ -668,7 +684,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <span class="card-mini" data-mini="mul"></span>
       </button>
     </div>
-    <button class="gamebar" data-act="gsel" id="gameBar"><span class="gb-ico">🎮</span><b>ゲーム</b><span class="gb-sub">めいろ ・ すうどく ・ IQテスト</span><span class="gb-state" id="gameState">🪙 クリアで コイン</span></button>
+    <button class="gamebar" data-act="gsel" id="gameBar"><span class="gb-ico">🎮</span><b>ゲーム</b><span class="gb-sub">めいろ ・ しんけいすいじゃく ・ IQテスト</span><span class="gb-state" id="gameState">🪙 クリアで コイン</span></button>
   </section>
 
   <!-- IQテスト -->
@@ -728,25 +744,22 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
     </div>
   </section>
 
-  <!-- すうどく -->
-  <section class="screen pitch" id="sudoku">
+  <!-- しんけいすいじゃく -->
+  <section class="screen pitch" id="memory">
     <div class="qbar">
       <button class="qquit" data-act="quit" aria-label="やめる">✕</button>
-      <span class="qtheme" id="sdTheme" style="--tc:#2f8cff">すうどく</span>
-      <span class="gtime" id="sdTime">⏱ 0:00</span>
+      <span class="qtheme" id="mmTheme" style="--tc:#f0801e">しんけいすいじゃく</span>
+      <span class="gtime" id="mmTime">⏱ 0:00</span>
       <span class="gsp"></span>
     </div>
     <div class="gmain">
-      <div class="gboard sdboard" id="sdBoard"></div>
+      <div class="mmwrap" id="mmWrap"><div class="mmboard" id="mmBoard"></div></div>
       <div class="gside">
-        <p class="grule">たて・よこ・ふとい わくの 中に、1〜6が 1つずつ はいるように しよう。マスを えらんでから すうじを おしてね。</p>
-        <p class="gnote" id="sdNote"></p>
-        <div class="sdpad">
-          <button class="sdk" data-act="sdNum" data-d="1">1</button><button class="sdk" data-act="sdNum" data-d="2">2</button><button class="sdk" data-act="sdNum" data-d="3">3</button>
-          <button class="sdk" data-act="sdNum" data-d="4">4</button><button class="sdk" data-act="sdNum" data-d="5">5</button><button class="sdk" data-act="sdNum" data-d="6">6</button>
-        </div>
-        <div class="sdrow"><button class="kbtn" data-act="sdErase">⌫ けす</button><button class="kbtn" data-act="sdUndo">↩ もどす</button></div>
-        <div class="sdrow"><button class="kbtn" data-act="sdMemo" id="sdMemo">✏️ メモ：オフ</button><button class="kbtn give" data-act="sdHint" id="sdHint">💡 ヒント</button></div>
+        <p class="grule">カードを 2まい めくって、おなじ どうぶつを みつけよう。ぜんぶの ペアを みつけたら クリア！</p>
+        <div class="mmstat" id="mmStat"><b id="mmPairs">ペア 0 / 6</b><small id="mmTries">ちょうせん 0かい</small></div>
+        <div class="mmtray" id="mmTray"></div>
+        <p class="gnote" id="mmNote"></p>
+        <button class="kbtn give" data-act="mmHint" id="mmHint">👀 ちらっと みる</button>
       </div>
     </div>
   </section>
@@ -863,13 +876,17 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       </div>
       <div class="set-card">
         <h3>🎮 ゲーム</h3>
-        <label class="row"><span class="grow">きょうのミッションが終わるまでゲームにカギをかける<small>優先テーマのシールをその日に5枚集めると、めいろ・すうどく・IQテストで遊べるようになります</small></span><span class="sw"><input type="checkbox" data-set="gameLock"><i></i></span></label>
+        <label class="row"><span class="grow">きょうのミッションが終わるまでゲームにカギをかける<small>優先テーマのシールをその日に5枚集めると、めいろ・しんけいすいじゃく・IQテストで遊べるようになります</small></span><span class="sw"><input type="checkbox" data-set="gameLock"><i></i></span></label>
         <label class="row"><span class="grow">ゲームをクリアしたらコインをもらえる<small>クリア1回でコイン1枚（IQテストは7問中4問以上の正解）。コイン10枚で、トップ画面の「🪙」ボタンからシール1枚（ランダム）と交換できます（自動では交換しません）。オフにすると、ゲームはコインなしで遊べます。ヒントは1回3つまでです</small></span><span class="sw"><input type="checkbox" data-set="gameCoin"><i></i></span></label>
         <div class="row">
-          <span class="grow">1日に遊べる回数（ゲームごと）<small>めいろ・すうどく・IQテストのそれぞれで、この回数まで遊べます。遊びはじめたとき（めいろは線を引きはじめた、すうどくは数字を入れた、IQテストは1問目に答えたとき）に1回と数えるので、選びまちがえてすぐ戻ったときは数えません</small></span>
+          <span class="grow">1日に遊べる回数（ゲームごと）<small>めいろ・しんけいすいじゃく・IQテストのそれぞれで、この回数まで遊べます。遊びはじめたとき（めいろは線を引きはじめた、しんけいすいじゃくはカードをめくった、IQテストは1問目に答えたとき）に1回と数えるので、選びまちがえてすぐ戻ったときは数えません</small></span>
           <div class="seg"><button data-act="seg" data-k="gameLimit" data-val="1">1回</button><button data-act="seg" data-k="gameLimit" data-val="2">2回</button><button data-act="seg" data-k="gameLimit" data-val="3">3回</button><button data-act="seg" data-k="gameLimit" data-val="5">5回</button><button data-act="seg" data-k="gameLimit" data-val="0">制限なし</button></div>
         </div>
         <div class="row"><span class="grow" id="gPlayNote"></span><button class="mini" data-act="gReset">今日の回数をリセット</button></div>
+        <div class="row">
+          <span class="grow">しんけいすいじゃくのカードの枚数<small>ゲーム画面には、ここで選んだ枚数だけが出ます。動物は36種類の中から毎回ランダムに選びます。ベストタイムは枚数ごとに記録します</small></span>
+          <div class="seg"><button data-act="seg" data-k="memPairs" data-val="6">12枚（6ペア）</button><button data-act="seg" data-k="memPairs" data-val="8">16枚（8ペア）</button><button data-act="seg" data-k="memPairs" data-val="12">24枚（12ペア）</button></div>
+        </div>
       </div>
       <div class="set-card">
         <h3>🏅 ランク</h3>
@@ -904,7 +921,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
         ・かけざんの1の段は練習用で、シールはもらえません。<br>
         ・シールは全100種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
-        ・トップ画面の下の「ゲーム」で、めいろ・すうどく・IQテストを遊べます（それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。</p>
+        ・トップ画面の下の「ゲーム」で、めいろ・しんけいすいじゃく・IQテストを遊べます（それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。</p>
       </div>
     </div>
   </section>
@@ -1081,9 +1098,9 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3 },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3, memPairs: 6 },
     coins: 0, coinsTotal: 0, gstats: {},  // ゲームの コイン（10まいで シール1まいと こうかん）と きろく
-    gday: {},  // きょう ゲームを あそんだ かいすう { d: 日づけ, meiro, sudoku, iq }
+    gday: {},  // きょう ゲームを あそんだ かいすう { d: 日づけ, meiro, memory, iq }
   };
 }
 let D = defaults();
@@ -1111,6 +1128,8 @@ function load() {
     }
     const lim = Number(D.settings.gameLimit);
     D.settings.gameLimit = Number.isFinite(lim) && lim >= 0 ? lim : def.settings.gameLimit;
+    const mp = Number(D.settings.memPairs);
+    D.settings.memPairs = [6, 8, 12].includes(mp) ? mp : def.settings.memPairs;
   } catch (e) { D = defaults(); }
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* 保存できなくても あそべる */ } }
@@ -1960,6 +1979,7 @@ function goHome() {
   Q.token++;
   gStop();
   MZ.drawing = false;
+  mmStop();
   IQ.active = false;
   IQ.token++;
   Speech.stop();
@@ -1969,12 +1989,12 @@ function goHome() {
   show('home');
 }
 
-// ---------- ゲーム（めいろ・すうどく・IQテスト。9さい向けと おなじ） ----------
+// ---------- ゲーム（めいろ・しんけいすいじゃく・IQテスト） ----------
 // カギ：きょうの ミッション（ゆうせんテーマの シール 5まい）が おわるまで あそべない
 const gameLocked = () => S().gameLock !== false && missionLeft() > 0;
 const coinOn = () => S().gameCoin !== false;
 // 1にちに あそべる かいすう（ゲームごと。0 は せいげん なし）。あそびはじめた とき（1て うごかした とき）に 1かいと かぞえる
-const GKINDS = ['meiro', 'sudoku', 'iq'];
+const GKINDS = ['meiro', 'memory', 'iq'];
 const gLimit = () => Math.max(0, Number(S().gameLimit) || 0);
 function gDay() {
   const t = new Date().toDateString();
@@ -2023,13 +2043,14 @@ function openGameLock() {
 }
 const GAMES = {
   meiro: { name: 'めいろ', lv: { 1: { name: 'やさしい', n: 5, k: 7, walls: 0, coin: 1 }, 2: { name: 'ふつう', n: 6, k: 9, walls: 3, coin: 1 }, 3: { name: 'むずかしい', n: 7, k: 10, walls: 6, coin: 1 } } },
-  sudoku: { name: 'すうどく', lv: { 1: { name: 'やさしい', givens: 18, coin: 1 }, 2: { name: 'ふつう', givens: 14, coin: 1 }, 3: { name: 'むずかしい', givens: 11, coin: 1 } } },
+  // しんけいすいじゃくは むずかしさの かわりに カードの まいすう（おうちの方へ画面で きめる。lv は ペアの かず）
+  memory: { name: 'しんけいすいじゃく', lv: { 6: { name: '12まい', pairs: 6, coin: 1 }, 8: { name: '16まい', pairs: 8, coin: 1 }, 12: { name: '24まい', pairs: 12, coin: 1 } } },
   iq: { name: 'IQテスト', lv: { 1: { name: 'やさしい', coin: 1 }, 2: { name: 'ふつう', coin: 1 }, 3: { name: 'むずかしい', coin: 1 } } },
 };
 const GAME_RULE = {
   iq: 'かず・ならび・なかまはずれ・かたち・シーソー・じゅんばん などの もんだいが 7もん。4もん いじょう せいかいで コイン！',
   meiro: '1 → 2 → 3 … の じゅんに、ぜんぶの マスを 1かいずつ とおって、さいごの すうじまで つなごう。ゆびで なぞってね。',
-  sudoku: 'たて・よこ・ふとい わくの 中に、1〜6が 1つずつ はいるように すうじを 入れよう。',
+  memory: 'カードを 2まい めくって、おなじ どうぶつの ペアを ぜんぶ みつけよう。',
 };
 const HINTS = 3;
 const COIN_RATE = 10;  // シール1まいに ひつような コイン
@@ -2037,7 +2058,8 @@ const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const gstat = (g, lv) => { const k = g + lv; return (D.gstats[k] = D.gstats[k] || { play: 0, clear: 0, best: 0 }); };
 const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0, counted: false };
 let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・game・coin
-const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : g === 'meiro' ? `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}` : `さいしょの すうじ ${L.givens}こ`;
+const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}`;  // めいろ・IQテスト（しんけいすいじゃくは どうぶつの え）
+const memPairs = () => [6, 8, 12].includes(+S().memPairs) ? +S().memPairs : 6;
 
 function renderGameSel() {
   const g2 = $('#gsGrid');
@@ -2046,9 +2068,10 @@ function renderGameSel() {
   g2.innerHTML = GKINDS.map(g => {
     const left = gLeft(g), used = left <= 0;
     const badge = lim ? `<em class="gs-left${used ? ' zero' : ''}">${used ? '🌙 きょうは おしまい' : `きょう あと ${left}かい`}</em>` : '';
-    return `<div class="gs-head">${{ meiro: '🧩', sudoku: '🔢', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small>${badge}</div>` + [1, 2, 3].map(lv => {
+    const mm = g === 'memory';
+    return `<div class="gs-head">${{ meiro: '🧩', memory: '🐾', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small>${badge}</div>` + (mm ? [memPairs()] : [1, 2, 3]).map(lv => {
       const L = GAMES[g].lv[lv], st = gstat(g, lv);
-      return `<button class="lvb gsb ${g}${used ? ' used' : ''}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${L.name}</b><small>${gameDesc(g, L)}</small><span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
+      return `<button class="lvb gsb ${g}${mm ? ' wide' : ''}${used ? ' used' : ''}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${mm ? `カード ${L.name}` : L.name}</b>${mm ? '<span class="mm-deco">🐕🐈🐼🦁🐘🐧🐬</span>' : `<small>${gameDesc(g, L)}</small>`}<span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
     }).join('');
   }).join('');
   $('#gsNote').textContent = (coinOn() ? 'クリアすると コインが もらえるよ（コイン 10まいで シール 1まいと こうかん）' : 'クリアを めざそう！') + (lim ? `　ゲームは それぞれ 1にち ${lim}かい まで` : '');
@@ -2071,7 +2094,7 @@ function startGame(g, lv) {
   const name = `${GAMES[g].name} ${GAMES[g].lv[lv].name}`;
   if (g === 'iq') { Gm.active = false; iqStart(lv, name); return; }
   if (g === 'meiro') { mzNew(GAMES.meiro.lv[lv]); $('#mzTheme').textContent = name; show('meiro'); }
-  else { sdNew(GAMES.sudoku.lv[lv]); $('#sdTheme').textContent = name; show('sudoku'); }
+  else { mmNew(GAMES.memory.lv[lv].pairs); $('#mmTheme').textContent = name; show('memory'); mmLayout(); requestAnimationFrame(mmLayout); }
   gHintLabel();
   gTick();
   Gm.timer = setInterval(gTick, 500);
@@ -2080,14 +2103,14 @@ function startGame(g, lv) {
 function gTick() {
   if (!Gm.active) return;
   Gm.sec = Math.floor((Date.now() - Gm.t0) / 1000);
-  const el = Gm.kind === 'meiro' ? $('#mzTime') : $('#sdTime');
+  const el = Gm.kind === 'meiro' ? $('#mzTime') : $('#mmTime');
   el.textContent = '⏱ ' + fmtTime(Gm.sec);
 }
 function gStop() { Gm.active = false; clearInterval(Gm.timer); }
 function gHintLabel() {
-  const left = HINTS - Gm.hints;
-  const b = Gm.kind === 'meiro' ? $('#mzHint') : $('#sdHint');
-  b.textContent = `💡 ヒント（のこり ${left}）`;
+  const left = HINTS - Gm.hints, mm = Gm.kind === 'memory';
+  const b = mm ? $('#mmHint') : $('#mzHint');
+  b.textContent = `${mm ? '👀 ちらっと みる' : '💡 ヒント'}（のこり ${left}）`;
   b.disabled = left <= 0;
 }
 function gameClear() {
@@ -2098,6 +2121,12 @@ function gameClear() {
   const best = !st.best || Gm.sec < st.best;
   if (best) st.best = Gm.sec;
   const top = `クリア！ タイム ${fmtTime(Gm.sec)}${best ? '（ベスト きろく！）' : ''}`;
+  let extra = '';
+  if (g === 'memory') {
+    const fewest = !st.minTry || MM.tries < st.minTry;
+    if (fewest) st.minTry = MM.tries;
+    extra = `<p class="msub">${MM.tries}かいの ちょうせんで ${MM.pairs}ペア ぜんぶ みつけたよ！${fewest && st.clear > 1 ? '<br>いちばん すくない かいすう！' : ''}</p>`;
+  }
   const coin = coinOn() ? GAMES[g].lv[lv].coin : 0;
   D.coins += coin;
   D.coinsTotal += coin;
@@ -2108,7 +2137,7 @@ function gameClear() {
     FX.confetti(innerWidth / 2, innerHeight * 0.55, 90, 14);
     const can = D.coins >= COIN_RATE;
     const last = gLimit() && gLeft(g) <= 0 ? ` きょうの ${GAMES[g].name}は これで おしまい` : '';
-    openModal(`<div class="lock-ico">🎉</div><p class="mq">${top}</p>
+    openModal(`<div class="lock-ico">🎉</div><p class="mq">${top}</p>${extra}
       ${coin ? `<div class="coin-get">${'<i class="coin">🪙</i>'.repeat(coin)}<b>コイン +${coin}まい ゲット！</b></div>${coinMeter()}` : ''}
       ${gEndNote(g)}${gEndBtns(g, can)}`);
     Speech.speak((coin ? `クリア！ コインを ${coin}まい ゲット！${can ? ' シールと こうかん できるよ！' : ''}` : 'クリア！ すごいね！') + last);
@@ -2610,131 +2639,130 @@ function mzHint() {
   mzAfter();
 }
 
-// ===== すうどく（6×6、ふとい わくは 2×3） =====
-const SDK = { sol: [], given: [], val: [], memo: [], sel: -1, memoMode: false, undo: [] };
-const sdBox = i => Math.floor(Math.floor(i / 6) / 2) * 2 + Math.floor((i % 6) / 3);
-const sdPeers = (i, j) => i !== j && (Math.floor(i / 6) === Math.floor(j / 6) || i % 6 === j % 6 || sdBox(i) === sdBox(j));
-const sdOk = (g, i, d) => { for (let j = 0; j < 36; j++) if (g[j] === d && sdPeers(i, j)) return false; return true; };
-function sdCount(grid, limit) {
-  const g = grid.slice();
-  let count = 0;
-  (function rec() {
-    if (count >= limit) return;
-    let best = -1, bc = null;
-    for (let i = 0; i < 36; i++) {
-      if (g[i]) continue;
-      const cs = [];
-      for (let d = 1; d <= 6; d++) if (sdOk(g, i, d)) cs.push(d);
-      if (!cs.length) return;
-      if (!bc || cs.length < bc.length) { best = i; bc = cs; if (cs.length === 1) break; }
-    }
-    if (best < 0) { count++; return; }
-    for (const d of bc) { g[best] = d; rec(); g[best] = 0; if (count >= limit) return; }
-  })();
-  return count;
+// ===== しんけいすいじゃく（どうぶつ カード。1人で ペアを ぜんぶ さがす） =====
+// [え, なまえ, ばしょ（カードの はいけいの いろ）, よみあげ（かなの まま だと よみにくい もの）]
+const ANIMALS = [
+  ['🐕', 'いぬ', 'home'], ['🐈', 'ねこ', 'home'], ['🐹', 'ハムスター', 'home'], ['🐇', 'うさぎ', 'farm'],
+  ['🐄', 'うし', 'farm'], ['🐖', 'ぶた', 'farm'], ['🐎', 'うま', 'farm'], ['🐑', 'ひつじ', 'farm'], ['🐓', 'にわとり', 'farm'],
+  ['🐻', 'くま', 'forest'], ['🦊', 'きつね', 'forest'], ['🐿️', 'りす', 'forest'], ['🦉', 'ふくろう', 'forest'], ['🦔', 'ハリネズミ', 'forest'],
+  ['🐒', 'さる', 'forest'], ['🐼', 'パンダ', 'forest'], ['🐨', 'コアラ', 'forest'], ['🐅', 'とら', 'forest'],
+  ['🦁', 'ライオン', 'savanna'], ['🐘', 'ぞう', 'savanna'], ['🦒', 'キリン', 'savanna'], ['🦓', 'しまうま', 'savanna'], ['🦘', 'カンガルー', 'savanna'], ['🦏', 'さい', 'savanna', 'サイ'],
+  ['🦆', 'あひる', 'pond'], ['🐸', 'かえる', 'pond'], ['🦛', 'かば', 'pond', 'カバ'], ['🐊', 'わに', 'pond', 'ワニ'], ['🦩', 'フラミンゴ', 'pond'],
+  ['🐬', 'いるか', 'sea', 'イルカ'], ['🐳', 'くじら', 'sea'], ['🦀', 'かに', 'sea', 'カニ'], ['🐙', 'たこ', 'sea', 'タコ'], ['🐢', 'かめ', 'sea'],
+  ['🐧', 'ペンギン', 'ice'], ['🦭', 'アザラシ', 'ice'],
+];
+const MM_RATIO = 1.2;  // カードの たて ÷ よこ
+const MM = { cards: [], open: [], found: [], got: 0, pairs: 6, tries: 0, peek: false, timer: 0, token: 0 };
+const mmSay = a => a[3] || a[1];
+const mmEl = i => $(`#mmBoard [data-i="${i}"]`);
+const mmNote = t => { $('#mmNote').textContent = t; };
+function mmNew(pairs) {
+  mmStop();
+  const pick = shuffle(ANIMALS.slice()).slice(0, pairs);
+  MM.cards = shuffle(pick.flatMap((a, k) => [{ a, k, up: false, got: false }, { a, k, up: false, got: false }]));
+  Object.assign(MM, { open: [], found: [], got: 0, pairs, tries: 0 });
+  $('#mmBoard').innerHTML = MM.cards.map((c, i) =>
+    `<button class="mc" data-act="mm" data-i="${i}" aria-label="カード"><span class="mc-in"><span class="mc-back"></span><span class="mc-face hb-${c.a[2]}"><i>${c.a[0]}</i><b>${c.a[1]}</b></span></span></button>`).join('');
+  $('#mmTray').innerHTML = '';
+  mmNote('すきな カードを タッチしてね');
+  mmStatus();
 }
-function sdFull() {
-  const g = Array(36).fill(0);
-  (function rec(i) {
-    if (i === 36) return true;
-    for (const d of shuffle([1, 2, 3, 4, 5, 6])) {
-      if (sdOk(g, i, d)) { g[i] = d; if (rec(i + 1)) return true; g[i] = 0; }
-    }
-    return false;
-  })(0);
-  return g;
+function mmStop() {
+  MM.token++;
+  clearTimeout(MM.timer);
+  MM.peek = false;
+  $('#mmBoard').classList.remove('peek');
 }
-function sdNew(L) {
-  const sol = sdFull(), puz = sol.slice();
-  let givens = 36;
-  for (const i of shuffle([...Array(36).keys()])) {
-    if (givens <= L.givens) break;
-    const v = puz[i];
-    puz[i] = 0;
-    if (sdCount(puz, 2) !== 1) puz[i] = v; else givens--;
+function mmStatus() {
+  $('#mmPairs').textContent = `ペア ${MM.got} / ${MM.pairs}`;
+  $('#mmTries').textContent = `ちょうせん ${MM.tries}かい`;
+}
+// がめんの ひろさに あわせて、いちばん カードが おおきく なる ならべかたを えらぶ
+function mmLayout() {
+  const wrap = $('#mmWrap'), bd = $('#mmBoard'), n = MM.cards.length;
+  if (!n || !wrap.clientWidth) return;
+  const W = wrap.clientWidth - 20, H = wrap.clientHeight - 26;  // ほし・かげの ぶん すこし あける
+  const gap = Math.round(Math.max(8, Math.min(16, Math.min(W, H) * 0.02)));
+  let best = { w: 0, cols: n };
+  for (let cols = 2; cols <= n; cols++) {
+    if (n % cols) continue;
+    const rows = n / cols;
+    const w = Math.min((W - gap * (cols - 1)) / cols, (H - gap * (rows - 1)) / rows / MM_RATIO);
+    if (w > best.w) best = { w, cols };
   }
-  Object.assign(SDK, { sol, given: puz.map(v => v > 0), val: puz.slice(), memo: Array.from({ length: 36 }, () => []), sel: -1, memoMode: false, undo: [] });
-  sdMemoLabel();
-  sdRender();
-  Speech.speak('たて よこ わくに 1から6を 1つずつ いれよう');
+  const w = Math.max(40, Math.floor(Math.min(best.w, 230)));
+  bd.style.gap = `${gap}px`;
+  bd.style.gridTemplateColumns = `repeat(${best.cols}, ${w}px)`;
+  bd.style.setProperty('--cw', `${w}px`);
 }
-function sdConflicts() {
-  const bad = new Set();
-  for (let i = 0; i < 36; i++) if (SDK.val[i]) for (let j = i + 1; j < 36; j++) if (SDK.val[j] === SDK.val[i] && sdPeers(i, j)) { bad.add(i); bad.add(j); }
-  return bad;
+addEventListener('resize', () => { if (screen === 'memory') mmLayout(); });
+if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (screen === 'memory') mmLayout(); });
+function mmHideOpen() {
+  clearTimeout(MM.timer);
+  for (const k of MM.open) { MM.cards[k].up = false; mmEl(k).classList.remove('up'); }
+  MM.open = [];
 }
-function sdRender() {
-  const bad = sdConflicts(), s = SDK.sel, sv = s >= 0 ? SDK.val[s] : 0;
-  let h = '';
-  for (let i = 0; i < 36; i++) {
-    const r = Math.floor(i / 6), c = i % 6, v = SDK.val[i];
-    const cls = ['sdc'];
-    if (c === 2) cls.push('br');
-    if (r === 1 || r === 3) cls.push('bb');
-    if (SDK.given[i]) cls.push('given');
-    if (s >= 0 && sdPeers(i, s)) cls.push('peer');
-    if (sv && v === sv && i !== s) cls.push('same');
-    if (i === s) cls.push('sel');
-    if (bad.has(i)) cls.push('err');
-    const inner = v ? v : SDK.memo[i].length ? `<span class="sdm">${[1, 2, 3, 4, 5, 6].map(d => `<i>${SDK.memo[i].includes(d) ? d : ''}</i>`).join('')}</span>` : '';
-    h += `<button class="${cls.join(' ')}" data-act="sdCell" data-i="${i}">${inner}</button>`;
-  }
-  $('#sdBoard').innerHTML = h;
-}
-function sdMemoLabel() { const b = $('#sdMemo'); b.textContent = `✏️ メモ：${SDK.memoMode ? 'オン' : 'オフ'}`; b.classList.toggle('on', SDK.memoMode); }
-function sdSet(i, v, memoToggle) {
-  if (!Gm.active || i < 0 || SDK.given[i]) return;
+function mmFlip(i) {
+  if (!Gm.active || Gm.kind !== 'memory' || MM.peek) return;
+  const c = MM.cards[i];
+  if (!c || c.up || c.got) return;
+  if (MM.open.length >= 2) mmHideOpen();  // ちがった 2まいが まだ ひらいて いたら すぐ ふせる
   gameUse();
-  SDK.undo.push({ i, val: SDK.val[i], memo: SDK.memo[i].slice() });
-  if (memoToggle) {
-    if (SDK.val[i]) return sdRender();
-    const m = SDK.memo[i];
-    SDK.memo[i] = m.includes(v) ? m.filter(x => x !== v) : m.concat(v).sort();
-  } else {
-    SDK.val[i] = SDK.val[i] === v ? 0 : v;
-    if (SDK.val[i]) for (let j = 0; j < 36; j++) if (sdPeers(i, j)) SDK.memo[j] = SDK.memo[j].filter(x => x !== v);
+  c.up = true;
+  mmEl(i).classList.add('up');
+  MM.open.push(i);
+  SFX.pop(MM.open.length * 5);
+  if (MM.open.length === 1) { Speech.speak(mmSay(c.a)); mmNote('もう 1まい めくろう'); return; }
+  MM.tries++;
+  const [i1, i2] = MM.open, a = MM.cards[i1], b = MM.cards[i2];
+  mmStatus();
+  if (a.k !== b.k) {
+    Speech.speak(mmSay(b.a));
+    mmNote('ちがう どうぶつ だったね。どこに あったか おぼえておこう');
+    MM.timer = setTimeout(mmHideOpen, 1300);
+    return;
   }
-  sdRender();
-  if (SDK.val.every((x, k) => x === SDK.sol[k])) gameClear();
+  // ペア！
+  a.got = b.got = true;
+  MM.open = [];
+  MM.got++;
+  MM.found.push(a.a[0]);
+  const tk = MM.token, all = MM.got === MM.pairs;
+  if (all) { gTick(); clearInterval(Gm.timer); }  // タイムは ここで とめる
+  Speech.speak(`${mmSay(a.a)}！ ペア！`);
+  mmNote(all ? '🎉 ぜんぶ みつけた！' : `${a.a[1]}の ペア！`);
+  setTimeout(() => {
+    if (tk !== MM.token) return;
+    for (const k of [i1, i2]) {
+      const el = mmEl(k);
+      el.classList.add('got');
+      const r = el.getBoundingClientRect();
+      FX.confetti(r.left + r.width / 2, r.top + r.height / 2, 22, 8);
+    }
+    SFX.rankup();
+    $('#mmTray').insertAdjacentHTML('beforeend', `<i>${a.a[0]}</i>`);
+    mmStatus();
+    if (all) setTimeout(() => { if (tk === MM.token) gameClear(); }, 900);
+  }, 380);
 }
-function sdNum(d) {
-  if (SDK.sel < 0) { $('#sdNote').textContent = 'さきに マスを えらんでね'; return; }
-  $('#sdNote').textContent = '';
-  if (SDK.given[SDK.sel]) { $('#sdNote').textContent = 'さいしょから ある すうじは かえられないよ'; return; }
-  sdSet(SDK.sel, d, SDK.memoMode);
-}
-function sdErase() {
-  const i = SDK.sel;
-  if (i < 0 || SDK.given[i]) return;
-  SDK.undo.push({ i, val: SDK.val[i], memo: SDK.memo[i].slice() });
-  SDK.val[i] = 0; SDK.memo[i] = [];
-  sdRender();
-}
-function sdUndo() {
-  const u = SDK.undo.pop();
-  if (!u) return;
-  SDK.val[u.i] = u.val; SDK.memo[u.i] = u.memo; SDK.sel = u.i;
-  sdRender();
-}
-function sdHint() {
-  if (!Gm.active || Gm.hints >= HINTS) return;
-  let i = SDK.sel;
-  if (i < 0 || SDK.given[i] || SDK.val[i] === SDK.sol[i]) {
-    // まちがって いる マスを さきに、なければ あいて いる マスから
-    const wrong = [...Array(36).keys()].filter(k => SDK.val[k] && SDK.val[k] !== SDK.sol[k]);
-    const empty = [...Array(36).keys()].filter(k => !SDK.val[k]);
-    i = wrong.length ? wrong[0] : pick(empty);
-  }
-  if (i === undefined) return;
+// ヒント：のこりの カードを ぜんぶ ちらっと みせる
+function mmHint() {
+  if (!Gm.active || Gm.kind !== 'memory' || Gm.hints >= HINTS || MM.peek) return;
+  gameUse();
   Gm.hints++;
   gHintLabel();
-  SDK.sel = i;
-  SDK.memo[i] = [];
-  sdSet(i, SDK.sol[i], false);
-  if (SDK.val[i] !== SDK.sol[i]) { SDK.val[i] = SDK.sol[i]; sdRender(); }
-  const cell = $(`#sdBoard [data-i="${i}"]`);
-  if (cell) cell.classList.add('hint');
-  $('#sdNote').textContent = '💡 1つ おしえたよ';
+  mmHideOpen();
+  MM.peek = true;
+  const tk = MM.token;
+  $('#mmBoard').classList.add('peek');
+  mmNote('👀 よく みて おぼえてね！');
+  Speech.speak('よく みて おぼえてね');
+  setTimeout(() => {
+    if (tk !== MM.token) return;
+    MM.peek = false;
+    $('#mmBoard').classList.remove('peek');
+    mmNote('');
+  }, 2000);
 }
 
 // ---------- シールちょう ----------
@@ -2875,7 +2903,7 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b) return;
   const act = b.dataset.act;
-  if (act !== 'key') SFX.tap();
+  if (act !== 'key' && act !== 'mm') SFX.tap();
   switch (act) {
     case 'start': chooseTheme(b.dataset.theme); break;
     case 'startPriority': enterTheme(S().priority); break;
@@ -2901,12 +2929,8 @@ document.addEventListener('click', e => {
     case 'mzUndo': if (Gm.active && MZ.path.length) { MZ.path.pop(); mzAfter(); } break;
     case 'mzReset': if (Gm.active) { MZ.path = []; mzNote(''); mzRender(); } break;
     case 'mzHint': mzHint(); break;
-    case 'sdCell': SDK.sel = +b.dataset.i; $('#sdNote').textContent = ''; sdRender(); break;
-    case 'sdNum': sdNum(+b.dataset.d); break;
-    case 'sdErase': sdErase(); break;
-    case 'sdUndo': sdUndo(); break;
-    case 'sdMemo': SDK.memoMode = !SDK.memoMode; sdMemoLabel(); break;
-    case 'sdHint': sdHint(); break;
+    case 'mm': mmFlip(+b.dataset.i); break;
+    case 'mmHint': mmHint(); break;
     case 'iqok': iqCheck(); break;
     case 'iqgive': if (IQ.active && !IQ.lock && !IQ.canSkip) { gameUse(); iqReveal(true); } break;
     case 'iqch': if (IQ.active && !IQ.lock) { IQ.sel = +b.dataset.i; iqRenderChoices(); } break;
@@ -2953,7 +2977,7 @@ document.addEventListener('click', e => {
     case 'settings': openGate(); break;
     case 'gateKey': gateKey(b.dataset.k); break;
     case 'seg':
-      S()[b.dataset.k] = b.dataset.k === 'gameLimit' ? Number(b.dataset.val) : b.dataset.val;
+      S()[b.dataset.k] = ['gameLimit', 'memPairs'].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
       save();
       renderSettings();
       applyInputMode();
@@ -3022,16 +3046,6 @@ $('#app').addEventListener('mousedown', e => {
 });
 // ハードウェアキーボードや すうじボタンモードでの キー入力
 document.addEventListener('keydown', e => {
-  // すうどく：すうじ・けす・やじるしで マスを うごかす
-  if (screen === 'sudoku' && Gm.active && !$('#modal').classList.contains('show')) {
-    const mv = { ArrowUp: -6, ArrowDown: 6, ArrowLeft: -1, ArrowRight: 1 }[e.key];
-    if (/^[1-6]$/.test(e.key)) sdNum(+e.key);
-    else if (e.key === 'Backspace' || e.key === 'Delete') sdErase();
-    else if (mv) { const i = SDK.sel < 0 ? 0 : SDK.sel + mv; if (i >= 0 && i < 36 && !(Math.abs(mv) === 1 && Math.floor(i / 6) !== Math.floor(SDK.sel / 6))) { SDK.sel = i; sdRender(); } }
-    else return;
-    e.preventDefault();
-    return;
-  }
   if (screen !== 'quiz' || !Q.active || $('#modal').classList.contains('show')) return;
   if (document.activeElement === ans && isKb()) return;
   if (/^[0-9]$/.test(e.key)) padKey(e.key);
