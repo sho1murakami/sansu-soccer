@@ -356,6 +356,11 @@ body.kb .pad{display:none}
 .gate-q{display:flex;align-items:center;gap:.3em;font-size:clamp(30px,4.4vw,44px);font-weight:900;font-variant-numeric:tabular-nums}
 .gate-val{min-width:2.4em;height:1.25em;line-height:1.25em;background:#eef2f8;border-radius:.2em;text-align:center}
 .gate-val.ng{animation:shake .4s;background:#ffe1e4;color:#e0283c}
+.gate-val.pin{min-width:5.2em;letter-spacing:.12em;font-size:.8em;height:1.55em;line-height:1.55em}
+.gate-sub{max-width:min(520px,80vw);line-height:1.5;font-size:16px}
+.gate-msg{margin:-4px 0;min-height:1.4em;color:#e0283c;font-weight:800;font-size:16px}
+.gate-foot{display:flex;align-items:center;gap:18px}
+.gate-link{color:#2f6fd8;text-decoration:underline;font-size:15px}
 .gate-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(330px,70vw)}
 .gkey{height:clamp(46px,calc((var(--vh) - 390px)/4.3),68px);border-radius:14px;background:#f1f4f9;font-size:clamp(20px,2.6vw,28px);box-shadow:0 4px 0 #c9d2e0}
 .gkey:active{transform:translateY(3px);box-shadow:0 1px 0 #c9d2e0}
@@ -476,7 +481,7 @@ body.kb .pad{display:none}
 /* しんけいすいじゃく（どうぶつ カード） */
 .mmwrap{flex:1;min-width:0;min-height:0;align-self:stretch;display:grid;place-items:center;padding:10px}
 .mmboard{display:grid;--cw:120px}
-.mc{position:relative;width:var(--cw);height:calc(var(--cw) * 1.2);border-radius:calc(var(--cw) * .12);perspective:900px}
+.mc{position:relative;width:var(--cw);height:var(--ch,calc(var(--cw) * 1.2));border-radius:calc(var(--cw) * .12);perspective:900px}
 .mc-in{position:absolute;inset:0;transition:transform .38s cubic-bezier(.3,.7,.4,1);-webkit-transform-style:preserve-3d;transform-style:preserve-3d}
 .mc.up .mc-in,.mc.got .mc-in,.mmboard.peek .mc-in{transform:rotateY(180deg)}
 .mc-back,.mc-face{position:absolute;inset:0;border-radius:calc(var(--cw) * .12);border:calc(var(--cw) * .045) solid #fff;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 5px 0 rgba(0,0,0,.25);overflow:hidden}
@@ -504,9 +509,8 @@ body.kb .pad{display:none}
 .mmtray{display:flex;flex-wrap:wrap;align-content:flex-start;gap:0 4px;min-height:calc(1.3em + 12px);font-size:clamp(22px,2.6vw,30px);line-height:1.3;background:rgba(255,255,255,.16);border-radius:14px;padding:6px 10px}
 .mmtray:empty::before{content:"みつけた どうぶつが ここに ならぶよ";align-self:center;font-size:clamp(13px,1.4vw,16px);color:rgba(255,255,255,.88)}
 .mmtray i{font-style:normal;animation:pop .45s}
+.mmtray.many{font-size:clamp(18px,2vw,22px);gap:0 2px}
 .gsb.memory{--kan:#f0801e}
-.gsb.wide{grid-column:1/-1}
-.mm-deco{font-size:clamp(20px,2.4vw,28px);letter-spacing:.08em}
 
 /* ---------- IQテスト ---------- */
 .iqmain{flex:1;min-height:0;display:flex;gap:clamp(12px,2vw,28px);padding:4px 18px 14px}
@@ -560,6 +564,8 @@ body.kb .pad{display:none}
 .seg{display:inline-flex;background:#e8edf4;border-radius:12px;padding:3px;gap:3px;flex:none}
 .seg button{padding:8px 14px;border-radius:10px;font-size:16px;color:#5b6780}
 .seg button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);color:var(--ink)}
+.mem-seg button{padding:6px 12px;line-height:1.25}
+.mem-seg button small{font-size:12px;color:inherit;opacity:.75}
 .dan-order.seg{background:rgba(0,0,0,.2);border-radius:999px;padding:4px}
 .dan-order.seg button{color:#fff;font-size:20px;padding:8px 22px;border-radius:999px}
 .dan-order.seg button.on{background:#fff;color:var(--ink)}
@@ -586,6 +592,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
   .gside{width:min(100%,640px)}
   #memory .gside{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"rule rule" "stat hint" "tray tray" "note note";align-items:center}
   #memory .grule{grid-area:rule}#mmStat{grid-area:stat}#mmHint{grid-area:hint}#mmTray{grid-area:tray}#mmNote{grid-area:note}
+  #mmTray{flex-wrap:nowrap;overflow:hidden}
   .iqmain{flex-direction:column}
   .iqcard{flex:1}
   .iqside{flex:none}
@@ -883,10 +890,13 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
           <div class="seg"><button data-act="seg" data-k="gameLimit" data-val="1">1回</button><button data-act="seg" data-k="gameLimit" data-val="2">2回</button><button data-act="seg" data-k="gameLimit" data-val="3">3回</button><button data-act="seg" data-k="gameLimit" data-val="5">5回</button><button data-act="seg" data-k="gameLimit" data-val="0">制限なし</button></div>
         </div>
         <div class="row"><span class="grow" id="gPlayNote"></span><button class="mini" data-act="gReset">今日の回数をリセット</button></div>
-        <div class="row">
-          <span class="grow">しんけいすいじゃくのカードの枚数<small>ゲーム画面には、ここで選んだ枚数だけが出ます。動物は36種類の中から毎回ランダムに選びます。ベストタイムは枚数ごとに記録します</small></span>
-          <div class="seg"><button data-act="seg" data-k="memPairs" data-val="6">12枚（6ペア）</button><button data-act="seg" data-k="memPairs" data-val="8">16枚（8ペア）</button><button data-act="seg" data-k="memPairs" data-val="12">24枚（12ペア）</button></div>
-        </div>
+      </div>
+      <div class="set-card">
+        <h3>🐾 しんけいすいじゃくのカードの枚数</h3>
+        <p class="note">ゲーム画面の「やさしい・ふつう・むずかしい」で出るカードの枚数です。動物は48種類の中から毎回ランダムに選びます。ベストタイムは枚数ごとに記録します。</p>
+        <div class="row"><span class="grow">やさしい</span><div class="seg mem-seg"><button data-act="seg" data-k="mem1" data-val="6">12枚<small>6ペア</small></button><button data-act="seg" data-k="mem1" data-val="8">16枚<small>8ペア</small></button><button data-act="seg" data-k="mem1" data-val="12">24枚<small>12ペア</small></button><button data-act="seg" data-k="mem1" data-val="18">36枚<small>18ペア</small></button><button data-act="seg" data-k="mem1" data-val="24">48枚<small>24ペア</small></button></div></div>
+        <div class="row"><span class="grow">ふつう</span><div class="seg mem-seg"><button data-act="seg" data-k="mem2" data-val="6">12枚<small>6ペア</small></button><button data-act="seg" data-k="mem2" data-val="8">16枚<small>8ペア</small></button><button data-act="seg" data-k="mem2" data-val="12">24枚<small>12ペア</small></button><button data-act="seg" data-k="mem2" data-val="18">36枚<small>18ペア</small></button><button data-act="seg" data-k="mem2" data-val="24">48枚<small>24ペア</small></button></div></div>
+        <div class="row"><span class="grow">むずかしい</span><div class="seg mem-seg"><button data-act="seg" data-k="mem3" data-val="6">12枚<small>6ペア</small></button><button data-act="seg" data-k="mem3" data-val="8">16枚<small>8ペア</small></button><button data-act="seg" data-k="mem3" data-val="12">24枚<small>12ペア</small></button><button data-act="seg" data-k="mem3" data-val="18">36枚<small>18ペア</small></button><button data-act="seg" data-k="mem3" data-val="24">48枚<small>24ペア</small></button></div></div>
       </div>
       <div class="set-card">
         <h3>🏅 ランク</h3>
@@ -894,6 +904,11 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
           <span class="grow">トップ画面で最初に出すランク<small>じどう：たしざん → ひきざん → かけざん の順に表示し、ワールドクラス（シール300枚）になったら次の計算に切り替えます。トップ画面のプルダウンでいつでも切り替えられます</small></span>
           <div class="seg"><button data-act="seg" data-k="rankView" data-val="auto">じどう</button><button data-act="seg" data-k="rankView" data-val="add">たしざん</button><button data-act="seg" data-k="rankView" data-val="sub">ひきざん</button><button data-act="seg" data-k="rankView" data-val="mul">かけざん</button></div>
         </div>
+      </div>
+      <div class="set-card">
+        <h3>🔒 おうちの方へ画面のパスワード</h3>
+        <div class="row"><span class="grow">パスワードを変更する<small>数字4〜8けた。忘れたときは、パスワードの画面の「パスワードを忘れたとき」から、3けた×3けたの計算に答えて決め直せます（記録は消えません）</small></span><button class="mini" data-act="pinChange">変更する</button></div>
+        <p class="note bk-note" id="pinNote"></p>
       </div>
       <div class="set-card">
         <h3>💾 記録のバックアップ（引っこし）</h3>
@@ -1098,7 +1113,7 @@ function defaults() {
   return {
     v: 2, stickers: [], miss: {},
     stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3, memPairs: 6 },
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3, mem1: 6, mem2: 8, mem3: 12, pin: '' },
     coins: 0, coinsTotal: 0, gstats: {},  // ゲームの コイン（10まいで シール1まいと こうかん）と きろく
     gday: {},  // きょう ゲームを あそんだ かいすう { d: 日づけ, meiro, memory, iq }
   };
@@ -1128,8 +1143,12 @@ function load() {
     }
     const lim = Number(D.settings.gameLimit);
     D.settings.gameLimit = Number.isFinite(lim) && lim >= 0 ? lim : def.settings.gameLimit;
-    const mp = Number(D.settings.memPairs);
-    D.settings.memPairs = [6, 8, 12].includes(mp) ? mp : def.settings.memPairs;
+    delete D.settings.memPairs;  // まえの せってい（まいすう 1つだけ）は つかわない
+    for (const k of ['mem1', 'mem2', 'mem3']) {
+      const v = Number(D.settings[k]);
+      D.settings[k] = [6, 8, 12, 18, 24].includes(v) ? v : def.settings[k];
+    }
+    if (typeof D.settings.pin !== 'string') D.settings.pin = '';
   } catch (e) { D = defaults(); }
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* 保存できなくても あそべる */ } }
@@ -2043,8 +2062,8 @@ function openGameLock() {
 }
 const GAMES = {
   meiro: { name: 'めいろ', lv: { 1: { name: 'やさしい', n: 5, k: 7, walls: 0, coin: 1 }, 2: { name: 'ふつう', n: 6, k: 9, walls: 3, coin: 1 }, 3: { name: 'むずかしい', n: 7, k: 10, walls: 6, coin: 1 } } },
-  // しんけいすいじゃくは むずかしさの かわりに カードの まいすう（おうちの方へ画面で きめる。lv は ペアの かず）
-  memory: { name: 'しんけいすいじゃく', lv: { 6: { name: '12まい', pairs: 6, coin: 1 }, 8: { name: '16まい', pairs: 8, coin: 1 }, 12: { name: '24まい', pairs: 12, coin: 1 } } },
+  // しんけいすいじゃくの lv は ペアの かず（やさしい・ふつう・むずかしい ごとの まいすうは おうちの方へ画面で きめる）
+  memory: { name: 'しんけいすいじゃく', lv: Object.fromEntries([6, 8, 12, 18, 24].map(p => [p, { name: `${p * 2}まい`, pairs: p, coin: 1 }])) },
   iq: { name: 'IQテスト', lv: { 1: { name: 'やさしい', coin: 1 }, 2: { name: 'ふつう', coin: 1 }, 3: { name: 'むずかしい', coin: 1 } } },
 };
 const GAME_RULE = {
@@ -2059,7 +2078,10 @@ const gstat = (g, lv) => { const k = g + lv; return (D.gstats[k] = D.gstats[k] |
 const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0, counted: false };
 let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・game・coin
 const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}`;  // めいろ・IQテスト（しんけいすいじゃくは どうぶつの え）
-const memPairs = () => [6, 8, 12].includes(+S().memPairs) ? +S().memPairs : 6;
+const MEM_OPTS = [6, 8, 12, 18, 24];          // えらべる ペアの かず（12・16・24・36・48まい）
+const MEM_DEF = { 1: 6, 2: 8, 3: 12 };          // はじめの せってい：やさしい 12まい・ふつう 16まい・むずかしい 24まい
+const LV_NAME = { 1: 'やさしい', 2: 'ふつう', 3: 'むずかしい' };
+const memPairs = d => MEM_OPTS.includes(+S()[`mem${d}`]) ? +S()[`mem${d}`] : MEM_DEF[d];
 
 function renderGameSel() {
   const g2 = $('#gsGrid');
@@ -2069,9 +2091,9 @@ function renderGameSel() {
     const left = gLeft(g), used = left <= 0;
     const badge = lim ? `<em class="gs-left${used ? ' zero' : ''}">${used ? '🌙 きょうは おしまい' : `きょう あと ${left}かい`}</em>` : '';
     const mm = g === 'memory';
-    return `<div class="gs-head">${{ meiro: '🧩', memory: '🐾', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small>${badge}</div>` + (mm ? [memPairs()] : [1, 2, 3]).map(lv => {
-      const L = GAMES[g].lv[lv], st = gstat(g, lv);
-      return `<button class="lvb gsb ${g}${mm ? ' wide' : ''}${used ? ' used' : ''}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${mm ? `カード ${L.name}` : L.name}</b>${mm ? '<span class="mm-deco">🐕🐈🐼🦁🐘🐧🐬</span>' : `<small>${gameDesc(g, L)}</small>`}<span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
+    return `<div class="gs-head">${{ meiro: '🧩', memory: '🐾', iq: '🧠' }[g]} ${GAMES[g].name}<small>${GAME_RULE[g]}</small>${badge}</div>` + [1, 2, 3].map(d => {
+      const lv = mm ? memPairs(d) : d, L = GAMES[g].lv[lv], st = gstat(g, lv);
+      return `<button class="lvb gsb ${g}${used ? ' used' : ''}" data-act="gstart" data-g="${g}" data-lv="${lv}"><b>${LV_NAME[d]}</b><small>${mm ? `カード ${L.name}（${L.pairs}ペア）` : gameDesc(g, L)}</small><span class="gline"><span class="gbest">${g === 'iq' ? (st.hi ? `🏅 さいこう ${st.hi}/${IQ_N}もん` : 'まだ ちょうせん なし') : st.best ? '🏅 ベスト ' + fmtTime(st.best) : 'まだ クリア なし'}</span>${coinOn() ? `<em class="gcoin">🪙 ${L.coin}まい</em>` : ''}</span></button>`;
     }).join('');
   }).join('');
   $('#gsNote').textContent = (coinOn() ? 'クリアすると コインが もらえるよ（コイン 10まいで シール 1まいと こうかん）' : 'クリアを めざそう！') + (lim ? `　ゲームは それぞれ 1にち ${lim}かい まで` : '');
@@ -2650,8 +2672,10 @@ const ANIMALS = [
   ['🦆', 'あひる', 'pond'], ['🐸', 'かえる', 'pond'], ['🦛', 'かば', 'pond', 'カバ'], ['🐊', 'わに', 'pond', 'ワニ'], ['🦩', 'フラミンゴ', 'pond'],
   ['🐬', 'いるか', 'sea', 'イルカ'], ['🐳', 'くじら', 'sea'], ['🦀', 'かに', 'sea', 'カニ'], ['🐙', 'たこ', 'sea', 'タコ'], ['🐢', 'かめ', 'sea'],
   ['🐧', 'ペンギン', 'ice'], ['🦭', 'アザラシ', 'ice'],
+  ['🐁', 'ねずみ', 'home'], ['🐐', 'やぎ', 'farm'], ['🦌', 'しか', 'forest', 'シカ'], ['🦍', 'ゴリラ', 'forest'], ['🦥', 'ナマケモノ', 'forest'], ['🦜', 'オウム', 'forest'],
+  ['🐫', 'らくだ', 'savanna'], ['🦢', 'はくちょう', 'pond'], ['🦈', 'サメ', 'sea'], ['🐠', 'さかな', 'sea'], ['🦦', 'ラッコ', 'sea'], ['🐻‍❄️', 'しろくま', 'ice'],
 ];
-const MM_RATIO = 1.2;  // カードの たて ÷ よこ
+const mmRatio = n => n > 24 ? 1.05 : 1.2;  // カードの たて ÷ よこ（36まい いじょうは すこし ひくく）
 const MM = { cards: [], open: [], found: [], got: 0, pairs: 6, tries: 0, peek: false, timer: 0, token: 0 };
 const mmSay = a => a[3] || a[1];
 const mmEl = i => $(`#mmBoard [data-i="${i}"]`);
@@ -2664,6 +2688,7 @@ function mmNew(pairs) {
   $('#mmBoard').innerHTML = MM.cards.map((c, i) =>
     `<button class="mc" data-act="mm" data-i="${i}" aria-label="カード"><span class="mc-in"><span class="mc-back"></span><span class="mc-face hb-${c.a[2]}"><i>${c.a[0]}</i><b>${c.a[1]}</b></span></span></button>`).join('');
   $('#mmTray').innerHTML = '';
+  $('#mmTray').classList.toggle('many', pairs > 12);
   mmNote('すきな カードを タッチしてね');
   mmStatus();
 }
@@ -2682,18 +2707,20 @@ function mmLayout() {
   const wrap = $('#mmWrap'), bd = $('#mmBoard'), n = MM.cards.length;
   if (!n || !wrap.clientWidth) return;
   const W = wrap.clientWidth - 20, H = wrap.clientHeight - 26;  // ほし・かげの ぶん すこし あける
-  const gap = Math.round(Math.max(8, Math.min(16, Math.min(W, H) * 0.02)));
+  const gap = Math.round(Math.max(n > 24 ? 6 : 8, Math.min(16, Math.min(W, H) * (n > 24 ? 0.014 : 0.02))));
+  const ratio = mmRatio(n);
   let best = { w: 0, cols: n };
   for (let cols = 2; cols <= n; cols++) {
     if (n % cols) continue;
     const rows = n / cols;
-    const w = Math.min((W - gap * (cols - 1)) / cols, (H - gap * (rows - 1)) / rows / MM_RATIO);
+    const w = Math.min((W - gap * (cols - 1)) / cols, (H - gap * (rows - 1)) / rows / ratio);
     if (w > best.w) best = { w, cols };
   }
   const w = Math.max(40, Math.floor(Math.min(best.w, 230)));
   bd.style.gap = `${gap}px`;
   bd.style.gridTemplateColumns = `repeat(${best.cols}, ${w}px)`;
   bd.style.setProperty('--cw', `${w}px`);
+  bd.style.setProperty('--ch', `${Math.floor(w * ratio)}px`);
 }
 addEventListener('resize', () => { if (screen === 'memory') mmLayout(); });
 if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (screen === 'memory') mmLayout(); });
@@ -2828,40 +2855,112 @@ function stickerDetail(s, sub) {
   Speech.speak(d.name + (s.k ? ' キラキラ' : ''));
 }
 
-// ---------- おうちの方へ の ロック（九九より むずかしい 計算で おとなを かくにん） ----------
-const Gate = { ans: 0, val: '' };
+// ---------- おうちの方へ の ロック（パスワード：すうじ 4〜8けた） ----------
+// パスワードは そのまま しまわず、ハッシュに して しまう（バックアップの もじにも そのままは でない）
+const PIN_MIN = 4, PIN_MAX = 8, PIN_TRY = 5, PIN_WAIT = 60;
+function pinHash(str) {
+  let h1 = 0xdeadbeef ^ 31, h2 = 0x41c6ce57 ^ 31;
+  for (const ch of 'sansu-soccer:' + str) {
+    const c = ch.charCodeAt(0);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+// mode：enter（入れる）・new1（きめる）・new2（もう いちど）・forgot（わすれたとき の けいさん）
+// after：settings（せっていを ひらく）・changed（せってい がめんで へんこう）
+const Gate = { mode: 'enter', after: 'settings', val: '', first: '', ans: 0, miss: 0, until: 0 };
+const GATE_TXT = {
+  enter: ['🔒 おうちの方の確認', 'パスワードを入れて OK を押してください'],
+  new1: ['🔒 パスワードを決める', 'おうちの方へ画面を開くときのパスワードを決めてください（数字4〜8けた）'],
+  new2: ['🔒 パスワードを決める', '確認のため、同じパスワードをもう一度入れてください'],
+  forgot: ['🔑 パスワードを忘れたとき', '次の計算の答えを入れると、パスワードを決め直せます（シールなどの記録は消えません）'],
+};
 function openGate() {
   Speech.stop();
-  let a;
-  do { a = 13 + rand(27); } while (a % 10 === 0);
-  const b = 3 + rand(7);
-  Object.assign(Gate, { ans: a * b, val: '' });
+  gateMode(S().pin ? 'enter' : 'new1', 'settings');
+}
+function gateMode(mode, after, msg) {
+  Object.assign(Gate, { mode, val: '' });
+  if (after) Gate.after = after;
+  if (mode === 'new1') Gate.first = '';
+  let q = '';
+  if (mode === 'forgot') {
+    const a = 101 + rand(899), b = 101 + rand(899);
+    Gate.ans = a * b;
+    q = `${a} × ${b} = `;
+  }
+  const [title, sub] = GATE_TXT[mode];
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'del', '0', 'ok'].map(k =>
     `<button class="gkey${k === 'ok' ? ' ok' : ''}" data-act="gateKey" data-k="${k}">${k === 'del' ? 'けす' : k === 'ok' ? 'OK' : k}</button>`).join('');
-  openModal(`<p class="mq">おうちの方の確認</p>
-    <p class="msub">次の計算の答えを入れて OK を押してください</p>
-    <div class="gate-q">${a} × ${b} = <span class="gate-val" id="gateVal"></span></div>
+  openModal(`<p class="mq">${title}</p>
+    <p class="msub gate-sub">${sub}</p>
+    <div class="gate-q">${q}<span class="gate-val${mode === 'forgot' ? '' : ' pin'}" id="gateVal"></span></div>
+    <p class="gate-msg" id="gateMsg">${msg || ''}</p>
     <div class="gate-pad">${keys}</div>
-    <button class="bigbtn" data-act="closeModal">もどる</button>`, 'tight');
+    <div class="gate-foot"><button class="bigbtn" data-act="closeModal">もどる</button>${mode === 'enter' ? '<button class="gate-link" data-act="gateForgot">パスワードを忘れたとき</button>' : ''}</div>`, 'tight');
+  gateShow();
+}
+function gateShow() {
+  const v = $('#gateVal');
+  if (v) v.textContent = Gate.mode === 'forgot' ? Gate.val : '●'.repeat(Gate.val.length);
+}
+function gateNg(msg) {
+  SFX.wrong();
+  const v = $('#gateVal');
+  Gate.val = '';
+  gateShow();
+  $('#gateMsg').textContent = msg;
+  v.classList.remove('ng'); void v.offsetWidth; v.classList.add('ng');
 }
 function gateKey(k) {
-  const v = $('#gateVal');
+  if (!$('#gateVal')) return;
+  if (Gate.mode === 'enter' && Date.now() < Gate.until) {
+    $('#gateMsg').textContent = `${PIN_TRY}回まちがえたので、あと ${Math.ceil((Gate.until - Date.now()) / 1000)}秒 まってください`;
+    return;
+  }
   if (k !== 'ok') {
-    Gate.val = k === 'del' ? Gate.val.slice(0, -1) : (Gate.val + k).slice(0, 3);
-    v.textContent = Gate.val;
+    const max = Gate.mode === 'forgot' ? 6 : PIN_MAX;
+    Gate.val = k === 'del' ? Gate.val.slice(0, -1) : (Gate.val + k).slice(0, max);
+    $('#gateMsg').textContent = '';
+    gateShow();
     return;
   }
-  if (!Gate.val) return;
-  if (+Gate.val === Gate.ans) {
+  const v = Gate.val;
+  if (!v) return;
+  if (Gate.mode === 'enter') {
+    if (pinHash(v) === S().pin) { Gate.miss = 0; closeModal(); gateOpenSettings(); return; }
+    Gate.miss++;
+    if (Gate.miss >= PIN_TRY) { Gate.miss = 0; Gate.until = Date.now() + PIN_WAIT * 1000; gateNg(`${PIN_TRY}回まちがえたので、${PIN_WAIT}秒 まってからもう一度入れてください`); }
+    else gateNg('パスワードがちがいます');
+    return;
+  }
+  if (Gate.mode === 'new1') {
+    if (v.length < PIN_MIN) { gateNg(`${PIN_MIN}けた以上の数字にしてください`); return; }
+    Gate.first = v;
+    gateMode('new2');
+    return;
+  }
+  if (Gate.mode === 'new2') {
+    if (v !== Gate.first) { gateMode('new1', null, '2回の入力がちがいました。もう一度決めてください'); SFX.wrong(); return; }
+    S().pin = pinHash(v);
+    save();
     closeModal();
-    renderSettings();
-    show('settings');
+    if (Gate.after === 'changed') { renderSettings(); $('#pinNote').textContent = '✅ パスワードを変更しました'; }
+    else gateOpenSettings();
     return;
   }
-  // まちがえたら べつの もんだいに かえる
+  // forgot：あっていたら パスワードを きめなおす
+  if (+v === Gate.ans) { gateMode('new1', 'settings'); return; }
   SFX.wrong();
-  v.classList.remove('ng'); void v.offsetWidth; v.classList.add('ng');
-  setTimeout(() => { if ($('#modal').classList.contains('show') && $('#gateVal') === v) openGate(); }, 500);
+  gateMode('forgot', null, '答えがちがいます。べつの計算に変えました');
+}
+function gateOpenSettings() {
+  renderSettings();
+  $('#pinNote').textContent = '';
+  show('settings');
 }
 
 // ---------- せってい ----------
@@ -2976,8 +3075,10 @@ document.addEventListener('click', e => {
     }
     case 'settings': openGate(); break;
     case 'gateKey': gateKey(b.dataset.k); break;
+    case 'gateForgot': gateMode('forgot', 'settings'); break;
+    case 'pinChange': gateMode('new1', 'changed'); break;
     case 'seg':
-      S()[b.dataset.k] = ['gameLimit', 'memPairs'].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
+      S()[b.dataset.k] = ['gameLimit', 'mem1', 'mem2', 'mem3'].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
       save();
       renderSettings();
       applyInputMode();
