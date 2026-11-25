@@ -359,8 +359,6 @@ body.kb .pad{display:none}
 .gate-val.pin{min-width:5.2em;letter-spacing:.12em;font-size:.8em;height:1.55em;line-height:1.55em}
 .gate-sub{max-width:min(520px,80vw);line-height:1.5;font-size:16px}
 .gate-msg{margin:-4px 0;min-height:1.4em;color:#e0283c;font-weight:800;font-size:16px}
-.gate-foot{display:flex;align-items:center;gap:18px}
-.gate-link{color:#2f6fd8;text-decoration:underline;font-size:15px}
 .gate-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(330px,70vw)}
 .gkey{height:clamp(46px,calc((var(--vh) - 390px)/4.3),68px);border-radius:14px;background:#f1f4f9;font-size:clamp(20px,2.6vw,28px);box-shadow:0 4px 0 #c9d2e0}
 .gkey:active{transform:translateY(3px);box-shadow:0 1px 0 #c9d2e0}
@@ -907,7 +905,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       </div>
       <div class="set-card">
         <h3>🔒 おうちの方へ画面のパスワード</h3>
-        <div class="row"><span class="grow">パスワードを変更する<small>数字4〜8けた。忘れたときは、パスワードの画面の「パスワードを忘れたとき」から、3けた×3けたの計算に答えて決め直せます（記録は消えません）</small></span><button class="mini" data-act="pinChange">変更する</button></div>
+        <div class="row"><span class="grow">パスワードを変更する<small>数字4〜8けた。<b>忘れると、この画面を開けなくなります</b>（決め直す方法はありません）。メモしておいてください。お子さんの遊び・シールの記録はそのまま使えます</small></span><button class="mini" data-act="pinChange">変更する</button></div>
         <p class="note bk-note" id="pinNote"></p>
       </div>
       <div class="set-card">
@@ -2869,14 +2867,14 @@ function pinHash(str) {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
 }
-// mode：enter（入れる）・new1（きめる）・new2（もう いちど）・forgot（わすれたとき の けいさん）
+// mode：enter（入れる）・new1（きめる）・new2（もう いちど）
+// わすれたときに きめなおす ほうほうは つくらない（けいさんなどは こどもが とけて しまう ため）
 // after：settings（せっていを ひらく）・changed（せってい がめんで へんこう）
-const Gate = { mode: 'enter', after: 'settings', val: '', first: '', ans: 0, miss: 0, until: 0 };
+const Gate = { mode: 'enter', after: 'settings', val: '', first: '', miss: 0, until: 0 };
 const GATE_TXT = {
   enter: ['🔒 おうちの方の確認', 'パスワードを入れて OK を押してください'],
-  new1: ['🔒 パスワードを決める', 'おうちの方へ画面を開くときのパスワードを決めてください（数字4〜8けた）'],
+  new1: ['🔒 パスワードを決める', 'おうちの方へ画面を開くときのパスワードを決めてください（数字4〜8けた）。<br><b>忘れると開けなくなります。</b>メモしておいてください'],
   new2: ['🔒 パスワードを決める', '確認のため、同じパスワードをもう一度入れてください'],
-  forgot: ['🔑 パスワードを忘れたとき', '次の計算の答えを入れると、パスワードを決め直せます（シールなどの記録は消えません）'],
 };
 function openGate() {
   Speech.stop();
@@ -2886,26 +2884,20 @@ function gateMode(mode, after, msg) {
   Object.assign(Gate, { mode, val: '' });
   if (after) Gate.after = after;
   if (mode === 'new1') Gate.first = '';
-  let q = '';
-  if (mode === 'forgot') {
-    const a = 101 + rand(899), b = 101 + rand(899);
-    Gate.ans = a * b;
-    q = `${a} × ${b} = `;
-  }
   const [title, sub] = GATE_TXT[mode];
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'del', '0', 'ok'].map(k =>
     `<button class="gkey${k === 'ok' ? ' ok' : ''}" data-act="gateKey" data-k="${k}">${k === 'del' ? 'けす' : k === 'ok' ? 'OK' : k}</button>`).join('');
   openModal(`<p class="mq">${title}</p>
     <p class="msub gate-sub">${sub}</p>
-    <div class="gate-q">${q}<span class="gate-val${mode === 'forgot' ? '' : ' pin'}" id="gateVal"></span></div>
+    <div class="gate-q"><span class="gate-val pin" id="gateVal"></span></div>
     <p class="gate-msg" id="gateMsg">${msg || ''}</p>
     <div class="gate-pad">${keys}</div>
-    <div class="gate-foot"><button class="bigbtn" data-act="closeModal">もどる</button>${mode === 'enter' ? '<button class="gate-link" data-act="gateForgot">パスワードを忘れたとき</button>' : ''}</div>`, 'tight');
+    <button class="bigbtn" data-act="closeModal">もどる</button>`, 'tight');
   gateShow();
 }
 function gateShow() {
   const v = $('#gateVal');
-  if (v) v.textContent = Gate.mode === 'forgot' ? Gate.val : '●'.repeat(Gate.val.length);
+  if (v) v.textContent = '●'.repeat(Gate.val.length);
 }
 function gateNg(msg) {
   SFX.wrong();
@@ -2922,8 +2914,7 @@ function gateKey(k) {
     return;
   }
   if (k !== 'ok') {
-    const max = Gate.mode === 'forgot' ? 6 : PIN_MAX;
-    Gate.val = k === 'del' ? Gate.val.slice(0, -1) : (Gate.val + k).slice(0, max);
+    Gate.val = k === 'del' ? Gate.val.slice(0, -1) : (Gate.val + k).slice(0, PIN_MAX);
     $('#gateMsg').textContent = '';
     gateShow();
     return;
@@ -2943,19 +2934,13 @@ function gateKey(k) {
     gateMode('new2');
     return;
   }
-  if (Gate.mode === 'new2') {
-    if (v !== Gate.first) { gateMode('new1', null, '2回の入力がちがいました。もう一度決めてください'); SFX.wrong(); return; }
-    S().pin = pinHash(v);
-    save();
-    closeModal();
-    if (Gate.after === 'changed') { renderSettings(); $('#pinNote').textContent = '✅ パスワードを変更しました'; }
-    else gateOpenSettings();
-    return;
-  }
-  // forgot：あっていたら パスワードを きめなおす
-  if (+v === Gate.ans) { gateMode('new1', 'settings'); return; }
-  SFX.wrong();
-  gateMode('forgot', null, '答えがちがいます。べつの計算に変えました');
+  // new2：2かい おなじなら きめる
+  if (v !== Gate.first) { gateMode('new1', null, '2回の入力がちがいました。もう一度決めてください'); SFX.wrong(); return; }
+  S().pin = pinHash(v);
+  save();
+  closeModal();
+  if (Gate.after === 'changed') { renderSettings(); $('#pinNote').textContent = '✅ パスワードを変更しました'; }
+  else gateOpenSettings();
 }
 function gateOpenSettings() {
   renderSettings();
@@ -3075,7 +3060,6 @@ document.addEventListener('click', e => {
     }
     case 'settings': openGate(); break;
     case 'gateKey': gateKey(b.dataset.k); break;
-    case 'gateForgot': gateMode('forgot', 'settings'); break;
     case 'pinChange': gateMode('new1', 'changed'); break;
     case 'seg':
       S()[b.dataset.k] = ['gameLimit', 'mem1', 'mem2', 'mem3'].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
