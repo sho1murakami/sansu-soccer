@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800;900&display=swap">
 <style>
 :root{
-  --add:#ff7a2f; --sub:#2f8cff; --mul:#a35bf0;
+  --add:#ff7a2f; --sub:#2f8cff; --mul:#a35bf0; --soro:#9b5a2a;
   --ca:#2f9bff; --cb:#ff8a1f; --cx:#ff3b4f;
   --navy:#132650; --navy-d:#0b1838;
   --yellow:#ffd23f; --gold:#ffb300;
@@ -131,8 +131,12 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
 .gb-state{background:rgba(255,255,255,.18);border-radius:999px;padding:3px 12px;font-size:.88em}
 .gamebar:active{transform:translateY(2px)}
 .gamebar.locked .gb-ico,.gamebar.locked b{opacity:.7}
+/* カギが かかって いるときは ゲームの なまえを かくして、のこりの まいすうを みせる */
+.gamebar.locked .gb-sub{display:none}
+.gamebar{max-width:calc(100% - 40px)}
+.gb-state{overflow:hidden;text-overflow:ellipsis}
 
-.cards{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,24px);padding:0 20px 22px}
+.cards{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.8vw,22px);padding:0 20px 22px}
 .card{
   --c:var(--add);--op:clamp(48px,min(8vw,10vh),96px);
   position:relative;overflow:hidden;min-height:0;
@@ -148,12 +152,17 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;margin:0;cu
   display:grid;place-items:center;font-size:calc(var(--op)*.72);font-weight:900;line-height:1;
   box-shadow:inset 0 -8px 0 rgba(0,0,0,.15),0 5px 0 rgba(0,0,0,.15);
 }
-.card-name{font-size:clamp(22px,min(4vw,5vh),46px);line-height:1.25}
+.card-op.emo{font-size:calc(var(--op)*.56)}
+.card-name{font-size:clamp(22px,min(3.4vw,5vh),44px);line-height:1.25;white-space:nowrap}
 .card-ex{font-size:clamp(16px,2vw,22px);color:var(--mute)}
 .card.pri{box-shadow:0 0 0 5px var(--yellow),0 10px 0 rgba(0,0,0,.22)}
 .card.pri:active{box-shadow:0 0 0 5px var(--yellow),0 4px 0 rgba(0,0,0,.22)}
 .card-ex.mission{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;color:#a86400;font-size:clamp(15px,1.7vw,19px)}
 .card-ex.locked{font-size:clamp(14px,1.6vw,18px);text-align:center}
+.card-ex.need{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;color:#2a6a9e;font-size:clamp(14px,1.6vw,18px);text-align:center}
+.card-ex.ok{color:#16924a;font-size:clamp(14px,1.6vw,18px)}
+.mdots.g i.on{background:#5fb8ff;border-color:#2f8cff}
+.card,.card-ex{text-align:center}
 .mdots{display:inline-flex;gap:4px}
 .mdots i{width:14px;height:14px;border-radius:50%;background:#e6eaf1;border:2px solid #c9d1de}
 .mdots i.on{background:var(--yellow);border-color:#e0a000}
@@ -365,6 +374,13 @@ body.kb .pad{display:none}
 .gkey.ok{background:linear-gradient(#5ee08c,#22b45a);color:#fff;box-shadow:0 4px 0 #15843f}
 .lock-ico{font-size:56px;line-height:1}
 .lock-msg{margin:0;font-size:clamp(18px,2.4vw,24px);line-height:1.55}
+.need-list{display:flex;flex-direction:column;gap:8px;width:min(460px,78vw)}
+.need-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:#f3f6fb;border-radius:16px;padding:8px 14px;font-size:22px;text-align:left}
+.need-row .ni{width:40px;height:40px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:24px;line-height:1}
+.need-row em{font-style:normal;color:#c2410c;font-size:18px;white-space:nowrap}
+.need-row .mdots{grid-column:2/4}
+.need-row.ok{background:#e4f8ea}
+.need-row.ok em{color:#16924a}
 .mbtns{display:flex;gap:14px}
 .mname{font-size:32px;margin:0}
 .msub{margin:0;color:var(--mute);font-size:18px}
@@ -510,6 +526,97 @@ body.kb .pad{display:none}
 .mmtray.many{font-size:clamp(18px,2vw,22px);gap:0 2px}
 .gsb.memory{--kan:#f0801e}
 
+
+/* ---------- そろばん（そろばんクイズ と おなじ がめん） ---------- */
+#soro [hidden]{display:none!important}
+#soro{--take:#0f9a6e;--take-bg:#d8f6ea;--put:#f2621b;--put-bg:#ffe5d4;--sboard:#f4e7cc;--frame:#6e4428;--beam:#3e2617;--rod:#b89a73;--bead:#4b2e1d;--shine:#8a6247}
+.sr-main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,4.3fr) minmax(0,5.7fr);gap:16px;padding:4px 16px 16px}
+.sr-card{margin:0;min-height:0;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;border-radius:28px;padding:12px 12px 10px;box-shadow:0 8px 0 rgba(0,0,0,.22)}
+#srSb{flex:1;min-height:0;width:100%;display:block}
+.sr-legend{display:flex;gap:18px;font-size:16px;color:var(--mute)}
+.sr-legend i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.sr-side{position:relative;min-height:0;display:flex;flex-direction:column;gap:12px;overflow-y:auto;padding:2px 2px 10px}
+.sr-eq{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:.2em;font-size:clamp(40px,min(6vw,9.5vh),86px);line-height:1;font-weight:900;color:#fff;
+  background:linear-gradient(#1d3670,var(--navy));border:5px solid var(--navy-d);border-radius:.28em;padding:.1em .4em;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.07),0 7px 0 rgba(0,0,0,.28);font-variant-numeric:tabular-nums;
+}
+.sr-eq .na{color:#6cc0ff}
+.sr-eq .nb{color:#ffb35c}
+.sr-eq.sub .nb{color:#ff7d8a}
+.sr-eqr{min-width:1.6em;height:1.2em;display:grid;place-items:center;padding:0 .12em;border-radius:.2em;background:#fff;color:#b6c0d4;box-shadow:inset 0 -.08em 0 rgba(0,0,0,.12)}
+.sr-eqr.ok{background:#d6ffe4;color:#0c8a3e;animation:pop .4s}
+.sr-bubble{display:flex;flex-direction:column;gap:8px;background:#fff;border-radius:22px;padding:12px 18px;box-shadow:0 6px 0 rgba(0,0,0,.2)}
+.sr-q{margin:0;font-size:clamp(22px,min(2.6vw,4.2vh),32px);line-height:1.35}
+.sr-steps{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.sr-steps li{width:36px;height:8px;border-radius:4px;background:#e1e6ef}
+.sr-steps li.on{background:var(--take)}
+.sr-steps li.done{background:#9aa6b8}
+.sr-choices{display:flex;flex-direction:column;gap:12px}
+.sr-choices.yn{flex-direction:row}
+.sr-choices.yn .sr-opt{flex:1}
+.sr-opt{display:flex;align-items:center;gap:10px}
+.sr-cspk{flex:none;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.92);font-size:22px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.sr-cspk:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.sr-choice{
+  flex:1;min-width:0;min-height:clamp(60px,9vh,82px);text-align:left;padding:10px 20px;background:#fff;border-radius:20px;
+  font-size:clamp(22px,min(2.6vw,4.2vh),32px);line-height:1.3;box-shadow:0 6px 0 #b8c4d8;transition:opacity .2s,background .15s;
+}
+.sr-choices.yn .sr-choice{text-align:center}
+.sr-choice:active{transform:translateY(4px);box-shadow:0 2px 0 #b8c4d8}
+.sr-choice.right{background:#d6ffe4;box-shadow:0 6px 0 #22b45a}
+.sr-choice.nope{opacity:.35}
+#soro .pt{display:inline-block;white-space:nowrap}
+#soro .pt+.pt{margin-left:.3em}
+#soro .pt b{font-size:1.15em;font-weight:900}
+#soro .pt.take{color:var(--take)}
+#soro .pt.put{color:var(--put)}
+.sr-hint{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:var(--yellow);color:#5a3c00;border-radius:20px;padding:10px 18px;box-shadow:0 5px 0 #c99a00;font-size:clamp(18px,min(2.2vw,3.4vh),24px);animation:pop .35s;cursor:pointer}
+.sr-hint .hs{font-size:.9em}
+/* ひらがなの わかちがきは スペースでだけ かいぎょう（「2こ」が わかれないように） */
+.sr-hint,.sr-q{word-break:keep-all;overflow-wrap:anywhere}
+.sr-qrow{display:flex;align-items:center;gap:12px}
+.sr-qrow .sr-q{flex:1;min-width:0}
+.sr-hintbtn{flex:none;background:var(--yellow);color:var(--ink);padding:8px 18px;border-radius:999px;font-size:clamp(18px,min(2vw,3.2vh),24px);box-shadow:0 5px 0 #c99a00;white-space:nowrap}
+.sr-hintbtn:active{transform:translateY(3px);box-shadow:0 2px 0 #c99a00}
+.sr-tf{display:grid;grid-template-columns:repeat(5,24px);gap:5px}
+.sr-tf i{width:24px;height:24px;border-radius:50%;border:3px dashed #7a5600}
+.sr-tf i.on{background:#7a5600;border-style:solid}
+.sr-answer{background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 rgba(0,0,0,.2);font-size:clamp(24px,min(3vw,4.8vh),38px);line-height:1.4}
+.sr-answer .pt{border-radius:10px;padding:2px 6px;transition:background .2s}
+.sr-answer .pt.act.take{background:var(--take-bg)}
+.sr-answer .pt.act.put{background:var(--put-bg)}
+.sr-after{display:flex;gap:12px;flex-wrap:wrap}
+.sr-pass{
+  position:absolute;left:50%;top:42%;z-index:5;pointer-events:none;opacity:0;transform:translate(-50%,-50%);
+  font-size:clamp(28px,4vw,48px);color:#fff;background:linear-gradient(#5ee08c,#22b45a);padding:.2em .8em;border-radius:999px;
+  box-shadow:0 6px 0 #15843f;text-shadow:0 2px 0 rgba(0,0,0,.2);white-space:nowrap;
+}
+.sr-pass.show{animation:passPop 1s ease forwards}
+.sb-board{fill:var(--sboard)}
+.sb-frame{fill:none;stroke:var(--frame);stroke-width:14}
+.sb-rod{stroke:var(--rod);stroke-width:5;stroke-linecap:round}
+.sb-beam{stroke:var(--beam);stroke-width:6}
+.bead{transition:transform .55s cubic-bezier(.3,.8,.3,1)}
+.still .bead{transition:none}
+.bead .body{fill:var(--bead);stroke:var(--bead);stroke-width:4;stroke-linejoin:round;transition:fill .2s,stroke .2s}
+.bead .shine{fill:none;stroke:var(--shine);stroke-width:3;stroke-linecap:round;opacity:.65}
+.bead.is-take .body{fill:var(--take);stroke:var(--take)}
+.bead.is-put .body{fill:var(--put);stroke:var(--put)}
+.bead.is-take .shine,.bead.is-put .shine{stroke:#fff;opacity:.45}
+.sb-side{fill:var(--mute);font-size:16px;font-weight:800;font-family:inherit}
+.sb-digit{fill:var(--ink);font-size:32px;font-weight:900;font-family:inherit}
+.sb-label{fill:var(--mute);font-size:15px;font-weight:800;font-family:inherit}
+.hl{fill:none;stroke:#e0a000;stroke-width:4;stroke-dasharray:10 7;opacity:0}
+.hl.on{animation:blinkO 1s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){ .bead{transition-duration:.15s} .hl.on{animation:none;opacity:1} }
+details summary{cursor:pointer;font-size:17px;font-weight:800;padding:6px 0}
+.rule{display:grid;grid-template-columns:100px minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid #edf0f5;font-size:15px}
+.rule p{margin:0 0 2px}
+.rule-ph{font-weight:800;margin-right:10px}
+.rule-list{color:#5d6880;font-variant-numeric:tabular-nums}
+.rules-h{margin:14px 0 4px;font-size:17px}
+
 /* ---------- IQテスト ---------- */
 .iqmain{flex:1;min-height:0;display:flex;gap:clamp(12px,2vw,28px);padding:4px 18px 14px}
 .iqcard{flex:1.25;min-width:0;min-height:0;background:#fff;border-radius:24px;box-shadow:0 6px 0 rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2vh,22px);padding:16px;overflow:hidden}
@@ -585,6 +692,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
 @media (orientation:portrait){
   .summary{grid-template-columns:auto 1fr auto;grid-template-areas:"t c b" "r r r"}
   .total{grid-area:t}.coinbtn{grid-area:c;justify-self:end}.bookbtn{grid-area:b;justify-self:end}.rank-wrap{grid-area:r}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sr-main{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,40%) minmax(0,1fr)}
   .gmain{flex-direction:column}
   .gboard{--gb:min(92vw,calc(var(--vh) - 470px),680px)}
   .gside{width:min(100%,640px)}
@@ -615,6 +724,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
 @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes blinkO{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes passPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}30%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
 @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-.12em)}40%{transform:translateX(.12em)}60%{transform:translateX(-.08em)}80%{transform:translateX(.06em)}}
 @keyframes blink{0%,100%{box-shadow:inset 0 -.08em 0 rgba(0,0,0,.12),0 0 0 0 rgba(255,210,63,.9)}50%{box-shadow:inset 0 -.08em 0 rgba(0,0,0,.12),0 0 0 .12em rgba(255,210,63,.9)}}
 @keyframes ballIn{from{opacity:0;transform:scale(.2) rotate(-120deg)}to{opacity:1;transform:none}}
@@ -654,6 +765,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
               <option value="add">＋ たしざん</option>
               <option value="sub">− ひきざん</option>
               <option value="mul">× かけざん</option>
+              <option value="soro">🧮 そろばん</option>
             </select>
             の ランク
           </span>
@@ -687,6 +799,13 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <span class="card-ex">九九：3 × 4</span>
         <span class="card-cnt">シール<b data-cnt="mul">0</b>まい</span>
         <span class="card-mini" data-mini="mul"></span>
+      </button>
+      <button class="card" data-act="start" data-theme="soro" style="--c:var(--soro)">
+        <span class="card-op emo">🧮</span>
+        <span class="card-name">そろばん</span>
+        <span class="card-ex">れい：5 + 9</span>
+        <span class="card-cnt">シール<b data-cnt="soro">0</b>まい</span>
+        <span class="card-mini" data-mini="soro"></span>
       </button>
     </div>
     <button class="gamebar" data-act="gsel" id="gameBar"><span class="gb-ico">🎮</span><b>ゲーム</b><span class="gb-sub">めいろ ・ しんけいすいじゃく ・ IQテスト</span><span class="gb-state" id="gameState">🪙 クリアで コイン</span></button>
@@ -783,6 +902,50 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
     </div>
   </section>
 
+  <!-- そろばん（そろばんクイズの「ぜんぶ」） -->
+  <section class="screen pitch" id="soro">
+    <div class="qbar">
+      <button class="qquit" data-act="quit" aria-label="やめる">✕</button>
+      <span class="qtheme" id="srTheme" style="--tc:var(--soro)">🧮 そろばん</span>
+      <div class="pg" id="srPg"></div>
+      <span class="combo" id="srCombo"></span>
+      <button class="qsay" data-act="srRepeat" aria-label="もういちど よむ">🔊</button>
+    </div>
+    <div class="sr-main">
+      <figure class="sr-card">
+        <svg id="srSb" class="still" viewBox="0 0 360 336" role="img" aria-label="そろばん">
+          <rect class="sb-board" x="70" y="12" width="280" height="258" rx="18"/>
+          <line class="sb-rod" x1="145" y1="19" x2="145" y2="263"/>
+          <line class="sb-rod" x1="275" y1="19" x2="275" y2="263"/>
+          <line class="sb-beam" x1="70" y1="102" x2="350" y2="102"/>
+          <rect class="sb-frame" x="70" y="12" width="280" height="258" rx="18"/>
+          <text class="sb-side" x="36" y="62" text-anchor="middle">5だま</text>
+          <text class="sb-side" x="36" y="172" text-anchor="middle">1だま</text>
+          <g id="srBeads"></g>
+          <rect id="srHl5" class="hl" x="217" y="27" width="116" height="72" rx="14"/>
+          <rect id="srHl1" class="hl" x="217" y="105" width="116" height="160" rx="14"/>
+          <text id="srDt" class="sb-digit" x="145" y="306" text-anchor="middle">0</text>
+          <text id="srDo" class="sb-digit" x="275" y="306" text-anchor="middle">0</text>
+          <text class="sb-label" x="145" y="328" text-anchor="middle">じゅうの くらい</text>
+          <text class="sb-label" x="275" y="328" text-anchor="middle">いちの くらい</text>
+        </svg>
+        <div class="sr-legend"><span><i style="background:var(--take)"></i>とる</span><span><i style="background:var(--put)"></i>いれる</span></div>
+      </figure>
+      <div class="sr-side" id="srSide">
+        <div class="sr-eq" id="srEq"><span class="na" id="srA">5</span><span id="srOp">+</span><span class="nb" id="srN">9</span><span>=</span><span class="sr-eqr" id="srR">?</span></div>
+        <div class="sr-bubble"><div class="sr-qrow"><p class="sr-q" id="srQ"></p><button class="sr-hintbtn" data-act="srHint" id="srHintBtn">💡 ヒント</button></div><ol class="sr-steps" id="srSteps" aria-hidden="true"></ol></div>
+        <div class="sr-choices" id="srChoices"></div>
+        <div class="sr-hint" id="srHintBox" hidden></div>
+        <div class="sr-answer" id="srAnswer" hidden></div>
+        <div class="sr-after" id="srAfter" hidden>
+          <button class="bigbtn yellow" data-act="srNext" id="srNextBtn">つぎへ ▶</button>
+          <button class="bigbtn" data-act="srReplay">🔁 もういちど みる</button>
+        </div>
+        <div class="sr-pass" id="srPass">⚽ ナイスパス！</div>
+      </div>
+    </div>
+  </section>
+
   <!-- もんだい -->
   <section class="screen pitch" id="quiz">
     <div class="qbar">
@@ -834,6 +997,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
       <button data-act="bookTab" data-f="add">たしざん<b></b></button>
       <button data-act="bookTab" data-f="sub">ひきざん<b></b></button>
       <button data-act="bookTab" data-f="mul">かけざん<b></b></button>
+      <button data-act="bookTab" data-f="soro">そろばん<b></b></button>
       <button data-act="bookTab" data-f="coin">🪙 こうかん<b></b></button>
       <button data-act="bookTab" data-f="zukan">🔍 ずかん</button>
       <button data-act="bookTab" data-f="odds">🎲 でる かくりつ</button>
@@ -872,16 +1036,42 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         </div>
       </div>
       <div class="set-card">
+        <h3>🧮 そろばん</h3>
+        <div class="row">
+          <span class="grow">出す問題<small>トップの「そろばん」を押すと、そろばんクイズの「ぜんぶ」（5のともだち・10のともだち・5だまにちゅうい・5かな？10かな？をまぜたもの）がすぐ始まります。1回5問で、3問以上をまちがえずに正解するとシール1枚（ヒントを見て正解した問題も数えます）</small></span>
+          <div class="seg"><button data-act="seg" data-k="soroMode" data-val="add">たしざん</button><button data-act="seg" data-k="soroMode" data-val="sub">ひきざん</button><button data-act="seg" data-k="soroMode" data-val="mix">りょうほう</button></div>
+        </div>
+        <div class="row">
+          <span class="grow">言い方の選択肢の数<small>2つにすると、まちがえやすい言い方だけが並びます</small></span>
+          <div class="seg"><button data-act="seg" data-k="soroChoices" data-val="2">2つ</button><button data-act="seg" data-k="soroChoices" data-val="3">3つ</button></div>
+        </div>
+        <div class="row">
+          <span class="grow">ヒントの出し方<small>ボタンで出す：こまったら「💡 ヒント」を押して出します。いつも出す：最初から出しておきます</small></span>
+          <div class="seg"><button data-act="seg" data-k="soroHint" data-val="button">ボタンで出す</button><button data-act="seg" data-k="soroHint" data-val="always">いつも出す</button></div>
+        </div>
+        <p class="note" id="soroWeak"></p>
+        <details><summary>考え方と、出題する問題・言い方の一覧</summary>
+          <p class="note">「たせない9は 1とって10いれる」のような言い方は1つの決まりで、5+9 などの例外は「とりたい1だまが足りない」ときだけ起きます。ひき算も同じで、14−9 などの例外は「いれたい1だまが、もういっぱいで入らない」ときだけです。<br>
+          答えを選ぶ前に「1だま、とれる？（ひき算は、いれられる？）」「5だま、いれられる？（ひき算は、とれる？）」と、そろばんを見て判断する問題も出します。組み合わせを暗記しなくても、目で見て正しい言い方を選べるようにするためです。</p>
+          <div id="soroRules"></div>
+        </details>
+      </div>
+      <div class="set-card">
         <h3>🎯 優先テーマ</h3>
         <div class="row">
           <span class="grow">優先する計算<small>この計算のシールをその日に5枚集めるまで、ほかの計算ではシールがもらえません（練習はできます）</small></span>
-          <div class="seg"><button data-act="seg" data-k="priority" data-val="add">たしざん</button><button data-act="seg" data-k="priority" data-val="sub">ひきざん</button><button data-act="seg" data-k="priority" data-val="mul">かけざん</button></div>
+          <div class="seg"><button data-act="seg" data-k="priority" data-val="add">たしざん</button><button data-act="seg" data-k="priority" data-val="sub">ひきざん</button><button data-act="seg" data-k="priority" data-val="mul">かけざん</button><button data-act="seg" data-k="priority" data-val="soro">そろばん</button></div>
         </div>
         <p class="note" id="missionNote"></p>
       </div>
       <div class="set-card">
         <h3>🎮 ゲーム</h3>
-        <label class="row"><span class="grow">きょうのミッションが終わるまでゲームにカギをかける<small>優先テーマのシールをその日に5枚集めると、めいろ・しんけいすいじゃく・IQテストで遊べるようになります</small></span><span class="sw"><input type="checkbox" data-set="gameLock"><i></i></span></label>
+        <div class="row"><span class="grow">ゲームのカギ：その日に集めるシール<small>下の枚数を、その日のうちに全部集めると、めいろ・しんけいすいじゃく・IQテストで遊べるようになります。全部「なし」にすると、いつでも遊べます</small></span></div>
+        <div class="row"><span class="grow">たしざん</span><div class="seg"><button data-act="seg" data-k="needAdd" data-val="0">なし</button><button data-act="seg" data-k="needAdd" data-val="1">1枚</button><button data-act="seg" data-k="needAdd" data-val="2">2枚</button><button data-act="seg" data-k="needAdd" data-val="3">3枚</button><button data-act="seg" data-k="needAdd" data-val="5">5枚</button><button data-act="seg" data-k="needAdd" data-val="10">10枚</button></div></div>
+        <div class="row"><span class="grow">ひきざん</span><div class="seg"><button data-act="seg" data-k="needSub" data-val="0">なし</button><button data-act="seg" data-k="needSub" data-val="1">1枚</button><button data-act="seg" data-k="needSub" data-val="2">2枚</button><button data-act="seg" data-k="needSub" data-val="3">3枚</button><button data-act="seg" data-k="needSub" data-val="5">5枚</button><button data-act="seg" data-k="needSub" data-val="10">10枚</button></div></div>
+        <div class="row"><span class="grow">かけざん</span><div class="seg"><button data-act="seg" data-k="needMul" data-val="0">なし</button><button data-act="seg" data-k="needMul" data-val="1">1枚</button><button data-act="seg" data-k="needMul" data-val="2">2枚</button><button data-act="seg" data-k="needMul" data-val="3">3枚</button><button data-act="seg" data-k="needMul" data-val="5">5枚</button><button data-act="seg" data-k="needMul" data-val="10">10枚</button></div></div>
+        <div class="row"><span class="grow">そろばん</span><div class="seg"><button data-act="seg" data-k="needSoro" data-val="0">なし</button><button data-act="seg" data-k="needSoro" data-val="1">1枚</button><button data-act="seg" data-k="needSoro" data-val="2">2枚</button><button data-act="seg" data-k="needSoro" data-val="3">3枚</button><button data-act="seg" data-k="needSoro" data-val="5">5枚</button><button data-act="seg" data-k="needSoro" data-val="10">10枚</button></div></div>
+        <p class="note" id="needNote"></p>
         <label class="row"><span class="grow">ゲームをクリアしたらコインをもらえる<small>クリア1回でコイン1枚（IQテストは7問中4問以上の正解）。コイン10枚で、トップ画面の「🪙」ボタンからシール1枚（ランダム）と交換できます（自動では交換しません）。オフにすると、ゲームはコインなしで遊べます。ヒントは1回3つまでです</small></span><span class="sw"><input type="checkbox" data-set="gameCoin"><i></i></span></label>
         <div class="row">
           <span class="grow">1日に遊べる回数（ゲームごと）<small>めいろ・しんけいすいじゃく・IQテストのそれぞれで、この回数まで遊べます。遊びはじめたとき（めいろは線を引きはじめた、しんけいすいじゃくはカードをめくった、IQテストは1問目に答えたとき）に1回と数えるので、選びまちがえてすぐ戻ったときは数えません</small></span>
@@ -900,7 +1090,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         <h3>🏅 ランク</h3>
         <div class="row">
           <span class="grow">トップ画面で最初に出すランク<small>じどう：たしざん → ひきざん → かけざん の順に表示し、ワールドクラス（シール300枚）になったら次の計算に切り替えます。トップ画面のプルダウンでいつでも切り替えられます</small></span>
-          <div class="seg"><button data-act="seg" data-k="rankView" data-val="auto">じどう</button><button data-act="seg" data-k="rankView" data-val="add">たしざん</button><button data-act="seg" data-k="rankView" data-val="sub">ひきざん</button><button data-act="seg" data-k="rankView" data-val="mul">かけざん</button></div>
+          <div class="seg"><button data-act="seg" data-k="rankView" data-val="auto">じどう</button><button data-act="seg" data-k="rankView" data-val="add">たしざん</button><button data-act="seg" data-k="rankView" data-val="sub">ひきざん</button><button data-act="seg" data-k="rankView" data-val="mul">かけざん</button><button data-act="seg" data-k="rankView" data-val="soro">そろばん</button></div>
         </div>
       </div>
       <div class="set-card">
@@ -934,7 +1124,8 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
         ・かけざんの1の段は練習用で、シールはもらえません。<br>
         ・シールは全100種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
-        ・トップ画面の下の「ゲーム」で、めいろ・しんけいすいじゃく・IQテストを遊べます（それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。</p>
+        ・トップ画面の下の「ゲーム」で、めいろ・しんけいすいじゃく・IQテストを遊べます（はじめは、その日に たしざん と そろばん のシールを5枚ずつ集めてから。それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。<br>
+        ・「そろばん」は、前の「そろばんクイズ」の「ぜんぶ」と同じ問題です。そろばんクイズでもらったシールは、下の「記録のバックアップ」で読み込むと、そろばんのシールに加わります。</p>
       </div>
     </div>
   </section>
@@ -1016,7 +1207,9 @@ const THEMES = {
   add: { name: 'たしざん', op: '+', say: 'たす', color: 'var(--add)', ex: 'れい：3 + 5' },
   sub: { name: 'ひきざん', op: '−', say: 'ひく', color: 'var(--sub)', ex: 'れい：8 − 3' },
   mul: { name: 'かけざん', op: '×', say: 'かける', color: 'var(--mul)', ex: '九九：3 × 4' },
+  soro: { name: 'そろばん', op: '', say: '', color: 'var(--soro)', ex: 'れい：5 + 9' },  // もんだいは Soro（そろばんクイズの「ぜんぶ」）
 };
+const THEME_ICON = { add: '＋', sub: '−', mul: '×', soro: '🧮' };
 
 // 九九の となえかた（[だん-1][かず-1]）
 const KUKU = [
@@ -1093,7 +1286,7 @@ function stickerOdds(perfect) {
 // ランク（たしざん・ひきざん・かけざん それぞれ）[ひつような まいすう, なまえ, アイコン]
 const RANKS = [[0, 'ルーキー', '🌱'], [15, 'レギュラー', '⚽'], [40, 'エース', '🔥'], [80, 'キャプテン', '🎖️'], [130, 'スター', '⭐'], [200, 'レジェンド', '👑'], [300, 'ワールドクラス', '🌏']];
 const TOP_RANK = RANKS[RANKS.length - 1][0];
-const RANK_ORDER = ['add', 'sub', 'mul'];
+const RANK_ORDER = ['add', 'sub', 'mul', 'soro'];
 
 const QUESTIONS = 7;  // 1かいの もんだい数
 const PASS = 4;       // シールが もらえる せいかい数（7もん ちゅう）
@@ -1104,14 +1297,22 @@ const NO_STICKER_DAN = 1;  // シールが もらえない 九九の だん（�
 const PRAISE = [['ゴール！', 'ゴール！'], ['ゴール！', 'ゴール！'], ['ナイスシュート！', 'ナイスシュート！'], ['すごい！', 'すごい！'], ['やったね！', 'やったね！'], ['せいかい！', '正解！'], ['てんさい！', '天才！'], ['ばっちり！', 'ばっちり！']];
 const RETRY = ['おしい！ もう一回', 'ちがうよ。もう一回 やってみよう', 'おしい！ ボールを かぞえてみよう'];
 
+// ゲームの カギ：その日に あつめる シールの まいすう（テーマごと。0 は なし）
+const NEED_KEY = { add: 'needAdd', sub: 'needSub', mul: 'needMul', soro: 'needSoro' };
+const NEED_OPTS = [0, 1, 2, 3, 5, 10];
+
 // ---------- 保存 ----------
 const KEY = 'sansu-soccer:v1';
 const blankStats = () => ({ play: 0, perfect: 0, q: 0, ok: 0 });
 function defaults() {
   return {
     v: 2, stickers: [], miss: {},
-    stats: { add: blankStats(), sub: blankStats(), mul: blankStats() },
-    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameLock: true, gameCoin: true, gameLimit: 3, mem1: 6, mem2: 8, mem3: 12, pin: '' },
+    stats: { add: blankStats(), sub: blankStats(), mul: blankStats(), soro: blankStats() },
+    soroMiss: {},  // そろばんの にがて（そろばんクイズ と おなじ かきかた：'5+9'・'14-9'）
+    settings: { speech: true, rate: 1.0, voice: '', sfx: true, input: 'keyboard', auto: true, hint: 'button', order: 'random', rankView: 'auto', priority: 'add', gameCoin: true, gameLimit: 3,
+      soroMode: 'add', soroChoices: 3, soroHint: 'button',  // そろばん
+      needAdd: 5, needSub: 0, needMul: 0, needSoro: 5,      // ゲームの カギ：その日に あつめる シール
+      mem1: 6, mem2: 8, mem3: 12, pin: '' },
     coins: 0, coinsTotal: 0, gstats: {},  // ゲームの コイン（10まいで シール1まいと こうかん）と きろく
     gday: {},  // きょう ゲームを あそんだ かいすう { d: 日づけ, meiro, memory, iq }
   };
@@ -1130,6 +1331,7 @@ function load() {
       miss: d.miss || {},
       gstats: d.gstats && typeof d.gstats === 'object' ? d.gstats : {},
       gday: d.gday && typeof d.gday === 'object' ? d.gday : {},
+      soroMiss: d.soroMiss && typeof d.soroMiss === 'object' ? d.soroMiss : {},
       coins: Number.isFinite(d.coins) ? d.coins : 0,
       coinsTotal: Number.isFinite(d.coinsTotal) ? d.coinsTotal : 0,
     };
@@ -1147,6 +1349,14 @@ function load() {
       D.settings[k] = [6, 8, 12, 18, 24].includes(v) ? v : def.settings[k];
     }
     if (typeof D.settings.pin !== 'string') D.settings.pin = '';
+    // まえの「ミッションが おわるまで ゲームに カギ」を オフに していたら、あたらしい カギも ぜんぶ なしに
+    if (D.settings.gameLock === false) for (const k of Object.values(NEED_KEY)) D.settings[k] = 0;
+    delete D.settings.gameLock;
+    for (const k of Object.values(NEED_KEY)) { const v = Number(D.settings[k]); D.settings[k] = NEED_OPTS.includes(v) ? v : def.settings[k]; }
+    if (!['add', 'sub', 'mix'].includes(D.settings.soroMode)) D.settings.soroMode = 'add';
+    D.settings.soroChoices = Number(D.settings.soroChoices) === 2 ? 2 : 3;
+    if (D.settings.soroHint !== 'always') D.settings.soroHint = 'button';
+    if (!THEMES[D.settings.priority]) D.settings.priority = 'add';
   } catch (e) { D = defaults(); }
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* 保存できなくても あそべる */ } }
@@ -1156,7 +1366,7 @@ const BK_APP = 'sansu-soccer';  // 9さい向けは 'kakezan-soccer'（まちが
 const bkNote = t => { $('#bkNote').textContent = t; };
 function bkSummary(d) {
   const st = Array.isArray(d.stickers) ? d.stickers : [], c = t => st.filter(s => s.t === t).length;
-  return `シール ${st.length}枚（たしざん ${c('add')}・ひきざん ${c('sub')}・かけざん ${c('mul')}）・コイン ${d.coins || 0}枚`;
+  return `シール ${st.length}枚（たしざん ${c('add')}・ひきざん ${c('sub')}・かけざん ${c('mul')}・そろばん ${c('soro')}）・コイン ${d.coins || 0}枚`;
 }
 const bkMake = () => JSON.stringify({ app: BK_APP, v: 1, at: new Date().toISOString(), data: D });
 async function bkExport() {
@@ -1197,6 +1407,16 @@ function bkImport() {
   if (!raw) { bkNote('上の欄に バックアップの文字を はりつけてください。'); return; }
   let obj;
   try { obj = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)); } catch (e) { obj = null; }
+  if (obj && obj.app === 'soroban-quiz' && obj.data && Array.isArray(obj.data.stickers)) {
+    const n = obj.data.stickers.length;
+    if (!confirm(`そろばんクイズの記録を読み込みますか？\n\nそろばんクイズのシール ${n}枚を、このアプリの「そろばん」のシールに加えます。今の記録は消えません（すでに読み込んだシールは、もう一度は加えません）。`)) return;
+    const added = soroMerge(obj.data);
+    save();
+    renderSettings();
+    $('#bkText').value = '';
+    bkNote(added ? `✅ そろばんのシールを ${added}枚 加えました（${bkSummary(D)}）。` : '✅ このシールは、もう読み込んであります。');
+    return;
+  }
   if (obj && obj.app === 'kakezan-soccer') {
     bkNote('⚠️ これは 9さい向けの アプリの バックアップです。9さい向けの アプリで 読み込んでください。');
     return;
@@ -1351,6 +1571,14 @@ const SFX = (() => {
     tap() { if (on()) tone(740, now(), 0.07, { vol: 0.12 }); },
     pop(n) { if (on()) tone(520 + Math.min(n, 20) * 40, now(), 0.12, { type: 'triangle', vol: 0.22 }); },
     start() { if (on()) whistle(now(), 0.3); },
+    // そろばん：とちゅうの ステップに せいかい（ちょんと けって パス）
+    pass() {
+      if (!on()) return;
+      const t = now();
+      tone(170, t, 0.1, { vol: 0.4, f2: 60 });
+      tone(987.8, t + 0.08, 0.14, { type: 'triangle', vol: 0.16 });
+      tone(1318.5, t + 0.17, 0.2, { type: 'triangle', vol: 0.16 });
+    },
     goal(combo) {
       if (!on()) return;
       const t = now();
@@ -1527,11 +1755,11 @@ function awardSticker(theme, dan, perfect) {
   const w = DESIGNS.map(d => stickerW(d, owned, perfect));
   let r = Math.random() * w.reduce((a, b) => a + b, 0), i = 0;
   for (; i < DESIGNS.length - 1; i++) { r -= w[i]; if (r <= 0) break; }
-  const before = rankOf(themeCount(theme)).r, leftBefore = missionLeft();
+  const before = rankOf(themeCount(theme)).r, leftBefore = missionLeft(), lockedBefore = gameLocked();
   const s = { d: DESIGNS[i].id, t: theme, k: Math.random() < SHINY_RATE ? 1 : 0, at: Date.now(), dan: dan || 0 };
   if (perfect) s.pf = 1;
   D.stickers.push(s);
-  return { s, isNew: !owned.has(s.d), rankUp: !!THEMES[theme] && rankOf(themeCount(theme)).r !== before, missionClear: leftBefore > 0 && missionLeft() === 0 };
+  return { s, isNew: !owned.has(s.d), rankUp: !!THEMES[theme] && rankOf(themeCount(theme)).r !== before, missionClear: leftBefore > 0 && missionLeft() === 0, gameOpen: lockedBefore && !gameLocked() };
 }
 
 // ---------- ホーム ----------
@@ -1555,23 +1783,37 @@ function renderHome() {
   const gl = gameLocked();
   const done = !gl && gAllDone();
   $('#gameBar').classList.toggle('locked', gl || done);
-  $('#gameState').textContent = gl ? `🔒 ミッションの あと（あと ${missionLeft()}まい）` : done ? '🌙 きょうは おしまい' : coinOn() ? '🪙 クリアで コイン' : '▶ あそぶ';
+  $('#gameState').textContent = gl ? '🔒 ' + needList().map(t => `${THEMES[t].name} あと${needLeft(t)}`).join('・') : done ? '🌙 きょうは おしまい' : coinOn() ? '🪙 クリアで コイン' : '▶ あそぶ';
   const cb = $('#coinBtn'), can = D.coins >= COIN_RATE;
   cb.hidden = !coinOn() && !D.coins;
   $('#coinNum').textContent = D.coins;
   $('#coinTxt').textContent = can ? '🎁 シールと こうかん！' : `あと ${COIN_RATE - D.coins}まいで こうかん`;
   cb.classList.toggle('ready', can);
 }
+const dotsHTML = (n, on, cls = '') => `<span class="mdots${cls}">${Array.from({ length: n }, (_, i) => `<i class="${i < on ? 'on' : ''}"></i>`).join('')}</span>`;
+// カードの したの ことば：ミッション → シールの カギ → ゲームまでの まいすう → れい の じゅん
 function renderMission(t) {
   const card = $(`.card[data-theme="${t}"]`), ex = card.querySelector('.card-ex');
   const pri = S().priority, done = missionDone(), isPri = t === pri, locked = stickerLocked(t);
-  card.classList.toggle('pri', isPri && done < MISSION);
-  ex.className = 'card-ex' + (isPri ? ' mission' : locked ? ' locked' : '');
-  if (isPri && done >= MISSION) ex.textContent = '✅ きょうの ミッション クリア！';
-  else if (isPri) {
-    const dots = Array.from({ length: MISSION }, (_, i) => `<i class="${i < done ? 'on' : ''}"></i>`).join('');
-    ex.innerHTML = `⭐ きょうの ミッション <span class="mdots">${dots}</span>`;
-  } else ex.textContent = locked ? `🔒 シールは ${THEMES[pri].name}の あと` : THEMES[t].ex;
+  const need = needOf(t), left = needLeft(t), example = t === 'soro' ? Soro.exText() : THEMES[t].ex;
+  const missionOn = isPri && done < MISSION, needOn = !locked && !missionOn && left > 0;
+  card.classList.toggle('pri', missionOn || (needOn && missionLeft() === 0));
+  if (missionOn) {
+    ex.className = 'card-ex mission';
+    ex.innerHTML = `⭐ きょうの ミッション ${dotsHTML(MISSION, done)}`;
+  } else if (locked) {
+    ex.className = 'card-ex locked';
+    ex.textContent = `🔒 シールは ${THEMES[pri].name}の あと`;
+  } else if (needOn) {
+    ex.className = 'card-ex need';
+    ex.innerHTML = `🎮 ゲームまで ${dotsHTML(need, need - left, ' g')}`;
+  } else if (isPri || need) {
+    ex.className = 'card-ex ok';
+    ex.textContent = isPri && !need ? '✅ きょうの ミッション クリア！' : '✅ きょうの ぶん クリア！';
+  } else {
+    ex.className = 'card-ex';
+    ex.textContent = example;
+  }
 }
 
 // テーマを えらんだとき：まだ シールが もらえない テーマなら、やるか きく
@@ -1588,6 +1830,7 @@ function enterTheme(t) {
   closeOverlays();
   Speech.stop();
   if (t === 'mul') { renderDan(); show('dan'); }
+  else if (t === 'soro') Soro.start();
   else startQuiz(t);
 }
 // だんを えらんだとき：シールが もらえない だんなら、やるか きく（ミッション中は もう きいてあるので きかない）
@@ -1922,47 +2165,50 @@ function finishQuiz() {
 }
 
 // top：コインと こうかん したときの みだし（けいさんの ときは なし）
-function showWin({ s, isNew, rankUp, missionClear }, ok, top) {
+// total：もんだいの かず（けいさん 7もん・そろばん 5もん）
+function showWin({ s, isNew, rankUp, missionClear, gameOpen }, ok, top, total = Q.list.length) {
   const d = DMAP[s.d], th = THEMES[s.t], g = gradeOf(s.d);
   const n = th ? themeCount(s.t) : D.stickers.length;
   const rk = rankOf(n).r;
-  const perfect = !top && ok === Q.list.length;
-  const left = s.t === S().priority ? missionLeft() : 0;
-  const opened = missionClear ? (S().gameLock !== false ? 'ほかの けいさんの シールと ゲームが ひらいたよ！' : 'ほかの けいさんでも シールが もらえるよ！') : '';
+  const perfect = !top && ok === total;
+  const left = s.t === S().priority ? missionLeft() : 0, gLeftN = th && gameLocked() ? needLeft(s.t) : 0;
+  const opened = [missionClear ? '✅ きょうの ミッション クリア！ ほかの シールも もらえるよ！' : '', gameOpen ? '🎮 ゲームが ひらいたよ！' : ''].filter(Boolean).join(' ');
   $('#winTop').textContent = top || (perfect ? 'ぜんもん せいかい！' : `${ok}もん せいかい！`);
   $('#win [data-act="again"]').hidden = !!top;
   $('#win [data-act="exchange"]').hidden = !(top && D.coins >= COIN_RATE);
   $('#winStk').innerHTML = stickerHTML(s, 'xxl');
   $('#winName').innerHTML = `${g !== 'n' ? `<i class="gr ${g}">${GRADES[g].short}</i> ` : ''}${d.name}${s.k ? ' <span class="kira">✨キラキラ✨</span>' : ''}${isNew ? ' <span class="newb">NEW!</span>' : ''}`;
-  $('#winSub').textContent = th ? `${th.name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい` + (left ? ` ・ ミッション あと ${left}まい` : '')
+  $('#winSub').textContent = th ? `${th.name}の シール ${n}まいめ ・ ぜんぶで ${D.stickers.length}まい` + (left ? ` ・ ミッション あと ${left}まい` : gLeftN ? ` ・ ゲームまで あと ${gLeftN}まい` : '')
     : `シール ぜんぶで ${D.stickers.length}まい ・ のこりの コイン ${D.coins}まい`;
   $('#winRank').textContent = rankUp ? `ランクアップ！ ${th.name}が ${rk[2]} ${rk[1]} に なった！` : '';
-  $('#winMission').textContent = missionClear ? `✅ きょうの ミッション クリア！ ${opened}` : '';
+  $('#winMission').textContent = opened;
   const w = $('#win');
-  w.classList.toggle('tight', rankUp && missionClear);
+  w.classList.toggle('tight', rankUp && !!opened);
   w.classList.remove('ready', 'show'); void w.offsetWidth; w.classList.add('show');
   FX.show(4200);
   SFX.fanfare();
   setTimeout(() => SFX.sparkle(), 1300);
-  if (rankUp || missionClear) setTimeout(() => SFX.rankup(), 2500);
+  if (rankUp || opened) setTimeout(() => SFX.rankup(), 2500);
   const line = `やったー！ ${top ? 'こうかん！' : perfect ? '全問 正解！' : `${ok}問 正解！`} ${d.name}の シール ゲット！${s.k ? ' キラキラだよ！' : ''}`
     + (rankUp ? ` ランクアップ！ ${th.name}の ランクが ${rk[1]}に なったよ！` : '')
-    + (missionClear ? ` きょうの ミッション クリア！ ${opened}` : '');
+    + (missionClear ? ' きょうの ミッション クリア！' : '') + (gameOpen ? ' ゲームが できるように なったよ！' : '');
   setTimeout(() => Speech.speak(line), 1000);
   setTimeout(() => w.classList.add('ready'), 2200);
 }
 
-function showResult(ok) {
-  const why = Q.noSticker, locked = !!why, pri = THEMES[S().priority].name, byDan = why === 'dan';
-  $('#resBalls').innerHTML = Q.results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('');
+// けいさん（Q）と そろばん で つかう。o で そろばんの けっかを わたす
+function showResult(ok, o = {}) {
+  const { results = Q.results, total = Q.list.length, pass = PASS, why = Q.noSticker, dan = Q.dan } = o;
+  const locked = !!why, pri = THEMES[S().priority].name, byDan = why === 'dan';
+  $('#resBalls').innerHTML = results.map(r => `<i class="${r ? 'ok' : 'ng'}">${r ? '⚽' : ''}</i>`).join('');
   $('#resOk').textContent = ok;
-  $('#resTotal').textContent = Q.list.length;
+  $('#resTotal').textContent = total;
   let msg = ok >= 2 ? 'いいね！ その ちょうし！' : 'がんばったね！';
-  if (locked && ok >= PASS) msg = 'すごい！ れんしゅう ばっちり！';
-  if (!locked && ok === PASS - 1) msg = 'おしい！ あと 1もん！';
-  const note = byDan ? `${Q.dan}のだんは れんしゅうだよ。シールは ${Q.dan + 1}のだんから もらえるよ`
+  if (locked && ok >= pass) msg = 'すごい！ れんしゅう ばっちり！';
+  if (!locked && ok === pass - 1) msg = 'おしい！ あと 1もん！';
+  const note = byDan ? `${dan}のだんは れんしゅうだよ。シールは ${dan + 1}のだんから もらえるよ`
     : locked ? `シールは ${pri}の シールを あと ${missionLeft()}まい あつめてから もらえるよ`
-    : `${PASS}もん いじょう せいかいで シール ゲット！`;
+    : `${pass}もん いじょう せいかいで シール ゲット！`;
   $('#resMsg').innerHTML = `${msg}<br><small>${note}</small>`;
   // シールなしの れんしゅうの あとは、シールが もらえる ほうへ さそう
   const goNext = $('#resNext');
@@ -1972,7 +2218,7 @@ function showResult(ok) {
   $('#resAgain').classList.toggle('yellow', !locked);
   $('#result').classList.add('show');
   SFX.cheer();
-  if (ok >= PASS - 1) FX.confetti(innerWidth / 2, innerHeight * 0.55, 60, 13);
+  if (ok >= pass - 1) FX.confetti(innerWidth / 2, innerHeight * 0.55, 60, 13);
   Speech.speak(`${ok}問 正解！ ${msg} ${byDan ? 'つぎは ほかの だんを やろう！' : locked ? `つぎは ${pri}を やろう！` : 'もう一回 チャレンジ しよう！'}`);
 }
 
@@ -1997,6 +2243,7 @@ function goHome() {
   gStop();
   MZ.drawing = false;
   mmStop();
+  Soro.stop();
   IQ.active = false;
   IQ.token++;
   Speech.stop();
@@ -2007,8 +2254,12 @@ function goHome() {
 }
 
 // ---------- ゲーム（めいろ・しんけいすいじゃく・IQテスト） ----------
-// カギ：きょうの ミッション（ゆうせんテーマの シール 5まい）が おわるまで あそべない
-const gameLocked = () => S().gameLock !== false && missionLeft() > 0;
+// カギ：その日に きめた まいすうの シール（はじめは たしざん 5まい・そろばん 5まい）を あつめるまで あそべない
+const todayCount = t => D.stickers.filter(s => s.t === t && isToday(s.at)).length;
+const needOf = t => { const v = Number(S()[NEED_KEY[t]]); return NEED_OPTS.includes(v) ? v : 0; };
+const needLeft = t => Math.max(0, needOf(t) - todayCount(t));
+const needList = () => Object.keys(NEED_KEY).filter(t => needLeft(t) > 0);
+const gameLocked = () => needList().length > 0;
 const coinOn = () => S().gameCoin !== false;
 // 1にちに あそべる かいすう（ゲームごと。0 は せいげん なし）。あそびはじめた とき（1て うごかした とき）に 1かいと かぞえる
 const GKINDS = ['meiro', 'memory', 'iq'];
@@ -2051,12 +2302,19 @@ function gEndBtns(g, can) {
   return `<div class="mbtns">${btns.map(([a, t], i) => `<button class="bigbtn${i ? '' : ' yellow'}" data-act="${a}">${t}</button>`).join('')}</div>`;
 }
 function openGameLock() {
-  const pri = THEMES[S().priority].name, left = missionLeft();
+  const all = Object.keys(NEED_KEY).filter(t => needOf(t) > 0), left = needList();
+  // ミッション中なら ゆうせんテーマを さきに
+  const order = left.slice().sort((a, b) => (b === S().priority && missionLeft() > 0) - (a === S().priority && missionLeft() > 0));
+  const rows = all.map(t => {
+    const n = needOf(t), l = needLeft(t);
+    return `<div class="need-row${l ? '' : ' ok'}" style="--c:${THEMES[t].color}"><span class="ni">${THEME_ICON[t]}</span><b>${THEMES[t].name}</b><em>${l ? `あと ${l}まい` : '✅ クリア'}</em>${dotsHTML(n, n - l, ' g')}</div>`;
+  }).join('');
   openModal(`<div class="lock-ico">🔒</div>
     <p class="mq">ゲームは まだ できないよ</p>
-    <p class="lock-msg">きょうの ミッション（${pri}の シール ${MISSION}まい）が<br>おわったら あそべるよ。あと ${left}まい！</p>
-    <div class="mbtns"><button class="bigbtn yellow" data-act="startPriority">⭐ ${pri}を やる</button><button class="bigbtn" data-act="closeModal">とじる</button></div>`);
-  Speech.speak(`ゲームは ${pri}の シールを あと ${left}まい あつめたら あそべるよ`);
+    <p class="lock-msg">きょうの シールを あつめたら あそべるよ</p>
+    <div class="need-list">${rows}</div>
+    <div class="mbtns">${order.map((t, i) => `<button class="bigbtn${i ? '' : ' yellow'}" data-act="start" data-theme="${t}">${THEME_ICON[t]} ${THEMES[t].name}</button>`).join('')}<button class="bigbtn" data-act="closeModal">とじる</button></div>`, 'tight');
+  Speech.speak(`ゲームは ${left.map(t => `${THEMES[t].name}を あと ${needLeft(t)}まい`).join('、')} あつめたら あそべるよ`);
 }
 const GAMES = {
   meiro: { name: 'めいろ', lv: { 1: { name: 'やさしい', n: 5, k: 7, walls: 0, coin: 1 }, 2: { name: 'ふつう', n: 6, k: 9, walls: 3, coin: 1 }, 3: { name: 'むずかしい', n: 7, k: 10, walls: 6, coin: 1 } } },
@@ -2074,7 +2332,7 @@ const COIN_RATE = 10;  // シール1まいに ひつような コイン
 const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const gstat = (g, lv) => { const k = g + lv; return (D.gstats[k] = D.gstats[k] || { play: 0, clear: 0, best: 0 }); };
 const Gm = { kind: '', lv: 1, t0: 0, sec: 0, timer: 0, active: false, hints: 0, counted: false };
-let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・game・coin
+let Last = 'quiz';  // さいごに あそんだ もの（「もういっかい」で つかう）：quiz・soro・game・coin
 const gameDesc = (g, L) => g === 'iq' ? '7もん ・ 4もん せいかいで コイン' : `${L.n}×${L.n} ・ すうじ ${L.k}こ${L.walls ? ' ・ かべ あり' : ''}`;  // めいろ・IQテスト（しんけいすいじゃくは どうぶつの え）
 const MEM_OPTS = [6, 8, 12, 18, 24];          // えらべる ペアの かず（12・16・24・36・48まい）
 const MEM_DEF = { 1: 6, 2: 8, 3: 12 };          // はじめの せってい：やさしい 12まい・ふつう 16まい・むずかしい 24まい
@@ -2790,6 +3048,486 @@ function mmHint() {
   }, 2000);
 }
 
+// ===== そろばん（5さい向けの「そろばんクイズ」を とりこんだ もの。トップの「そろばん」で すぐ「ぜんぶ」が はじまる） =====
+const SORO_N = 5, SORO_PASS = 3;  // 1かい 5もん。3もん いじょう まちがえずに せいかいすると シール
+const Soro = (() => {
+  // ---- ルール（そろばんクイズ と おなじ） ----
+  const KANA = { 1: 'いち', 2: 'に', 3: 'さん', 4: 'よん', 5: 'ご', 6: 'ろく', 7: 'なな', 8: 'はち', 9: 'きゅう', 10: 'じゅう' };
+  const KO = { 1: 'いっこ', 2: 'にこ', 3: 'さんこ', 4: 'よんこ' };
+  const readNum = v => v <= 10 ? KANA[v] : 'じゅう' + KANA[v - 10];
+  // たしざん a + n（いちの くらいだけ）：five＝5の ともだち、ten＝10の ともだち、tenfive＝10の ともだちだけど とる 1だまが たりない（5+9 など）
+  function classifyAdd(a, n) {
+    if (a + n >= 10) {
+      const k = 10 - n, f = a >= 5, c = a % 5;
+      return (k < 5 ? c >= k : (f && c >= k - 5)) ? 'ten' : 'tenfive';
+    }
+    if (n < 5 && a % 5 + n > 4) return 'five';
+    return 'direct';
+  }
+  // ひきざん m − n（m は 1〜18）：sfive・sten・stenfive（10を とったあと いれる 1だまの ばしょが ない：14−9 など）
+  function classifySub(m, n) {
+    const u = m % 10, f = u >= 5, c = u % 5;
+    if (u >= n) return (n < 5 ? c >= n : (f && c >= n - 5)) ? 'direct' : 'sfive';
+    if (m < 10) return 'negative';
+    const k = 10 - n;
+    return (k < 5 ? c + k <= 4 : (!f && c + k - 5 <= 4)) ? 'sten' : 'stenfive';
+  }
+  const P = (op, k, text, speech) => ({ op, k, text, speech });
+  // よみあげでは「は」を「わ」と かく（は と よまれないように）
+  const PHRASES = {
+    five: x => [P('take', x, x + 'とって', KANA[x] + ' とって'), P('put', 5, '5いれる', 'ご いれる')],
+    ten: x => [P('take', x, x + 'とって', KANA[x] + ' とって'), P('put', 10, '10いれる', 'じゅう いれる')],
+    tenfive: x => [P('put', x, x + 'をいれて', KANA[x] + 'を いれて'), P('take', 5, '5をとって、', 'ごを とって'), P('put', 10, '10いれる', 'じゅう いれる')],
+    sfive: x => [P('take', 5, '5とって', 'ご とって'), P('put', x, x + 'いれる', KANA[x] + ' いれる')],
+    sten: x => [P('take', 10, '10とって', 'じゅう とって'), P('put', x, x + 'いれる', KANA[x] + ' いれる')],
+    stenfive: x => [P('take', 10, '10とって', 'じゅう とって'), P('put', 5, '5をいれて', 'ごを いれて'), P('take', x, x + 'をとる', KANA[x] + 'を とる')],
+  };
+  const phrase = (kind, x) => ({ kind, x, key: kind + x, parts: PHRASES[kind](x) });
+  function finalPhrase(p) {
+    const x = { five: 5 - p.n, ten: 10 - p.n, tenfive: p.n - 5, sfive: 5 - p.n, sten: 10 - p.n, stenfive: p.n - 5 }[p.kind];
+    return phrase(p.kind, x);
+  }
+  const phraseText = ph => ph.parts.map(p => p.text).join('');
+  const resultOf = p => p.op === 'add' ? p.a + p.n : p.a - p.n;
+  // rods：{t:{f,c},o:{f,c}}  f＝5だま（0か1）、c＝1だま（0〜4）
+  function initRods(v) { const d = Math.floor(v / 10), u = v % 10; return { t: { f: d >= 5 ? 1 : 0, c: d % 5 }, o: { f: u >= 5 ? 1 : 0, c: u % 5 } }; }
+  function applyOp(st, op) {
+    const s = { t: { ...st.t }, o: { ...st.o } }, sign = op.op === 'put' ? 1 : -1;
+    if (op.k === 10) { s.t.c += sign; return s; }
+    if (op.k === 5) s.o.f += sign;
+    else if (op.k < 5) s.o.c += sign * op.k;
+    else { s.o.f += sign; s.o.c += sign * (op.k - 5); }
+    return s;
+  }
+  const ALL = [];
+  for (let a = 1; a <= 9; a++) for (let n = 1; n <= 9; n++) { const kind = classifyAdd(a, n); if (kind !== 'direct') ALL.push({ op: 'add', a, n, kind, key: a + '+' + n }); }
+  // ひきざんの 5の ともだちは 1けたの かずだけ（5−4、6−3 …）
+  for (let m = 1; m <= 18; m++) for (let n = 1; n <= 9; n++) { const kind = classifySub(m, n); if (kind === 'sten' || kind === 'stenfive' || (kind === 'sfive' && m < 10)) ALL.push({ op: 'sub', a: m, n, kind, key: m + '-' + n }); }
+
+  const OPS = { add: { name: 'たしざん', op: '+', say: 'たす' }, sub: { name: 'ひきざん', op: '−', say: 'ひく' } };
+  const MODES = { add: 'たしざん', sub: 'ひきざん', mix: 'たしざん・ひきざん' };
+  const LV = { look1: true, look5: true };  // 「ぜんぶ」の コース：1だま・5だまを みて きめる もんだいも だす
+  const mode = () => MODES[S().soroMode] ? S().soroMode : 'add';
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- そろばんの え ----
+  const NS = 'http://www.w3.org/2000/svg';
+  const RX = { t: 145, o: 275 };
+  const layer = $('#srBeads');
+  function svgEl(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+  function makeBead() {
+    const g = svgEl('g', { class: 'bead' }, layer);
+    svgEl('path', { class: 'body', d: 'M-44 0 L-19 -14 L19 -14 L44 0 L19 14 L-19 14 Z' }, g);
+    svgEl('path', { class: 'shine', d: 'M-30 -5.5 L-16 -9.5 L16 -9.5 L30 -5.5' }, g);
+    return g;
+  }
+  const B = {};
+  for (const r of ['t', 'o']) B[r] = { h: makeBead(), e: [makeBead(), makeBead(), makeBead(), makeBead()] };
+  let rods = initRods(0);
+  const place = (g, x, y) => { g.style.transform = `translate(${x}px,${y}px)`; };
+  function draw() {
+    for (const r of ['t', 'o']) {
+      const s = rods[r];
+      place(B[r].h, RX[r], s.f ? 82 : 48);
+      B[r].e.forEach((g, i) => place(g, RX[r], i < s.c ? 122 + 27 * i : 162 + 27 * i));
+      $(r === 't' ? '#srDt' : '#srDo').textContent = s.f * 5 + s.c;
+    }
+  }
+  function unpaint() { $$('.bead', layer).forEach(g => g.classList.remove('is-take', 'is-put')); }
+  function movedBeads(a, b) {
+    const list = [];
+    for (const r of ['t', 'o']) {
+      if (a[r].f !== b[r].f) list.push(B[r].h);
+      for (let i = Math.min(a[r].c, b[r].c); i < Math.max(a[r].c, b[r].c); i++) list.push(B[r].e[i]);
+    }
+    return list;
+  }
+  draw();
+  requestAnimationFrame(() => requestAnimationFrame(() => $('#srSb').classList.remove('still')));
+
+  // ---- もんだいを つくる ----
+  const validX = (kind, x) => kind === 'ten' || kind === 'sten' ? x >= 1 && x <= 9 : x >= 1 && x <= 4;
+  const neighbors = (kind, x) => [x + 1, x - 1, x + 2, x - 2].filter(v => validX(kind, v));
+  const phraseHTML = ph => ph.parts.map(p => { const m = p.text.match(/^(\d+)(.*)$/); return `<span class="pt ${p.op}"><b>${m[1]}</b>${esc(m[2])}</span>`; }).join('');
+  const speechOf = ph => ph.parts.map(p => p.speech).join('、');
+  const askPhrase = (q, speech, correct, distractors, tip) => ({ type: 'phrase', q, speech, correct, distractors, tip });
+  const askYesNo = (q, speech, labels, ok, hint, tip) => ({ type: 'yesno', q, speech, options: labels.map((label, i) => ({ label, correct: i === ok, h: { hint } })), tip });
+  // 💡 ヒント：こたえは いわずに、そろばんを みたり ○を かぞえたり すれば わかる ように する
+  const koSay = c => c ? KO[c] : 'ぜろこ';
+  const tip = (text, speech, extra = {}) => ({ text, speech, ...extra });
+  const partnerTip = (n, total, pre = '', preS = '') => tip(`${pre}${n} と あわせて ${total} に なる かずは？ ○を かぞえよう`, `${preS}${KANA[n]}と あわせて ${KANA[total]}に なる かずわ？ まるを かぞえよう`, { frame: [total, n] });
+
+  const buildSteps = (p, lv) => p.op === 'sub' ? buildSubSteps(p, lv) : buildAddSteps(p, lv);
+  function buildAddSteps(p, lv) {
+    const { a, n, kind } = p, k = 10 - n, steps = [];
+    if (lv.look5 && n <= 4) steps.push(askYesNo('5だまを いれられる？', 'ごだまを いれられる？', ['いれられる', 'いれられない'], a < 5 ? 0 : 1, 'look5',
+      tip('5だまが まんなかの ぼうに くっついて いたら、もう いれられないよ', 'ごだまが まんなかの ぼうに くっついて いたら、もう いれられないよ', { hl: 'srHl5' })));
+    const q = `たせない ${n} は？`, qs = `たせない ${KANA[n]}わ？`;
+    if (kind === 'five') {
+      const d = [];
+      if (lv.look5) d.push({ ph: phrase('ten', k), hint: 'look5' });
+      neighbors('five', 5 - n).forEach(x => d.push({ ph: phrase('five', x), hint: 'p5', m: n }));
+      steps.push(askPhrase(q, qs, phrase('five', 5 - n), d,
+        lv.look5 ? partnerTip(n, 5, '5だまが いれられるから 5の ともだち。', 'ごだまが いれられるから、ごの ともだち。') : partnerTip(n, 5)));
+      return steps;
+    }
+    const d = [];
+    if (lv.look5 && n <= 4) d.push({ ph: phrase('five', 5 - n), hint: 'look5' });
+    neighbors('ten', k).forEach(x => d.push({ ph: phrase('ten', x), hint: 'p10', m: n }));
+    steps.push(askPhrase(q, qs, phrase('ten', k), d,
+      lv.look5 && n <= 4 ? partnerTip(n, 10, '5だまが いれられないから 10の ともだち。', 'ごだまが いれられないから、じゅうの ともだち。') : partnerTip(n, 10)));
+    if (n >= 6 && (lv.look1 || kind === 'tenfive')) {
+      const can = kind === 'ten';
+      const c = a % 5;  // まんなかの ぼうに くっついて いる（いま かぞえている）1だま
+      steps.push(askYesNo(`いちの 1だまを ${k}こ とれる？`, `いちだまを ${KO[k]} とれる？`, ['とれる', 'とれない'], can ? 0 : 1, 'look1',
+        tip(`まんなかの ぼうに くっついて いる 1だまは ${c}こ。${k}こ とれるかな？`, `まんなかの ぼうに くっついて いる いちだまわ ${koSay(c)}。${KO[k]} とれるかな？`, { hl: 'srHl1' })));
+      if (!can) {
+        const d2 = [{ ph: phrase('ten', k), hint: 'short', m: k }];
+        neighbors('tenfive', n - 5).forEach(x => d2.push({ ph: phrase('tenfive', x), hint: 'p5', m: k }));
+        steps.push(askPhrase('1だまが たりない！ どうする？', 'いちだまが たりない！ どうする？', phrase('tenfive', n - 5), d2,
+          tip(`5だまを つかうよ。${k} と あわせて 5 に なる かずを いれて、5を とって、10 いれるよ`, `ごだまを つかうよ。${KANA[k]}と あわせて ごに なる かずを いれて、ごを とって、じゅう いれるよ`, { frame: [5, k] })));
+      }
+    }
+    return steps;
+  }
+  // たしざんと おなじ 3だんがまえ：いいかた → そろばんを みる → れいがいの いいかた
+  function buildSubSteps(p, lv) {
+    const { a, n, kind } = p, k = 10 - n, u = a % 10, steps = [];
+    if (lv.look5 && n <= 4) steps.push(askYesNo('5だまを とれる？', 'ごだまを とれる？', ['とれる', 'とれない'], u >= 5 ? 0 : 1, 'look5s',
+      tip('5だまが まんなかの ぼうに くっついて いたら、とれるよ', 'ごだまが まんなかの ぼうに くっついて いたら、とれるよ', { hl: 'srHl5' })));
+    const q = `ひけない ${n} は？`, qs = `ひけない ${KANA[n]}わ？`;
+    if (kind === 'sfive') {
+      const d = [];
+      if (lv.look5) d.push({ ph: phrase('sten', k), hint: 'look5s' });
+      neighbors('sfive', 5 - n).forEach(x => d.push({ ph: phrase('sfive', x), hint: 'p5', m: n }));
+      steps.push(askPhrase(q, qs, phrase('sfive', 5 - n), d,
+        lv.look5 ? partnerTip(n, 5, '5だまが とれるから 5の ともだち。', 'ごだまが とれるから、ごの ともだち。') : partnerTip(n, 5)));
+      return steps;
+    }
+    const d = [];
+    if (lv.look5 && n <= 4) d.push({ ph: phrase('sfive', 5 - n), hint: 'look5s' });
+    neighbors('sten', k).forEach(x => d.push({ ph: phrase('sten', x), hint: 'p10', m: n }));
+    steps.push(askPhrase(q, qs, phrase('sten', k), d,
+      lv.look5 && n <= 4 ? partnerTip(n, 10, '5だまが とれないから 10の ともだち。', 'ごだまが とれないから、じゅうの ともだち。') : partnerTip(n, 10)));
+    if (n >= 6 && (lv.look1 || kind === 'stenfive')) {
+      const can = kind === 'sten';
+      const free = 4 - u % 5;  // したに おりている（まだ いれられる）1だま
+      steps.push(askYesNo(`いちの 1だまを ${k}こ いれられる？`, `いちだまを ${KO[k]} いれられる？`, ['いれられる', 'いれられない'], can ? 0 : 1, 'look1s',
+        tip(`したに おりて いる 1だまは ${free}こ。${k}こ いれられるかな？`, `したに おりて いる いちだまわ ${koSay(free)}。${KO[k]} いれられるかな？`, { hl: 'srHl1' })));
+      if (!can) {
+        const d2 = [{ ph: phrase('sten', k), hint: 'full', m: k }];
+        neighbors('stenfive', n - 5).forEach(x => d2.push({ ph: phrase('stenfive', x), hint: 'p5', m: k }));
+        steps.push(askPhrase('1だまが いれられない！ どうする？', 'いちだまが いれられない！ どうする？', phrase('stenfive', n - 5), d2,
+          tip(`5だまを つかうよ。10を とって、5を いれて、${k} と あわせて 5 に なる かずを とるよ`, `ごだまを つかうよ。じゅうを とって、ごを いれて、${KANA[k]}と あわせて ごに なる かずを とるよ`, { frame: [5, k] })));
+      }
+    }
+    return steps;
+  }
+  function hintFor(d) {
+    const m = d.m;
+    switch (d.hint) {
+      case 'p10': return { text: `${m} と あわせて 10 に なる かずは？`, speech: `${KANA[m]}と あわせて じゅうに なる かずわ？`, frame: [10, m] };
+      case 'p5': return { text: `${m} と あわせて 5 に なる かずは？`, speech: `${KANA[m]}と あわせて ごに なる かずわ？`, frame: [5, m] };
+      case 'look5': return { text: '5だまを みてね。いれられるかな？', speech: 'ごだまを みてね。いれられるかな？', hl: 'srHl5' };
+      case 'look1': return { text: 'いちの 1だまを かぞえてみよう', speech: 'いちだまを かぞえてみよう', hl: 'srHl1' };
+      case 'short': return { text: `1だまが たりないから ${m}とれないね`, speech: `いちだまが たりないから ${KANA[m]} とれないね`, hl: 'srHl1' };
+      case 'look5s': return { text: '5だまを みてね。とれるかな？', speech: 'ごだまを みてね。とれるかな？', hl: 'srHl5' };
+      case 'look1s': return { text: 'したに いる 1だまを かぞえてみよう', speech: 'したに いる いちだまを かぞえてみよう', hl: 'srHl1' };
+      case 'full': return { text: `1だまが いっぱいで ${m}いれられないね`, speech: `いちだまが いっぱいで ${KANA[m]} いれられないね`, hl: 'srHl1' };
+    }
+  }
+  function frameHTML(total, m) { let s = '<span class="sr-tf" aria-hidden="true">'; for (let i = 0; i < total; i++) s += `<i${i < m ? ' class="on"' : ''}></i>`; return s + '</span>'; }
+
+  // 「ぜんぶ」の でかた（そろばんクイズ と おなじ）：まちがえた もんだいほど でやすく、おなじ もんだいは 1かいに 1どだけ
+  function pickRound(m) {
+    const ok = p => m === 'mix' || p.op === m;
+    const pool = ALL.filter(ok).map(p => ({ p, w: 1 + 2 * Math.min(D.soroMiss[p.key] || 0, 3) }));
+    const out = [], bag = pool.slice();
+    while (out.length < SORO_N && bag.length) {
+      let r = Math.random() * bag.reduce((s, x) => s + x.w, 0), i = 0;
+      for (; i < bag.length - 1; i++) { r -= bag[i].w; if (r <= 0) break; }
+      out.push(bag[i].p);
+      bag.splice(i, 1);
+    }
+    return out;
+  }
+  function updateMiss(p, first, hinted) {
+    const k = p.key, M = D.soroMiss;
+    if (first && hinted) return;  // ヒントで せいかい：にがての きろくは そのまま
+    if (first) { if (M[k]) { M[k]--; if (!M[k]) delete M[k]; } }
+    else M[k] = Math.min(5, (M[k] || 0) + 1);
+  }
+
+  // ---- もんだい ----
+  const R = { mode: 'add', queue: [], idx: 0, prob: null, steps: [], si: 0, first: true, hinted: false, curHint: null, lock: false, recorded: false, results: [], combo: 0, token: 0, active: false, stage: 'ask', skipGoal: null, noSticker: '' };
+
+  function start() {
+    SFX.unlock();
+    closeOverlays();
+    Speech.stop();
+    Last = 'soro';
+    const m = mode();
+    Object.assign(R, { mode: m, queue: pickRound(m), idx: 0, results: [], combo: 0, active: true, noSticker: noStickerReason('soro', 0) });
+    $('#srTheme').textContent = `${R.noSticker ? '🔒 ' : ''}🧮 そろばん ${MODES[m]}`;
+    show('soro');
+    SFX.start();
+    nextProblem();
+  }
+  function renderProgress() {
+    $('#srPg').innerHTML = R.queue.map((_, i) => {
+      const r = R.results[i];
+      const cls = r === true ? 'ok' : r === false ? 'ng' : i === R.idx ? 'cur' : '';
+      return `<i class="${cls}">${r === true ? '⚽' : ''}</i>`;
+    }).join('');
+    const c = $('#srCombo');
+    c.textContent = R.combo >= 2 ? `🔥 ${R.combo}れんぞく` : '';
+    c.classList.toggle('on', R.combo >= 2);
+  }
+  function nextProblem() {
+    const p = R.queue[R.idx];
+    Object.assign(R, { prob: p, steps: buildSteps(p, LV), si: 0, first: true, hinted: false, lock: false, recorded: false, stage: 'ask' });
+    R.token++;
+    unpaint(); rods = initRods(p.a); draw();
+    $('#srA').textContent = p.a; $('#srOp').textContent = OPS[p.op].op; $('#srN').textContent = p.n;
+    $('#srEq').classList.toggle('sub', p.op === 'sub');
+    const r = $('#srR'); r.textContent = '?'; r.classList.remove('ok');
+    $('#srAnswer').hidden = true; $('#srAfter').hidden = true;
+    $('#srPass').classList.remove('show');
+    $('#srSide').scrollTop = 0;
+    renderProgress(); renderStep();
+    Speech.speak(`${readNum(p.a)} ${OPS[p.op].say} ${KANA[p.n]}。 ${R.steps[0].speech}`);
+  }
+  function renderStep() {
+    const st = R.steps[R.si];
+    $('#srQ').textContent = st.q; hideHint();
+    $('#srSteps').innerHTML = R.steps.length < 2 ? '' : R.steps.map((_, i) => `<li class="${i < R.si ? 'done' : i === R.si ? 'on' : ''}"></li>`).join('');
+    const box = $('#srChoices'); box.innerHTML = ''; box.hidden = false; box.className = 'sr-choices' + (st.type === 'yesno' ? ' yn' : '');
+    let opts;
+    if (st.type === 'phrase') {
+      const n = Math.max(1, (S().soroChoices === 2 ? 2 : 3) - 1);
+      opts = shuffle([{ ph: st.correct, correct: true }, ...st.distractors.slice(0, n).map(d => ({ ph: d.ph, correct: false, h: d }))]);
+    } else opts = st.options;
+    for (const o of opts) {
+      const row = document.createElement('div'); row.className = 'sr-opt';
+      if (o.ph) {
+        const s = document.createElement('button');
+        s.className = 'sr-cspk'; s.type = 'button'; s.textContent = '🔊'; s.setAttribute('aria-label', 'この いいかたを よむ');
+        s.addEventListener('click', () => Speech.speak(speechOf(o.ph)));
+        row.appendChild(s);
+      }
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'sr-choice';
+      b.innerHTML = o.ph ? phraseHTML(o.ph) : esc(o.label);
+      b.addEventListener('click', () => choose(o, b));
+      row.appendChild(b); box.appendChild(row);
+    }
+    const always = S().soroHint === 'always';
+    $('#srHintBtn').hidden = !st.tip || always;
+    if (always && st.tip) showHint(st.tip);
+  }
+  function showHint(h) {
+    const el = $('#srHintBox');
+    R.curHint = h;
+    el.innerHTML = `<span>💡 ${esc(h.text)}</span>` + (h.frame ? frameHTML(h.frame[0], h.frame[1]) : '') + '<span class="hs" aria-hidden="true">🔊</span>';
+    el.hidden = false; hideHl();
+    if (h.hl) $('#' + h.hl).classList.add('on');
+  }
+  function hideHl() { $('#srHl5').classList.remove('on'); $('#srHl1').classList.remove('on'); }
+  function hideHint() { $('#srHintBox').hidden = true; hideHl(); }
+
+  function choose(o, b) {
+    SFX.unlock();
+    if (!R.active || R.lock || R.stage !== 'ask' || b.classList.contains('nope')) return;
+    if (!o.correct) {
+      R.first = false; b.classList.add('nope'); SFX.wrong();
+      const h = hintFor(o.h); showHint(h); Speech.speak('おしい！ ' + h.speech);
+      return;
+    }
+    R.lock = true; b.classList.add('right'); hideHint();
+    if (R.si === R.steps.length - 1) { shoot(); return; }
+    // とちゅうの ステップは パス
+    SFX.pass();
+    const ps = $('#srPass'); ps.classList.remove('show'); void ps.offsetWidth; ps.classList.add('show');
+    const tk = R.token;
+    setTimeout(() => {
+      if (tk !== R.token) return;
+      R.si++; R.lock = false; renderStep(); Speech.speak(R.steps[R.si].speech);
+    }, 750);
+  }
+  // さいごの こたえが あったら シュート → ゴール！ → そろばんで うごきを みせる
+  async function shoot() {
+    const p = R.prob, tk = R.token;
+    R.stage = 'goal';
+    $('#srChoices').hidden = true; hideHint(); $('#srHintBtn').hidden = true;
+    $$('#srSteps li').forEach(li => { li.className = 'done'; });
+    if (!R.recorded) {
+      R.recorded = true;
+      R.results[R.idx] = R.first;
+      R.combo = R.first ? R.combo + 1 : 0;
+      updateMiss(p, R.first, R.hinted);
+      save();
+      renderProgress();
+    }
+    const [txt, say] = pick(PRAISE);
+    showGoal(txt, `${p.a} ${OPS[p.op].op} ${p.n} = ${resultOf(p)}`, R.combo >= 5);
+    SFX.goal(R.combo);
+    let line = say;
+    if ([3, 5].includes(R.combo)) line += ` ${R.combo}れんぞく！`;
+    const skipped = new Promise(r => { R.skipGoal = r; });
+    await Promise.race([Promise.all([Speech.speak(line), sleep(1500)]), skipped]);
+    R.skipGoal = null;
+    if (tk !== R.token) return;
+    $('#goal').classList.remove('show');
+    R.stage = 'play';
+    $('#srQ').textContent = 'そろばんで やってみよう';
+    await playAnswer(tk);
+    if (tk !== R.token) return;
+    showDone();
+  }
+  async function playAnswer(tk) {
+    const ph = finalPhrase(R.prob), ans = $('#srAnswer');
+    ans.innerHTML = phraseHTML(ph); ans.hidden = false;
+    const spans = $$('.pt', ans);
+    for (let i = 0; i < ph.parts.length; i++) {
+      if (tk !== R.token) return;
+      spans.forEach((s, j) => s.classList.toggle('act', j === i));
+      const part = ph.parts[i], sp = Speech.speak(part.speech), next = applyOp(rods, part);
+      movedBeads(rods, next).forEach(g => g.classList.add(part.op === 'take' ? 'is-take' : 'is-put'));
+      await sleep(reduced ? 150 : 500); if (tk !== R.token) return;
+      rods = next; draw();
+      await Promise.all([sp, sleep(reduced ? 350 : 900)]);
+    }
+    spans.forEach(s => s.classList.remove('act'));
+  }
+  function showDone() {
+    const p = R.prob, r = $('#srR'), res = resultOf(p);
+    R.stage = 'done';
+    r.textContent = res; r.classList.add('ok');
+    $('#srQ').textContent = R.first ? 'せいかい！ すごいね' : 'できたね！ つぎは 1かいで いこう';
+    $('#srNextBtn').textContent = R.idx >= R.queue.length - 1 ? '🏁 けっかを みる' : 'つぎへ ▶';
+    $('#srAfter').hidden = false;
+    Speech.speak(`${readNum(p.a)} ${OPS[p.op].say} ${KANA[p.n]} わ ${readNum(res)}`);
+  }
+  async function replay() {
+    if (!R.active || R.stage !== 'done') return;
+    SFX.unlock();
+    R.token++; const tk = R.token;
+    Speech.stop();
+    $('#srAfter').hidden = true; unpaint(); rods = initRods(R.prob.a); draw();
+    const r = $('#srR'); r.textContent = '?'; r.classList.remove('ok');
+    $('#srQ').textContent = 'もういちど みてみよう';
+    R.stage = 'play';
+    await sleep(800); if (tk !== R.token) return;
+    await playAnswer(tk); if (tk !== R.token) return;
+    showDone();
+  }
+  function next() {
+    if (!R.active || R.stage !== 'done') return;
+    Speech.stop();
+    R.idx++;
+    if (R.idx >= R.queue.length) finish(); else nextProblem();
+  }
+  function finish() {
+    R.active = false; R.lock = true; R.token++;
+    const ok = R.results.filter(Boolean).length, n = R.queue.length;
+    const st = D.stats.soro;
+    st.play++; st.q += n; st.ok += ok;
+    if (ok === n) st.perfect++;
+    if (ok >= SORO_PASS && !R.noSticker) {
+      const res = awardSticker('soro', 0, ok === n);
+      res.s.c = R.mode;
+      save();
+      showWin(res, ok, '', n);
+    } else {
+      save();
+      showResult(ok, { results: R.results, total: n, pass: SORO_PASS, why: R.noSticker, dan: 0 });
+    }
+  }
+  function hint() {
+    const st = R.steps[R.si];
+    if (!R.active || R.stage !== 'ask' || !st || !st.tip) return;
+    R.hinted = true;
+    showHint(st.tip);
+    Speech.speak(st.tip.speech);
+  }
+  function repeat() {
+    if (!R.active || !R.prob) return;
+    if (R.stage === 'ask') Speech.speak(R.steps[R.si].speech);
+    else Speech.speak(speechOf(finalPhrase(R.prob)));
+  }
+  function skipGoal() { if (R.skipGoal) { Speech.stop(); R.skipGoal(); } }
+  function stop() {
+    R.active = false;
+    R.token++;
+    if (R.skipGoal) { R.skipGoal(); R.skipGoal = null; }
+  }
+  $('#srPass').addEventListener('animationend', e => e.currentTarget.classList.remove('show'));
+  $('#srHintBox').addEventListener('click', () => { if (R.curHint) Speech.speak(R.curHint.speech); });
+
+  // ---- おうちの方へ画面 ----
+  function rulesHTML() {
+    let h = '';
+    for (const op of ['add', 'sub']) {
+      h += `<p class="rules-h">${op === 'add' ? 'たし算' : 'ひき算'}</p>`;
+      for (let n = 9; n >= 1; n--) {
+        const groups = new Map();
+        ALL.filter(p => p.op === op && p.n === n).forEach(p => { const t = phraseText(finalPhrase(p)); if (!groups.has(t)) groups.set(t, []); groups.get(t).push(`${p.a}${OPS[op].op}${p.n}`); });
+        h += `<div class="rule"><span>${op === 'add' ? 'たせない' : 'ひけない'}${n}は</span><div>${[...groups].map(([t, l]) => `<p><span class="rule-ph">${esc(t)}</span><span class="rule-list">${l.join('、')}</span></p>`).join('')}</div></div>`;
+      }
+    }
+    return h;
+  }
+  const weakText = () => Object.entries(D.soroMiss).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([k]) => {
+    const p = ALL.find(x => x.key === k);
+    return p ? `${p.a}${OPS[p.op].op}${p.n}（${phraseText(finalPhrase(p))}）` : '';
+  }).filter(Boolean).join('、');
+  // シールの「どこで もらったか」：あたらしい もの（add・sub・mix）と、まえの そろばんクイズの コース（l1〜l5・m1〜m5）
+  const courseName = c => c === 'mix' ? MODES.mix : /^(add|l)/.test(c || '') ? 'たしざん' : /^(sub|m)/.test(c || '') ? 'ひきざん' : '';
+  const exText = () => ({ add: 'れい：5 + 9', sub: 'れい：14 − 9', mix: 'れい：5 + 9・14 − 9' })[mode()];
+  return { start, stop, next, replay, hint, repeat, skipGoal, rulesHTML, weakText, courseName, exText, MODES };
+})();
+
+// ---- まえの「そろばんクイズ」の シールを、がくしゅうアプリの そろばんの シールに くわえる ----
+// おなじ シール（え・もらった じかん・キラキラが おなじ）は 2かい いれない。はじめての ときだけ きろくと せっていも うつす
+const SORO_KEY = 'soroban-quiz:v2';
+function soroMerge(src) {
+  const list = src && Array.isArray(src.stickers) ? src.stickers : [];
+  const key = s => `${s.d}|${Number(s.at) || 0}|${s.k ? 1 : 0}`;
+  const have = {};
+  for (const s of D.stickers) if (s.src === 'soroban') have[key(s)] = (have[key(s)] || 0) + 1;
+  let added = 0;
+  for (const s of list) {
+    if (!s || !DMAP[s.d]) continue;
+    const k = key(s);
+    if (have[k] > 0) { have[k]--; continue; }
+    D.stickers.push({ d: s.d, t: 'soro', k: s.k ? 1 : 0, at: Number(s.at) || 0, dan: 0, c: s.c || (s.t === 'sub' ? 'sub' : 'add'), src: 'soroban' });
+    added++;
+  }
+  if (added) D.stickers.sort((a, b) => (a.at || 0) - (b.at || 0));  // もらった じゅんに ならべる
+  if (!D.soroFrom && list.length) {
+    D.soroFrom = Date.now();
+    const st = D.stats.soro;
+    for (const t of ['add', 'sub']) {
+      const x = (src.stats || {})[t];
+      if (x) for (const f of ['play', 'perfect', 'q', 'ok']) st[f] += Number(x[f]) || 0;
+    }
+    for (const [k, v] of Object.entries(src.miss || {})) if (Number(v) > 0) D.soroMiss[k] = Math.min(5, Number(v));
+    const ss = src.settings || {};
+    if (ss.choices === 2 || ss.choices === 3) S().soroChoices = ss.choices;
+    if (ss.hint === 'always' || ss.hint === 'button') S().soroHint = ss.hint;
+  }
+  return added;
+}
+// おなじ Safari の なかに そろばんクイズの きろくが あれば、ひらいた ときに じどうで くわえる
+function soroAutoMerge() {
+  try {
+    const raw = localStorage.getItem(SORO_KEY);
+    if (!raw) return;
+    const first = !D.soroFrom;
+    if (soroMerge(JSON.parse(raw)) || (first && D.soroFrom)) save();
+  } catch (e) { /* よめなくても あそべる */ }
+}
+
 // ---------- シールちょう ----------
 let bookFilter = 'all', bookNew = -1;
 function renderBook() {
@@ -2963,6 +3701,10 @@ function renderSettings() {
   $('#rateOut').textContent = Number(S().rate).toFixed(1);
   $('#missionNote').textContent = `今日の${THEMES[S().priority].name}のシール：${missionDone()} / ${MISSION}枚` + (missionLeft() ? '' : '（達成）');
   $$('#settings [data-act="seg"]').forEach(b => b.classList.toggle('on', String(S()[b.dataset.k]) === b.dataset.val));
+  const needs = Object.keys(NEED_KEY).filter(t => needOf(t) > 0);
+  $('#needNote').textContent = needs.length ? `今日集めたシール：${needs.map(t => `${THEMES[t].name} ${todayCount(t)} / ${needOf(t)}枚`).join('・')}（${gameLocked() ? 'まだゲームは遊べません' : 'ゲームで遊べます'}）` : '今はいつでもゲームで遊べます';
+  $('#soroWeak').textContent = `そろばんのにがてな問題：${Soro.weakText() || 'まだ ありません'}`;
+  if (!$('#soroRules').innerHTML) $('#soroRules').innerHTML = Soro.rulesHTML();
   $('#gPlayNote').innerHTML = `今日遊んだ回数<small>${GKINDS.map(g => `${GAMES[g].name} ${gPlays(g)}回`).join('・')}${gLimit() ? `（それぞれ ${gLimit()}回まで）` : '（制限なし）'}</small>`;
   renderVoiceSelect();
   const rows = Object.entries(THEMES).map(([t, th]) => {
@@ -2998,6 +3740,7 @@ document.addEventListener('click', e => {
     case 'order': S().order = b.dataset.val; save(); renderDan(); break;
     case 'again':
       if (Last === 'game') startGame(Gm.kind, Gm.lv);
+      else if (Last === 'soro') Soro.start();
       else if (Last === 'coin') goHome();
       else startQuiz(Q.theme, Q.dan);
       break;
@@ -3015,6 +3758,10 @@ document.addEventListener('click', e => {
     case 'mzHint': mzHint(); break;
     case 'mm': mmFlip(+b.dataset.i); break;
     case 'mmHint': mmHint(); break;
+    case 'srNext': Soro.next(); break;
+    case 'srReplay': Soro.replay(); break;
+    case 'srHint': Soro.hint(); break;
+    case 'srRepeat': Soro.repeat(); break;
     case 'iqok': iqCheck(); break;
     case 'iqgive': if (IQ.active && !IQ.lock && !IQ.canSkip) { gameUse(); iqReveal(true); } break;
     case 'iqch': if (IQ.active && !IQ.lock) { IQ.sel = +b.dataset.i; iqRenderChoices(); } break;
@@ -3034,8 +3781,9 @@ document.addEventListener('click', e => {
     case 'stk': {
       const s = D.stickers[+b.dataset.sid];
       const dt = new Date(s.at);
-      const where = !THEMES[s.t] ? '🪙 コインと こうかん' : THEMES[s.t].name + (s.t === 'mul' ? (s.dan ? ` ${s.dan}のだん` : ' ミックス') : '');
-      stickerDetail(s, `${where} で ゲット ・ ${dt.getMonth() + 1}がつ ${dt.getDate()}にち`);
+      const where = !THEMES[s.t] ? '🪙 コインと こうかん' : THEMES[s.t].name + (s.t === 'mul' ? (s.dan ? ` ${s.dan}のだん` : ' ミックス') : s.t === 'soro' && Soro.courseName(s.c) ? ` ${Soro.courseName(s.c)}` : '');
+      const from = s.src === 'soroban' ? '（まえの そろばんクイズ）' : '';
+      stickerDetail(s, s.at ? `${where}${from} で ゲット ・ ${dt.getMonth() + 1}がつ ${dt.getDate()}にち` : `${where}${from} で ゲット`);
       break;
     }
     case 'zukanItem': {
@@ -3062,7 +3810,7 @@ document.addEventListener('click', e => {
     case 'gateKey': gateKey(b.dataset.k); break;
     case 'pinChange': gateMode('new1', 'changed'); break;
     case 'seg':
-      S()[b.dataset.k] = ['gameLimit', 'mem1', 'mem2', 'mem3'].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
+      S()[b.dataset.k] = ['gameLimit', 'mem1', 'mem2', 'mem3', 'soroChoices', ...Object.values(NEED_KEY)].includes(b.dataset.k) ? Number(b.dataset.val) : b.dataset.val;
       save();
       renderSettings();
       applyInputMode();
@@ -3124,7 +3872,7 @@ $('#ansForm').addEventListener('submit', e => {
 });
 $('#board').addEventListener('click', () => { if (isKb() && Q.active) ans.focus({ preventScroll: true }); });
 // ゴールの えんしゅつ中に タップすると すぐ つぎへ
-$('#goal').addEventListener('click', () => { if (screen === 'iq') { if (IQ.canSkip) iqSkip(); } else if (Q.canSkip) skip(); });
+$('#goal').addEventListener('click', () => { if (screen === 'iq') { if (IQ.canSkip) iqSkip(); } else if (screen === 'soro') Soro.skipGoal(); else if (Q.canSkip) skip(); });
 // もんだい中は ボタンを おしても 入力らんの フォーカスを はずさない（キーボードが とじないように）
 $('#app').addEventListener('mousedown', e => {
   if (Q.active && e.target !== ans && !e.target.closest('.modal')) e.preventDefault();
@@ -3146,6 +3894,7 @@ document.addEventListener('visibilitychange', () => {
 
 // ---------- はじめる ----------
 load();
+soroAutoMerge();
 fitViewport();
 applyInputMode();
 rankTheme = initialRankTheme();
