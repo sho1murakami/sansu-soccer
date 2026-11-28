@@ -418,6 +418,9 @@ body.kb .pad{display:none}
 .zk-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:16px}
 .zk-item em{position:absolute;top:0;right:6px;background:var(--add);color:#fff;font-style:normal;font-size:14px;padding:2px 8px;border-radius:999px;z-index:2}
 .zk-item.none>span:last-child{color:#b0b7c4}
+/* ながい なまえは すこし ちいさく して 1ぎょうに（ジェットコースター など） */
+.zk-item .nm.lg{font-size:14px;letter-spacing:-.02em;white-space:nowrap}
+.zk-item .nm.xl{font-size:12.5px;letter-spacing:-.03em;white-space:nowrap}
 .empty{text-align:center;font-size:26px;color:#8a7a55;padding:60px 20px;line-height:1.6}
 .gr{display:inline-block;font-style:normal;font-weight:900;font-size:12px;line-height:1;padding:3px 6px;border-radius:6px;color:#fff;vertical-align:middle}
 .gr.r{background:linear-gradient(#5aa8ff,#2f6fd8)}
@@ -1123,7 +1126,7 @@ table.st{width:100%;border-collapse:collapse;font-size:17px}
         ・ボールをタッチすると、数を声でかぞえます。<br>
         ・1回7問で、4問以上を1回目で正解するとシールがもらえます（2回目で正解した問題は数えません）。<br>
         ・かけざんの1の段は練習用で、シールはもらえません。<br>
-        ・シールは全100種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
+        ・シールは全200種類。ノーマル・レア・スーパーレアがあり、シールちょうの「🎲 でる かくりつ」で出る確率を見られます。<br>
         ・トップ画面の下の「ゲーム」で、めいろ・しんけいすいじゃく・IQテストを遊べます（はじめは、その日に たしざん と そろばん のシールを5枚ずつ集めてから。それぞれ1日3回まで。上の「🎮 ゲーム」で変えられます）。<br>
         ・「そろばん」は、前の「そろばんクイズ」の「ぜんぶ」と同じ問題です。そろばんクイズでもらったシールは、下の「記録のバックアップ」で読み込むと、そろばんのシールに加わります。</p>
       </div>
@@ -1242,7 +1245,7 @@ const DESIGNS = [
   ['sun', '🌞', 'おひさま', '#ffe590'], ['volcano', '🌋', 'かざん', '#ffc8b0'], ['saturn', '🪐', 'どせい', '#e6d8ff'],
   ['onigiri', '🍙', 'おにぎり', '#e9f6e2'], ['strawberry', '🍓', 'いちご', '#ffd4dc'], ['icecream', '🍦', 'ソフトクリーム', '#fff1d9'],
   ['crown', '👑', 'おうかん', '#ffe794'], ['gem', '💎', 'ほうせき', '#ccf2ff'],
-  // ここから 54しゅるい ふやした（ぜんぶで 100しゅるい。9さい向けと おなじ）
+  // ここから 54しゅるい ふやした（ここまでで 100しゅるい。9さい向けと おなじ）
   ['monkey', '🐵', 'サル', '#f2d4b0'], ['giraffe', '🦒', 'キリン', '#ffe3a3'], ['elephant', '🐘', 'ゾウ', '#d6dde8'],
   ['zebra', '🦓', 'シマウマ', '#e8e8f0'], ['hippo', '🦛', 'カバ', '#dcd0f0'], ['rhino', '🦏', 'サイ', '#d9dfe6'],
   ['kangaroo', '🦘', 'カンガルー', '#f5d2a8'], ['squirrel', '🐿️', 'リス', '#f3cfa6'], ['hedgehog', '🦔', 'ハリネズミ', '#e8d6c2'],
@@ -1261,12 +1264,39 @@ const DESIGNS = [
   ['pizza', '🍕', 'ピザ', '#ffe0b0'], ['burger', '🍔', 'ハンバーガー', '#ffdcb0'], ['donut', '🍩', 'ドーナツ', '#ffd6e4'],
   ['cake', '🍰', 'ショートケーキ', '#fff0f0'], ['watermelon', '🍉', 'スイカ', '#d8f5c8'], ['sushi', '🍣', 'おすし', '#ffe6d6'],
   ['ghost', '👻', 'おばけ', '#e8e8ff'], ['wizard', '🧙', 'まほうつかい', '#e0d4ff'], ['castle', '🏰', 'おしろ', '#e4e8f0'],
+  // ここから 100しゅるい ふやした（ぜんぶで 200しゅるい。さいしょの 100しゅるいは 9さい向け・そろばんクイズと おなじ）
+  ['mouse', '🐭', 'ネズミ', '#e9e4f0'], ['chicken', '🐔', 'ニワトリ', '#fff0d6'], ['duck', '🦆', 'アヒル', '#d9f0d0'], ['swan', '🦢', 'ハクチョウ', '#dceeff'],
+  ['snail', '🐌', 'カタツムリ', '#f0e2c8'], ['caterpillar', '🐛', 'イモムシ', '#d6f5b0'], ['seal', '🦭', 'アザラシ', '#d8e6f2'], ['otter', '🦦', 'ラッコ', '#e6d2bc'],
+  ['sloth', '🦥', 'ナマケモノ', '#e2d6c4'], ['wolf', '🐺', 'オオカミ', '#d8dde8'], ['raccoon', '🦝', 'アライグマ', '#dcd8d2'], ['sheep', '🐑', 'ヒツジ', '#f2f0ea'],
+  ['goat', '🐐', 'ヤギ', '#ece6d8'], ['deer', '🦌', 'シカ', '#f0d8b8'], ['camel', '🐫', 'ラクダ', '#f5e0b0'], ['gorilla', '🦍', 'ゴリラ', '#d6d6dc'],
+  ['blowfish', '🐡', 'フグ', '#fff0b8'], ['squid', '🦑', 'イカ', '#ffd6dc'], ['shrimp', '🦐', 'エビ', '#ffd0c0'], ['polarbear', '🐻‍❄️', 'シロクマ', '#e0f0ff'],
+  ['peacock', '🦚', 'クジャク', '#c8f0e0'], ['jellyfish', '🪼', 'クラゲ', '#e0d8ff'], ['beaver', '🦫', 'ビーバー', '#ead8c4'], ['bird', '🐦', 'ことり', '#cfe8ff'],
+  ['apple', '🍎', 'リンゴ', '#ffd0d0'], ['banana', '🍌', 'バナナ', '#fff4b0'], ['grapes', '🍇', 'ブドウ', '#e6d4ff'], ['peach', '🍑', 'モモ', '#ffe0d4'],
+  ['cherry', '🍒', 'サクランボ', '#ffd4dc'], ['tangerine', '🍊', 'ミカン', '#ffe2b8'], ['pineapple', '🍍', 'パイナップル', '#fff0b0'], ['kiwi', '🥝', 'キウイ', '#dff5c4'],
+  ['lemon', '🍋', 'レモン', '#fff8b8'], ['carrot', '🥕', 'ニンジン', '#ffe0c4'], ['corn', '🌽', 'トウモロコシ', '#fff2b8'], ['bread', '🍞', 'しょくパン', '#f8e6c8'],
+  ['croissant', '🥐', 'クロワッサン', '#fbe4c0'], ['egg', '🍳', 'めだまやき', '#fff6d8'], ['curry', '🍛', 'カレーライス', '#ffe8c8'], ['ramen', '🍜', 'ラーメン', '#ffeccc'],
+  ['dango', '🍡', 'おだんご', '#ffe4ee'], ['cookie', '🍪', 'クッキー', '#f6e2c8'], ['chocolate', '🍫', 'チョコレート', '#ead8c8'], ['lollipop', '🍭', 'ペロペロキャンディ', '#ffd8f0'],
+  ['pudding', '🍮', 'プリン', '#fff0c8'], ['cupcake', '🧁', 'カップケーキ', '#ffe0ec'], ['popcorn', '🍿', 'ポップコーン', '#fff0e0'], ['fries', '🍟', 'フライドポテト', '#ffeeb8'],
+  ['friedshrimp', '🍤', 'エビフライ', '#ffe6c4'], ['ambulance', '🚑', 'きゅうきゅうしゃ', '#f0f4fa'], ['taxi', '🚕', 'タクシー', '#fff2b0'], ['car', '🚗', 'くるま', '#ffd0d0'],
+  ['truck', '🚚', 'トラック', '#d8e8ff'], ['tram', '🚃', 'でんしゃ', '#d8f0e0'], ['monorail', '🚝', 'モノレール', '#dfe6f0'], ['sailboat', '⛵', 'ヨット', '#d0ecff'],
+  ['motorbike', '🏍️', 'バイク', '#e0e0ea'], ['satellite', '🛰️', 'じんこうえいせい', '#d8dcf8'], ['balloon', '🎈', 'ふうせん', '#ffd0d8'], ['silvermedal', '🥈', 'ぎんメダル', '#e8ecf2'],
+  ['bronzemedal', '🥉', 'どうメダル', '#f4dcc4'], ['volleyball', '🏐', 'バレーボール', '#e8f2ff'], ['badminton', '🏸', 'バドミントン', '#e4f4e0'], ['bowling', '🎳', 'ボウリング', '#eceaf6'],
+  ['golf', '⛳', 'ゴルフ', '#d8f4c8'], ['skate', '⛸️', 'スケート', '#dcf0ff'], ['kite', '🪁', 'たこあげ', '#d8eaff'], ['yoyo', '🪀', 'ヨーヨー', '#ffd8d8'],
+  ['dice', '🎲', 'サイコロ', '#f0f0f4'], ['puzzle', '🧩', 'パズル', '#d8ecd0'], ['teddy', '🧸', 'くまの ぬいぐるみ', '#f2dcc4'], ['palette', '🎨', 'えのぐ', '#fff0d8'],
+  ['piano', '🎹', 'ピアノ', '#e8e8ee'], ['drum', '🥁', 'たいこ', '#ffe0c8'], ['trumpet', '🎺', 'トランペット', '#fff0b8'], ['guitar', '🎸', 'ギター', '#ffdcc0'],
+  ['tulip', '🌷', 'チューリップ', '#ffe0ea'], ['tree', '🌳', 'き', '#d4f0c4'], ['maple', '🍁', 'もみじ', '#ffd8c0'], ['wave', '🌊', 'なみ', '#c8e8ff'],
+  ['lightning', '⚡', 'かみなり', '#fff4b0'], ['snowman', '☃️', 'ゆきだるま', '#e4f2ff'], ['fuji', '🗻', 'ふじさん', '#dceaff'], ['galaxy', '🌌', 'ぎんが', '#d8d4f4'],
+  ['present', '🎁', 'プレゼント', '#ffe0e4'], ['koinobori', '🎏', 'こいのぼり', '#d8ecff'], ['pumpkin', '🎃', 'かぼちゃ', '#ffe0b8'], ['xmastree', '🎄', 'クリスマスツリー', '#d8f2d0'],
+  ['rollercoaster', '🎢', 'ジェットコースター', '#e0e8ff'], ['ferriswheel', '🎡', 'かんらんしゃ', '#ffe8f0'], ['tokyotower', '🗼', 'とうきょうタワー', '#ffe0d8'], ['circus', '🎪', 'サーカス', '#ffe4e4'],
+  ['telescope', '🔭', 'ぼうえんきょう', '#dcdcf4'], ['magicwand', '🪄', 'まほうの ステッキ', '#ecdcff'], ['superhero', '🦸', 'ヒーロー', '#d8e4ff'], ['fairy', '🧚', 'ようせい', '#f6dcff'],
+  ['mermaid', '🧜', 'にんぎょ', '#cdeef0'], ['shootingstar', '🌠', 'ながれぼし', '#d6dcff'], ['fireworks', '🎆', 'はなび', '#dcd4ff'], ['crystalball', '🔮', 'すいしょうだま', '#e8d8ff'],
 ].map(([id, e, name, bg]) => ({ id, e, name, bg }));
 const DMAP = Object.fromEntries(DESIGNS.map(d => [d.id, d]));
 // グレード：ノーマル・レア・スーパーレア（でやすさが ちがう）＋ キラキラ（どの シールでも SHINY_RATE で キラキラに なる）
 const GRADES = {
-  sr: { name: 'スーパーレア', short: 'SR', w: 0.12, ids: ['crown', 'gem', 'dragon', 'unicorn', 'ufo', 'castle'] },
-  r: { name: 'レア', short: 'R', w: 0.4, ids: ['trophy', 'saturn', 'medal', 'rocket', 'trex', 'shinkansen', 'whale', 'owl', 'flamingo', 'rainbow', 'earth', 'clover', 'wizard', 'comet', 'racecar', 'volcano'] },
+  sr: { name: 'スーパーレア', short: 'SR', w: 0.12, ids: ['crown', 'gem', 'dragon', 'unicorn', 'ufo', 'castle', 'peacock', 'fairy', 'mermaid', 'shootingstar', 'fireworks', 'crystalball'] },
+  r: { name: 'レア', short: 'R', w: 0.4, ids: ['trophy', 'saturn', 'medal', 'rocket', 'trex', 'shinkansen', 'whale', 'owl', 'flamingo', 'rainbow', 'earth', 'clover', 'wizard', 'comet', 'racecar', 'volcano',
+    'otter', 'sloth', 'wolf', 'polarbear', 'jellyfish', 'satellite', 'fuji', 'galaxy', 'present', 'rollercoaster', 'ferriswheel', 'tokyotower', 'circus', 'telescope', 'magicwand', 'superhero'] },
   n: { name: 'ノーマル', short: 'N', w: 1, ids: [] },
 };
 const gradeOf = id => GRADES.sr.ids.includes(id) ? 'sr' : GRADES.r.ids.includes(id) ? 'r' : 'n';
@@ -3546,7 +3576,7 @@ function renderBook() {
       const mine = st.filter(s => s.d === d.id), g = gradeOf(d.id);
       const badge = g !== 'n' ? `<i class="gr ${g}">${GRADES[g].short}</i>` : '';
       if (!mine.length) return `<div class="zk-item none"><span class="stk md unknown"><span class="em">？</span></span><span>？？？</span>${badge}</div>`;
-      return `<button class="zk-item" data-act="zukanItem" data-did="${d.id}">${stickerHTML({ d: d.id, k: mine.some(s => s.k) }, 'md')}<span>${d.name}</span><em>×${mine.length}</em>${badge}</button>`;
+      return `<button class="zk-item" data-act="zukanItem" data-did="${d.id}">${stickerHTML({ d: d.id, k: mine.some(s => s.k) }, 'md')}<span class="${d.name.length >= 9 ? 'nm xl' : d.name.length >= 8 ? 'nm lg' : 'nm'}">${d.name}</span><em>×${mine.length}</em>${badge}</button>`;
     }).join('') + '</div>';
     return;
   }
